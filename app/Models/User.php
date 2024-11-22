@@ -17,11 +17,10 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
-    protected $fillable = [
-        'name',
-        'email',
-        'password',
-    ];
+    protected $fillable = ['first_name', 'last_name', 'email', 'password'];
+
+    // Automatically load the related subscriptions and ratings and appointments and membershipApplications models with each subscription to prevent lazy loading and improve query efficiency.
+    protected $with = ['subscriptions', 'ratings', 'appointments', 'membershipApplications'];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -42,4 +41,30 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+    /**
+    * A user can have multiple subscriptions associated with them.
+    */
+    public function subscriptions(){
+        return $this->hasMany(Subscription::class);
+    }
+
+    /**
+    * A user can give multiple ratings.
+    */
+    public function ratings(){
+        return $this->hasMany(Rating::class);
+    }
+    /**
+    * A user can book multiple appointments.
+    */
+    public function appointments(){
+        return $this->hasMany(Appointment::class);
+    }
+
+    /**
+    * A user can submit multiple membership applications.
+    */
+    public function membershipApplications(){
+        return $this->hasMany(MembershipApplication::class);
+    }
 }
