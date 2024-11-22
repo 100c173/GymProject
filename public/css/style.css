@@ -1,0 +1,10 @@
+body {
+    margin: 0;
+    padding: 0;
+    height: 100vh; /* اجعل الطول 100% من ارتفاع نافذة العرض */
+    background-image: url( '../img/gym.jpg'); 
+
+    background-size: cover; /* لجعل الصورة تغطي المساحة بالكامل */
+    background-position: center; /* لتوسيع الصورة من المركز */
+    background-repeat: no-repeat; /* لجعل الصورة لا تتكرر */
+}
