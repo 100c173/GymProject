@@ -9,6 +9,7 @@ class Kernel extends ConsoleKernel
 {
     protected $commands = [
         \App\Console\Commands\GenerateExistingModelsMigrations::class,
+        \App\Console\Commands\GenerateExistingModelsControllers::class,
     ];
     /**
      * Define the application's command schedule.
