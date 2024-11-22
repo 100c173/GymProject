@@ -44,6 +44,7 @@ class GenerateExistingModelsMigrations extends Command
             ]);
 
             $this->info("Migration for {$model} created successfully.");
+            sleep(1);
         }
     }
 }
