@@ -21,6 +21,13 @@ class Appointment extends Model
     {
         return $this->hasMany(Attendance::class);
     }
+
+    /**
+     *   The appointment belongs to a single session
+     */
+    public function session(){
+        return $this->belongsTo(Session::class);
+    }
     
     /**
      * The appointment belongs to a single user (trainee or trainer).
