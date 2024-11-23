@@ -9,5 +9,5 @@ class SportEquipment extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'brand', 'description', 'equipment_status', 'image_path', 'equipment_status_id'];
+    protected $fillable = ['name', 'brand', 'description', 'equipment_status', 'image_path',];
 }
