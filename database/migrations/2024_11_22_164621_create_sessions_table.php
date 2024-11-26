@@ -16,7 +16,8 @@ return new class extends Migration
             $table->string('name');
             $table->text('description');
             $table->integer('max_members');
-            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
+            $table->enum('status', ['active', 'inactive', 'completed'])->default('active');
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
         });
     }
