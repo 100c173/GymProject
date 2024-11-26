@@ -11,9 +11,22 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        // To define how many rows per page
+        $entries_number = $request->input('entries_number', 5);
+
+        $q = User::query();
+
+        // Search by name
+        if ($request->input('searched_name'))
+            $q = User::where('first_name', 'like', '%' . $request->searched_name . '%');
+
+        $users = $q->paginate($entries_number);
+        return view('dashboard.manager.members.list_users', [
+            'users' => $users,
+            'entries_number' => $entries_number,
+        ]);
     }
 
     /**
@@ -50,7 +63,7 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(User $user)
     {
         //
     }
@@ -58,7 +71,7 @@ class UserController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(User $user)
     {
         //
     }
@@ -66,7 +79,7 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, User $user)
     {
         //
     }
@@ -74,8 +87,13 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(User $user)
     {
         //
+    }
+
+    public function forceDelete(string $id)
+    {
+
     }
 }
