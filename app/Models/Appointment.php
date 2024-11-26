@@ -11,9 +11,6 @@ class Appointment extends Model
 
     protected $fillable = ['status', 'session_id', 'user_id'];
     
-    // Automatically load the related user and session models to prevent lazy loading.
-    protected $with =['user' , 'session'];
-
     /**
      *  An appointment can have multiple attendance records.
      */
@@ -22,18 +19,17 @@ class Appointment extends Model
         return $this->hasMany(Attendance::class);
     }
 
-    /**
-     *   The appointment belongs to a single session
-     */
-    public function session(){
+    public function session()
+    {
         return $this->belongsTo(Session::class);
     }
     
-    /**
-     * The appointment belongs to a single user (trainee or trainer).
-     */
-    public function user(){
+    public function user()
+    {
         return $this->belongsTo(User::class);
     }
+    
+
+
     
 }

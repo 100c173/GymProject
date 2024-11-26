@@ -10,9 +10,7 @@ class Session extends Model
     use HasFactory;
 
     protected $fillable = ['name', 'description', 'max_members', 'user_id'];
-    
-    //Automatically load the related trainer model to prevent lazy loading.
-    protected $with = ['trainer' ];
+
 
     /**
      * A session can have multiple times associated with it through a many-to-many relationship.
