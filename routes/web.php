@@ -18,8 +18,11 @@ Route::get('/', function () {
     return view('auth.login');
 });
 
-Route::get('test', function () {
-    return view('test');
+Route::get('/dashboard', function () {
+    return view('dashboard');
+});
+Route::get('/test', function () {
+    return view('dashboard.manager.session.index');
 });
 
 Auth::routes();
