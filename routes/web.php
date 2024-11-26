@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Session;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -22,7 +23,8 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 });
 Route::get('/test', function () {
-    return view('dashboard.manager.session.index');
+    $sessions = Session::all();
+    return view('dashboard.manager.session.index',compact('sessions'));
 });
 
 Auth::routes();
