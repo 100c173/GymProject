@@ -10,7 +10,7 @@ class Time extends Model
     use HasFactory;
     public $timestamps = false;
 
-    protected $fillable = ['start_time', 'end_time', 'day_of_week'];
+    protected $fillable = ['start_time', 'end_time', 'day'];
 
     /**
     * A time slot can be associated with multiple sessions through a many-to-many relationship.
@@ -18,6 +18,6 @@ class Time extends Model
     */
     public function sessions()
     {
-        return $this->belongsToMany(Session::class)->as('sessions_times')->withTimestamps();
+        return $this->belongsToMany(Session::class,'session_time');
     }
 }

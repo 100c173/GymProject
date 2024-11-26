@@ -60,13 +60,4 @@ class User extends Authenticatable
     public function membershipApplications(){
         return $this->hasMany(MembershipApplication::class);
     }
-
-    /**
-    * A user can be in many sessions 
-    */
-    public function appointments()
-    {
-        return $this->hasMany(Appointment::class);
-    }
-    
 }

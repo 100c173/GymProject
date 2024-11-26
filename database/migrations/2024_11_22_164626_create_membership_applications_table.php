@@ -20,7 +20,7 @@ return new class extends Migration
             ])->default('pending');
             $table->string('pdf_path');
             $table->string('image_path');
-            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
         });
     }

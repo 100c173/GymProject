@@ -18,7 +18,8 @@ return new class extends Migration
                 'absent',
                 'nnconfirmed',
             ])->default('nnconfirmed');
-            $table->foreignId('appointment_id')->constrained('appointments')->cascadeOnDelete();
+            
+            $table->foreignId('appointment_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
         });
     }

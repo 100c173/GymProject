@@ -22,7 +22,7 @@
             </thead>
             <tfoot>
                 <tr>
-                    <th> Member Name</th>
+                    <th>Member Name</th>
                     <th>Session Name </th>
                     <th>Trainer </th>
                     <th>Session Date </th>
@@ -32,23 +32,22 @@
                 </tr>
             </tfoot>
             <tbody>
+                @foreach($appointments as $appointment)
                 <tr>
-                    <td>Tiger Nixon</td>
-                    <td>Cardio</td>
-                    <td>Tiger Nixon</td>
-
-                    <td>4/4/2024   </td>
-                    <td>2;00   </td>
+                    <td>{{$appointment->user->name}}</td>
+                    <td>{{$appointment->session->name}}</td>
+                    <td>{{$appointment->session->user->name}}</td>
+                    <td>{{$appointment->session->times->first()->day}} </td>
+                    <td>{{$appointment->session->times->first()->start_time}} </td>
                    
-                    <td>               <select class="form-select" aria-label="حالة الحضور">
+                    <td>  
+                        <select class="form-select" aria-label="حالة الحضور">
                         <option value="present">Present</option>
                         <option value="absent">Absent</option>
                         <option value="late">Late</option>
-                      </select>
-
-                   
-                    
+                        </select>
                 </tr>
+                @endforeach
               
             </tbody>
         </table>

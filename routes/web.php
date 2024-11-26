@@ -1,8 +1,8 @@
 <?php
 
-use App\Models\Session;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use Symfony\Component\Console\Input\Input;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,13 +19,10 @@ Route::get('/', function () {
     return view('auth.login');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
+Route::get('test', function () {
+    return view('test');
 });
-Route::get('/test', function () {
-    $sessions = Session::all();
-    return view('dashboard.manager.session.index',compact('sessions'));
-});
+
 
 Auth::routes();
 

@@ -8,25 +8,25 @@
                 <div class="card-body">
                   
                         <div class="form-floating mb-3">
-                            <h4>  Name:</h4>
+                            <h4>  Name: {{$session->name}}</h4>
 
                         </div>
                         <div class="form-floating mb-3">
-                            <h4>  Description:</h4>
+                            <h4>  Description: {{$session->description}}</h4>
                         </div>
                         <div class="form-floating mb-3">
-                            <h4>   period</h4>
+                            <h4>   period : {{$session->times->first()->start_time}} to {{$session->times->first()->end_time}}</h4>
                         </div>
                         <div class="form-floating mb-3">
-                            <h4>   Coach:</h4>
+                            <h4>   Coach: 121</h4>
                         </div>
                         <div class="form-floating mb-3">
-                            <h4>    Number of members:</h4>
+                            <h4>    Number of members: {{$session->max_members}} </h4>
                         </div>
                         <div class="form-floating mb-3">
-                            <h4>     Available times:</h4>
+                            <h4>     date: {{$session->times->first()->day}}</h4>
                         </div>
-                        <a href="" class="btn btn-sm btn-info btn-animate">back</a>
+                        <a href="{{route('sessions.index')}}" class="btn btn-sm btn-info btn-animate">back</a>
                 </div>
                
             </div>

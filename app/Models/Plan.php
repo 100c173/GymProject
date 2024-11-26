@@ -10,8 +10,6 @@ class Plan extends Model
     use HasFactory;
     protected $fillable = ['name', 'description', 'price', 'with_trainer', 'period', 'plan_type_id'];
 
-    //Automatically load the related subscriptions and planType and sessions  models to prevent lazy loading.
-    protected $with = ['subscriptions', 'planType', 'sessions'];
 
     /**
      * A plan can have multiple subscriptions associated with it.
