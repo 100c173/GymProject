@@ -46,7 +46,7 @@
                         </li>
                         <li>
                             <a class="dropdown-item" href="javascript:{}" onclick="document.getElementById('force_delete_user_{{$user->id}}').submit();">
-                                <form id="force_delete_user_{{$user->id}}" action="{{ route('users.forceDelete', $user) }}" method="POST" style="display: none;">
+                                <form id="force_delete_user_{{$user->id}}" action="{{ route('users.forceDelete', $user->id) }}" method="POST" style="display: none;">
                                     @csrf 
                                     @method('DELETE')
                                 </form>
