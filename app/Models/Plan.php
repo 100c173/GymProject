@@ -8,7 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Plan extends Model
 {
     use HasFactory;
-    protected $fillable = ['name', 'description', 'price', 'with_trainer', 'period', 'plan_type_id'];
+    // protected $guarded=[];
+     protected $fillable = ['name', 'description', 'price', 'with_trainer', 'period', 'plan_type_id'];
 
     //Automatically load the related subscriptions and planType and sessions  models to prevent lazy loading.
     protected $with = ['subscriptions', 'planType', 'sessions'];
@@ -26,7 +27,7 @@ class Plan extends Model
     */
     public function sessions()
     {
-        return $this->belongsToMany(Session::class)->as('plans_sessions')->withTimestamps();
+        return $this->belongsToMany(Session::class,'plans_sessions');//->as('plans_sessions')->withTimestamps();
     }
 
     /**

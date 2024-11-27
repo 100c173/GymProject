@@ -31,7 +31,7 @@
                 </tr>
             </tfoot>
             <tbody>
-                @foreach ($plans as $plan)
+              
                 <tr>
                      <td>{{$plan->name}}</td>
                      <td>  {{$plan->planType->name}}</td>
@@ -43,7 +43,6 @@
                         <option value="cancelled">None</option>
                      </select></td>
                      <th> 
-                        <a href="{{route('plans.show',$plan)}}" class="btn btn-sm btn-secondary btn-animate">Show</a>
                         <a href="{{route('plans.edit',$plan)}}" class="btn btn-sm btn-secondary btn-animate">Edit</a>
                         <form action="{{route('plans.destroy',$plan)}}" method="POST" style="display: inline-block;">
                             @csrf
@@ -51,7 +50,7 @@
                             <button type="submit" class="btn btn-sm btn-danger btn-animate" >Delete</button>
                         </form></th>
                 </tr>
-                @endforeach
+               
             </tbody>
         </table>
     </div>
