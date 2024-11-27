@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\UserRequest;
+use App\Http\Requests\UpdateUserRequest;
+use App\Http\Requests\CreateUserRequest;
 use App\Services\UserService;
 use App\Models\User;
 use Carbon\Carbon;
@@ -27,8 +28,7 @@ class UserController extends Controller
         // To define how many rows per page
         $entries_number = $request->input('entries_number', 5);
 
-        $users = $this->userService
-                ->getAllUsersAfterFiltering($request,$entries_number);
+        $users = $this->userService->getAllUsersAfterFiltering($request, $entries_number);
 
         return view('dashboard.manager.members.list_users', [
             'users' => $users,
@@ -48,13 +48,17 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(UserRequest $request)
+    public function store(CreateUserRequest $request)
     {
         //Create user using the UserService class
-        $this->userService->create($request);
+        $user = $this->userService->create($request);
 
         // Add flash message
-        session()->flash('success', 'User created successfully.');
+        if ($user) {
+            session()->flash('success', 'User created successfully.');
+        } else {
+            session()->flash('error', 'Failed to Create user.');
+        }
 
         // Redirect based on the value of redirect_to
         return redirect()->route('users.' . $request->redirect_to);
@@ -84,14 +88,27 @@ class UserController extends Controller
     public function edit(User $user)
     {
         //
+        return view('dashboard.manager.members.edit', [
+            'user' => $user,
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, User $user)
+    public function update(UpdateUserRequest $request, User $user)
     {
-        //
+        //Update user using the UserService class
+        $user = $this->userService->update($request, $user);
+
+        // Add flash message
+        if ($user) {
+            session()->flash('success', 'User updated successfully.');
+        } else {
+            session()->flash('error', 'Failed to update user.');
+        }
+
+        return redirect()->route('users.index');
     }
 
     /**
@@ -103,6 +120,4 @@ class UserController extends Controller
     }
 
     public function forceDelete(string $id) {}
-
-    
 }

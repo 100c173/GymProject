@@ -2,7 +2,8 @@
 
 namespace App\Services;
 
-use App\Http\Requests\UserRequest;
+use App\Http\Requests\CreateUserRequest;
+use App\Http\Requests\UpdateUserRequest;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -12,7 +13,7 @@ class UserService
     /**
      * For create a new user
      */
-    public function create(UserRequest $request)
+    public function create(CreateUserRequest $request)
     {
         $user = User::create([
             'first_name' => $request->first_name,
@@ -21,6 +22,24 @@ class UserService
             'password' => bcrypt($request->password),
         ]);
 
+        // Add flash message
+        if ($user)
+            session()->flash('success', 'User created successfully.');
+
+        return $user;
+    }
+
+    /**
+     * For update user
+     */
+    public function update(UpdateUserRequest $request, User $user)
+    {
+        $user = $user->update([
+            'first_name' => $request->first_name,
+            'last_name' => $request->last_name,
+            'email' => $request->email,
+        ]);
+        
         return $user;
     }
 
