@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\UserRequest;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
@@ -66,6 +67,15 @@ class UserController extends Controller
     public function show(User $user)
     {
         //
+        $serviceRatings = $user->ratings()->where('rateable_type', 'App\Models\Service')->get();
+        $userRatings = $user->ratings()->where('rateable_type', 'App\Models\User')->get();
+        $subscriptions = UserController::activeSubscriptions($user);
+        return view('dashboard.manager.members.view', [
+            'user' => $user,
+            'serviceRatings' => $serviceRatings,
+            'userRatings' => $userRatings,
+            'subscriptions' => $subscriptions,
+        ]);
     }
 
     /**
@@ -92,8 +102,11 @@ class UserController extends Controller
         //
     }
 
-    public function forceDelete(string $id)
-    {
+    public function forceDelete(string $id) {}
 
+    public function activeSubscriptions($user)
+    {
+        $today = Carbon::today();
+        return $user->subscriptions()->where('start', '<=', $today)->where('end', '>=', $today)->get();
     }
 }
