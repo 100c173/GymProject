@@ -3,12 +3,22 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\UserRequest;
+use App\Services\UserService;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
+
+    protected $userService;
+
+    public function __construct(UserService $userService)
+    {
+        $this->userService = $userService;
+    }
+
+
     /**
      * Display a listing of the resource.
      */
@@ -17,13 +27,9 @@ class UserController extends Controller
         // To define how many rows per page
         $entries_number = $request->input('entries_number', 5);
 
-        $q = User::query();
+        $users = $this->userService
+                ->getAllUsersAfterFiltering($request,$entries_number);
 
-        // Search by name
-        if ($request->input('searched_name'))
-            $q = User::where('first_name', 'like', '%' . $request->searched_name . '%');
-
-        $users = $q->paginate($entries_number);
         return view('dashboard.manager.members.list_users', [
             'users' => $users,
             'entries_number' => $entries_number,
@@ -44,21 +50,14 @@ class UserController extends Controller
      */
     public function store(UserRequest $request)
     {
-        //
-        $user = User::create([
-            'first_name' => $request->first_name,
-            'last_name' => $request->last_name,
-            'email' => $request->email,
-            'password' => bcrypt($request->password),
-        ]);
+        //Create user using the UserService class
+        $this->userService->create($request);
+
         // Add flash message
         session()->flash('success', 'User created successfully.');
+
         // Redirect based on the value of redirect_to
-        if ($request->redirect_to == 'index') {
-            return redirect()->route('users.index');
-        } else {
-            return redirect()->route('users.create');
-        }
+        return redirect()->route('users.' . $request->redirect_to);
     }
 
     /**
@@ -67,9 +66,10 @@ class UserController extends Controller
     public function show(User $user)
     {
         //
-        $serviceRatings = $user->ratings()->where('rateable_type', 'App\Models\Service')->get();
-        $userRatings = $user->ratings()->where('rateable_type', 'App\Models\User')->get();
-        $subscriptions = UserController::activeSubscriptions($user);
+        $serviceRatings = $this->userService->getUserRatingServices($user);
+        $userRatings =  $this->userService->getUserRatingTrainers($user);
+        $subscriptions = $this->userService->getUserActiveSubscriptions($user);
+
         return view('dashboard.manager.members.view', [
             'user' => $user,
             'serviceRatings' => $serviceRatings,
@@ -104,9 +104,5 @@ class UserController extends Controller
 
     public function forceDelete(string $id) {}
 
-    public function activeSubscriptions($user)
-    {
-        $today = Carbon::today();
-        return $user->subscriptions()->where('start', '<=', $today)->where('end', '>=', $today)->get();
-    }
+    
 }
