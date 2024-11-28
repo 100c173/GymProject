@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Appointment;
+use App\Models\Session;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class AppointmentController extends Controller
@@ -11,54 +14,42 @@ class AppointmentController extends Controller
      */
     public function index()
     {
-        //
-    }
+    $appointments=Appointment::with('session.times','user')->get();
+    $user = User::whereHas('appointments')->get();
+    return view('dashboard.manager.appointment.index',[
+     
+        'appointments'=>$appointments,'user'=>$user
+    ]);
+}
+public function search(Request $request)
+{
+    $search = $request->search;
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
+    // 
+    $appointments = Appointment::whereHas('user', function ($query) use ($search) {
+        $query->where('name', 'like', "%$search%"); // 
+    })
+    ->orWhereHas('session', function ($query) use ($search) {
+        $query->where('name', 'like', "%$search%"); //
+    })
+    ->get();
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+    return view('dashboard.manager.appointment.index', ['appointments' => $appointments]);
+}
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
+public function updateStatus(Request $request)
+{
+    try {
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
+        $appointment = Appointment::findOrFail($request->appointment_id);
+        $appointment->status = $request->status;
+        $appointment->save();
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        return response()->json(['success' => true]);
+    } catch (\Exception $e) {
+        return response()->json(['success' => false, 'message' => $e->getMessage()]);
     }
+}
+
 }

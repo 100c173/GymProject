@@ -8,7 +8,8 @@
         <meta name="author" content="" />
         <title>Dashboard </title>
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
-        <link href="css/styles.css" rel="stylesheet" />
+        <link href="{{ asset('/css/styles.css') }}" rel="stylesheet" />
+
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
         <style>
           
@@ -100,9 +101,13 @@
                             Members' attendance
                         </a>
                   
-                        <a class="nav-link" href="index.html">
+                        <a class="nav-link" href="{{route('appointments.index')}}">
                             <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                             Appointment
+                        </a>
+                        <a class="nav-link" href="">
+                            <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                            Rating
                         </a>
                         <a class="nav-link" href="index.html">
                             <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>

@@ -18,9 +18,10 @@ class Session extends Model
      */
     public function times()
     {
-        return $this->belongsToMany(Time::class,'session_time');
+        return $this->belongsToMany(Time::class,'sessions_times');
     }
-
+   
+    
     
     /**
     * A session can be associated with multiple plans through a many-to-many relationship.
