@@ -19,7 +19,22 @@ class PlanController extends Controller
       return view('dashboard.manager.plane.index',compact('plans'));
     
     }
-    
+    public function search(Request $request)
+    {
+        
+        if(!$request){
+            $plans = Plan::all();
+            return view('dashboard.manager.plane.index',compact('plans'));
+        }else{
+            $plans = Plan::where( 'period',$request->search)->orWhere('price','<=',$request->search)
+            ->orWhereHas('PlanType', function ($query) use ($request) {
+                $query->where('name', 'like', '%' . $request->search . '%');
+            })
+            ->get();
+            return view('dashboard.manager.plane.index',compact('plans'));
+        }
+        return view('dashboard.manager.plane.index',compact('plans','search'));
+    }
     /**
      * Show the form for creating a new resource.
      */

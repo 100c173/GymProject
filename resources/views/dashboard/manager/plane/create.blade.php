@@ -21,11 +21,27 @@
                             <input name="price" class="form-control" id="inputPrice" type="number" placeholder="plan price">
                             <label for="inputPrice">Plane Price</label>
                         </div>
-                    
-                        <div class="form-floating mb-3">
-                            <input name="with_trainer" class="form-control" id="inputtrainer" type="" placeholder="Password">
-                            <label for="inputtrainer">With Trainer</label>
+                        <div>
+                            
+                            <label>
+                                <input type="radio" name="with_trainer"value="0"  required>
+                                (None) 
+                            </label>
                         </div>
+                        <div>
+
+                            <label>
+                                <input type="radio" name="with_trainer"value="1"  required>
+                                (Personal Trainer) 
+                            </label>
+                        </div>
+                        <div>
+                            <label>
+                                <input type="radio" name="with_trainer"value="2"  required>
+                                (Group)
+                            </label>
+                        </div>
+
                         <div class="form-floating mb-3">
                             <input name="period" class="form-control" id="inputPeriod" type="number" placeholder="Period">
                             <label for="inputPeriod">Plane Period</label>
