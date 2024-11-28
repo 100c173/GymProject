@@ -18,7 +18,7 @@ class Session extends Model
      */
     public function times()
     {
-        return $this->belongsToMany(Time::class,'session_time');
+        return $this->belongsToMany(Time::class,'sessions_times');
     }
 
     
