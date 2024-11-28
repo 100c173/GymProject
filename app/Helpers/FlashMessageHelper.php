@@ -1,32 +1,19 @@
 <?php
-namespace App\Helpers;
 
-use Illuminate\Http\RedirectResponse;
-
-class FlashMessageHelper
-{
-    /**
-     * Handle a successful operation.
-     *
-     * @param string $message
-     * @param string|null $redirect
-     */
-    public static function success(string $message, string $redirect = null)
-    {
-        session()->flash('success', $message);
-        return redirect($redirect ?? url()->previous());
-    }
 
     /**
-     * Handle error operation.
+     * Flash a success or error message to the session based on a condition
      *
-     * @param string $message
-     * @param string|null $redirect
+     * @param bool $condition condition to evaluate
+     * @param string $successMessage The message to flash if the condition is true
+     * @param string $errorMessage The message to flash if the condition is false
      */
-    public static function error(string $message, string $redirect = null)
-    {
-        session()->flash('error', $message);
-        return redirect($redirect ?? url()->previous());
+    if (!function_exists('flashMessage')) {
+        function flashMessage($condition, $successMessage, $errorMessage) {
+            if ($condition) {
+                session()->flash('success', $successMessage);
+            } else {
+                session()->flash('error', $errorMessage);
+            }
+        }
     }
-
-}

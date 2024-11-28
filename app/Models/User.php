@@ -42,32 +42,43 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
     /**
-    * A user can have multiple subscriptions associated with them.
-    */
-    public function subscriptions(){
+     * A user can have multiple subscriptions associated with them.
+     */
+    public function subscriptions()
+    {
         return $this->hasMany(Subscription::class);
     }
 
     /**
-    * A user can give multiple ratings.
-    */
-    public function ratings(){
+     * A user can give multiple ratings.
+     */
+    public function ratings()
+    {
         return $this->hasMany(Rating::class);
     }
 
     /**
-    * A user can submit multiple membership applications.
-    */
-    public function membershipApplications(){
+     * A user can submit multiple membership applications.
+     */
+    public function membershipApplications()
+    {
         return $this->hasMany(MembershipApplication::class);
     }
 
     /**
-    * A user can be in many sessions 
-    */
+     * A user can be in many sessions 
+     */
     public function appointments()
     {
         return $this->hasMany(Appointment::class);
     }
-    
+
+    /**
+     * Scope for searching user based on the first name
+     * 
+     */
+    public function scopeSearchByFirstName($query, $firstName)
+    {
+        return $query->where('first_name', 'like', '%' . $firstName . '%');
+    }
 }

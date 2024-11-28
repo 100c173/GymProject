@@ -7,11 +7,14 @@ use App\Http\Requests\UpdateUserRequest;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Ramsey\Uuid\Type\Integer;
 
 class UserService
 {
     /**
      * For create a new user
+     * 
+     * @param CreateUserRequest $request To Create the user
      */
     public function create(CreateUserRequest $request)
     {
@@ -22,15 +25,14 @@ class UserService
             'password' => bcrypt($request->password),
         ]);
 
-        // Add flash message
-        if ($user)
-            session()->flash('success', 'User created successfully.');
-
         return $user;
     }
 
     /**
-     * For update user
+     * For update a user
+     * 
+     * @param UpdateUserRequest $request To Update the user
+     * @param User $user To know which user will be updated
      */
     public function update(UpdateUserRequest $request, User $user)
     {
@@ -39,12 +41,15 @@ class UserService
             'last_name' => $request->last_name,
             'email' => $request->email,
         ]);
-        
+
         return $user;
     }
 
     /**
      * To get all users after filtering with paginated data
+     * 
+     * @param Request $request To Apply the filtering if it's found
+     * @param $entries_number to know how many recordes per page
      */
     public function getAllUsersAfterFiltering(Request $request, $entries_number)
     {
@@ -52,13 +57,15 @@ class UserService
 
         // Search by name
         if ($request->input('searched_name'))
-            $q = User::where('first_name', 'like', '%' . $request->searched_name . '%');
+            $q->SearchByFirstName($request->input('searched_name'));
 
         return $q->paginate($entries_number);
     }
 
     /**
      * To get the subscriptions that are active and not expired
+     * 
+     * @param User $user To use it in relationship
      */
     public function getUserActiveSubscriptions(User $user)
     {
@@ -68,6 +75,8 @@ class UserService
 
     /**
      * To get all ratings related with services that user rate it
+     * 
+     * @param User $user To use it in relationship
      */
     public function getUserRatingServices(User $user)
     {
@@ -76,33 +85,49 @@ class UserService
 
     /**
      * To get all ratings related with Trainer that user rate it
+     * 
+     * @param User $user To use it in relationship
      */
     public function getUserRatingTrainers(User $user)
     {
         return $user->ratings()->where('rateable_type', 'App\Models\User')->get();
     }
 
-
+    /**
+     * To get all trashed users with filtering and paginated data
+     * 
+     * @param Request $request To Apply the filtering if it's found
+     * @param $entries_number to know how many recordes per page
+     */
     public function getAllTrashedUsersAfterFiltering(Request $request, $entries_number)
     {
         $q = User::query();
 
-        // Search by name
+        // Search using SearchByFirstName scope in the User model
         if ($request->input('searched_name'))
-            $q = User::where('first_name', 'like', '%' . $request->searched_name . '%');
+            $q->SearchByFirstName($request->input('searched_name'));
 
         return $q->onlyTrashed()->paginate($entries_number);
     }
 
+    /**
+     * For delete a user permenently
+     * 
+     * @param string $id Search the user by id
+     */
     public function forceDelete(string $id)
     {
         $user = User::withTrashed()->find($id);
         return $user->forceDelete();
     }
 
+    /**
+     * To restore a user
+     * 
+     * @param string $id Search the user by id
+     */
     public function restore(string $id)
     {
-       return User::withTrashed()->find($id)->restore();
+        return User::withTrashed()->find($id)->restore();
     }
-    
 }
