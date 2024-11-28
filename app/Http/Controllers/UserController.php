@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\FlashMessageHelper;
 use App\Http\Requests\UpdateUserRequest;
 use App\Http\Requests\CreateUserRequest;
 use App\Services\UserService;
@@ -56,9 +57,9 @@ class UserController extends Controller
 
         // Add flash message
         if ($user) {
-            session()->flash('success', 'User created successfully.');
+            FlashMessageHelper::success('User created successfully.');
         } else {
-            session()->flash('error', 'Failed to Create user.');
+            FlashMessageHelper::error('Failed to Create user.');
         }
 
         // Redirect based on the value of redirect_to
@@ -106,9 +107,9 @@ class UserController extends Controller
 
         // Add flash message
         if ($user) {
-            session()->flash('success', 'User updated successfully.');
+            FlashMessageHelper::success('User updated successfully.');
         } else {
-            session()->flash('error', 'Failed to update user.');
+            FlashMessageHelper::error('Failed to update user.');
         }
 
         return redirect($redirect);
@@ -124,9 +125,9 @@ class UserController extends Controller
 
         // Add flash message
         if ($user) {
-            session()->flash('success', 'User Deleted successfully.');
+            FlashMessageHelper::success('User Deleted successfully.');
         } else {
-            session()->flash('error', 'Failed to Delete user.');
+            FlashMessageHelper::error('Failed to Delete user.');
         }
 
         return redirect()->route('users.index');
@@ -138,9 +139,9 @@ class UserController extends Controller
         $user = $this->userService->forceDelete($id);
 
         if ($user) {
-            session()->flash('success', 'User Deleted successfully.');
+            FlashMessageHelper::success('User Deleted successfully.');
         } else {
-            session()->flash('error', 'Failed to Delete user.');
+            FlashMessageHelper::error('Failed to Delete user.');
         }
 
         return redirect($redirect);
@@ -151,9 +152,9 @@ class UserController extends Controller
         $user = $this->userService->restore($id);
 
         if ($user) {
-            session()->flash('success', 'User Restored successfully.');
+            FlashMessageHelper::success('User Restored successfully.');
         } else {
-            session()->flash('error', 'Failed to Restore user.');
+            FlashMessageHelper::error('Failed to Restore user.');
         }
 
         return redirect()->route('users.trashed');
