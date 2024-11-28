@@ -12,14 +12,16 @@ class TrainerAvailable implements ValidationRule
 {
     protected $timeId;
     protected $trainerId;
+    protected $curent_session_id ;
 
     /**
      * Create rule with time id and trainer id passed.
      */
-    public function __construct($timeId, $trainerId)
+    public function __construct($timeId, $trainerId , $curent_session_id)
     {
         $this->timeId = $timeId;
         $this->trainerId = $trainerId;
+        $this->curent_session_id = $curent_session_id;
     }
 
     /**
@@ -45,6 +47,7 @@ class TrainerAvailable implements ValidationRule
         foreach ($sessions as $session) {
 
             if ($session->time->day != $time->day) continue; // if the sessions not the same day no problem 
+            if(isset($this->curent_session_id) and $this->curent_session_id == $session->id ) continue ;
 
             $startTime2 = Carbon::createFromFormat('H:i:s', $session->time->start_time);
             $endTime2 = Carbon::createFromFormat('H:i:s',  $session->time->end_time);

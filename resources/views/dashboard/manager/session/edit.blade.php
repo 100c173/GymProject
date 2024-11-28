@@ -24,6 +24,8 @@
                     <form action="{{route('sessions.update',$session->id)}}" method="post">
                         @csrf
                         @method('PUT')
+                        <input type="hidden" name="session_id" value="{{$session->id}}">
+                        
                         <div class="form-floating mb-3">
                             <input class="form-control" id="inputName" name="name" value="{{$session->name}}">
                             <label for="inputName" >Session Name</label>
@@ -48,6 +50,17 @@
                                 @endforeach
                             </select>
                             <label for="time_id">Available Times</label>
+                        </div>
+
+                        <div class="form-floating mb-3">
+                            <select class="form-select" name="status" id="status">
+                                <option value="">Select Status</option>
+                                <option value="active">active</option>
+                                <option value="inactive">inactive</option>
+                                <option value="completed">completed</option>
+                                
+                            </select>
+                            <label for="status">Status</label>
                         </div>
 
                         <div class="form-floating mb-3">

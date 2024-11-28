@@ -84,12 +84,14 @@ class SessionController extends Controller
      */
     public function update(SessionRequest $request, Session $session)
     {
+        
         $session->update([
             'name' => $request->name,
             'description' => $request->description,
             'max_number' => $request->members_number,
             'user_id' => $request->trainer_id,
             'time_id' => $request->time_id,
+            'status' => $request->status,
         ]);
         
         return redirect()->route('sessions.index')->with('success', 'Session updated successfully');
