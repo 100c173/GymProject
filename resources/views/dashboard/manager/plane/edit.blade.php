@@ -22,10 +22,28 @@
                             <input name="price"value="{{$plan->price}}" class="form-control" id="inputPrice" type="number" placeholder="plan price">
                             <label for="inputPrice">Plane Price</label>
                         </div>
-                    
-                        <div class="form-floating mb-3">
-                            <input name="with_trainer"value="{{$plan->with_trainer}}" class="form-control" id="inputtrainer" type="" placeholder="Password">
-                            <label for="inputtrainer">With Trainer</label>
+                        <label >
+                            {{$plan->with_trainer==0?"None":(($plan->with_trainer==1)?"Personal trainer":"Group")}}
+                        </label>
+                        <div>
+                            
+                            <label>
+                                <input type="radio" name="with_trainer"value="0"  required>
+                                (None) 
+                            </label>
+                        </div>
+                        <div>
+
+                            <label>
+                                <input type="radio" name="with_trainer"value="1"  required>
+                                (Personal Trainer) 
+                            </label>
+                        </div>
+                        <div>
+                            <label>
+                                <input type="radio" name="with_trainer"value="2"  required>
+                                (Group)
+                            </label>
                         </div>
                         <div class="form-floating mb-3">
                             <input name="period"value="{{$plan->period}}" class="form-control" id="inputPeriod" type="number" placeholder="Period">

@@ -31,16 +31,7 @@
                      <th>action</th>
                 </tr>
             </thead>
-            <tfoot>
-                <tr>
-                    <th> Plane Name</th>
-                    <th> Plane Type</th>
-                     <th>Period </th>
-                     <th> Price</th>
-                     <th>With Trainer</th>
-                     <th>action</th>
-                </tr>
-            </tfoot>
+            
             <tbody>
                 @foreach ($plans as $plan)
                 <tr>
@@ -48,19 +39,7 @@
                      <td>  {{$plan->planType->name}}</td>
                      <td>{{$plan->period}}</td>
                     <td>{{$plan->price}}</td>
-                    <td>
-                    <div>
-                        @if($plan->with_trainer==0)
-                            None
-                        @elseif($plan->with_trainer==1)
-                            Personal Trainer
-                        @else
-                             Group
-                        @endif
-                       
-                    </div>
-                  
-                    </td>
+                    <td> {{$plan->with_trainer==0?"None":(($plan->with_trainer==1)?"Personal trainer":"Group")}}</td>
                      <th> 
                         <a href="{{route('plans.show',$plan)}}" class="btn btn-sm btn-secondary btn-animate">Show</a>
                         <a href="{{route('plans.edit',$plan)}}" class="btn btn-sm btn-secondary btn-animate">Edit</a>

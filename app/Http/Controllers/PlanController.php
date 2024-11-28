@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Plan;
 use App\Models\PlanType;
 use Illuminate\Http\Request;
+use App\Http\Requests\PlanControllerRequest;
 
 class PlanController extends Controller
 {
@@ -48,7 +49,7 @@ class PlanController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(PlanControllerRequest $request)
     {
              Plan::create([
             'name'=>$request->input('name'),

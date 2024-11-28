@@ -20,16 +20,7 @@
                      <th>action</th>
                 </tr>
             </thead>
-            <tfoot>
-                <tr>
-                    <th> Plane Name</th>
-                    <th> Plane Type</th>
-                     <th>Period </th>
-                     <th> Price</th>
-                     <th>With Trainer</th>
-                     <th>action</th>
-                </tr>
-            </tfoot>
+           
             <tbody>
               
                 <tr>
@@ -37,11 +28,7 @@
                      <td>  {{$plan->planType->name}}</td>
                      <td>{{$plan->period}}</td>
                     <td>{{$plan->price}}</td>
-                    <td> <select class="status-dropdown">
-                        <option value="inProgress">Personal</option>
-                        <option value="completed">Group</option>
-                        <option value="cancelled">None</option>
-                     </select></td>
+                    <td> {{$plan->with_trainer==0?"None":(($plan->with_trainer==1)?"Personal trainer":"Group")}}</td>
                      <th> 
                         <a href="{{route('plans.edit',$plan)}}" class="btn btn-sm btn-secondary btn-animate">Edit</a>
                         <form action="{{route('plans.destroy',$plan)}}" method="POST" style="display: inline-block;">
