@@ -81,4 +81,28 @@ class UserService
     {
         return $user->ratings()->where('rateable_type', 'App\Models\User')->get();
     }
+
+
+    public function getAllTrashedUsersAfterFiltering(Request $request, $entries_number)
+    {
+        $q = User::query();
+
+        // Search by name
+        if ($request->input('searched_name'))
+            $q = User::where('first_name', 'like', '%' . $request->searched_name . '%');
+
+        return $q->onlyTrashed()->paginate($entries_number);
+    }
+
+    public function forceDelete(string $id)
+    {
+        $user = User::withTrashed()->find($id);
+        return $user->forceDelete();
+    }
+
+    public function restore(string $id)
+    {
+       return User::withTrashed()->find($id)->restore();
+    }
+    
 }

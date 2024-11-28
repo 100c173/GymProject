@@ -1,23 +1,7 @@
 @extends('/dashboard/manager/layout')
 @section('content')
-@if (session('success'))
-    <div class="alert alert-success alert-dismissible fade show d-flex align-items-center" role="alert">
-        <i class="far fa-check-circle me-2"></i> 
-        <span style="font-weight: 500">
-            {{ session('success') }}
-        </span>
-        <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-@endif
-@if (session('error'))
-    <div class="alert alert-success alert-dismissible fade show d-flex align-items-center" role="alert">
-        <i class="far fa-close me-2"></i>
-        <span style="font-weight: 500">
-            {{ session('error') }}
-        </span>
-        <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-@endif
+@include('components.alert')
+
 <div class="container">
     <div class="row justify-content-center">
 
@@ -29,7 +13,7 @@
                     <h4 class="text-center font-weight-light my-2">User Information</h4>
                 </div>
                 <div class="card-body">
-                    <form action="{{route('users.update',$user)}}" method="POST" id="edit_user">
+                    <form action="{{route('users.update',['user' => $user, 'redirect' => url()->previous()])}}" method="POST" id="edit_user">
                         @csrf
                         @method('PUT')
                         
@@ -68,7 +52,7 @@
                 </div>
             </div>
             <div class="d-flex align-items-center justify-content-end mt-4 mb-0">
-                <a class="btn btn-secondary " href="{{route('users.index')}}">Cancel</a>
+                <a class="btn btn-secondary " href="{{url()->previous()}}">Cancel</a>
                 <button type="Edit" class="btn btn-primary btn-flat ms-2" form="edit_user">Edit</button>
             </div>
         </div>

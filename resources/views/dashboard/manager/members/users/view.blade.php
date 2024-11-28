@@ -1,5 +1,7 @@
 @extends('/dashboard/manager/layout')
 @section('content')
+@include('components.alert')
+
 <section style="background-color: #eee;">
     <div class="container py-3">
       <div class="row">
@@ -8,7 +10,7 @@
             <ol class="breadcrumb mb-0">
               <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
               <li class="breadcrumb-item"><a href="{{route('users.index')}}">Users</a></li>
-              <li class="breadcrumb-item active" aria-current="page">User Info</li>
+              <li class="breadcrumb-item active" aria-current="page">{{$user->first_name}}</li>
             </ol>
           </nav>
         </div>
@@ -46,7 +48,7 @@
                         </li>
                         <li>
                             <a class="dropdown-item" href="javascript:{}" onclick="document.getElementById('force_delete_user_{{$user->id}}').submit();">
-                                <form id="force_delete_user_{{$user->id}}" action="{{ route('users.forceDelete', $user->id) }}" method="POST" style="display: none;">
+                                <form id="force_delete_user_{{$user->id}}" action="{{ route('users.forceDelete',['id' => $user->id, 'redirect' => url()->previous()] ) }}" method="POST" style="display: none;">
                                     @csrf 
                                     @method('DELETE')
                                 </form>

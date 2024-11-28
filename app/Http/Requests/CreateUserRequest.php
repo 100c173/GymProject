@@ -34,4 +34,5 @@ class CreateUserRequest extends FormRequest
             'redirect_to' => 'in:index,create'
         ];
     }
+
 }

@@ -16,6 +16,7 @@ class UserController extends Controller
 
     public function __construct(UserService $userService)
     {
+        $this->middleware(['auth']);
         $this->userService = $userService;
     }
 
@@ -30,7 +31,7 @@ class UserController extends Controller
 
         $users = $this->userService->getAllUsersAfterFiltering($request, $entries_number);
 
-        return view('dashboard.manager.members.list_users', [
+        return view('dashboard.manager.members.users.list_users', [
             'users' => $users,
             'entries_number' => $entries_number,
         ]);
@@ -42,7 +43,7 @@ class UserController extends Controller
     public function create()
     {
         //
-        return view('dashboard.manager.members.create');
+        return view('dashboard.manager.members.users.create');
     }
 
     /**
@@ -74,7 +75,8 @@ class UserController extends Controller
         $userRatings =  $this->userService->getUserRatingTrainers($user);
         $subscriptions = $this->userService->getUserActiveSubscriptions($user);
 
-        return view('dashboard.manager.members.view', [
+
+        return view('dashboard.manager.members.users.view', [
             'user' => $user,
             'serviceRatings' => $serviceRatings,
             'userRatings' => $userRatings,
@@ -88,7 +90,7 @@ class UserController extends Controller
     public function edit(User $user)
     {
         //
-        return view('dashboard.manager.members.edit', [
+        return view('dashboard.manager.members.users.edit', [
             'user' => $user,
         ]);
     }
@@ -100,6 +102,7 @@ class UserController extends Controller
     {
         //Update user using the UserService class
         $user = $this->userService->update($request, $user);
+        $redirect = request()->query('redirect', route('users.index'));
 
         // Add flash message
         if ($user) {
@@ -108,7 +111,7 @@ class UserController extends Controller
             session()->flash('error', 'Failed to update user.');
         }
 
-        return redirect()->route('users.index');
+        return redirect($redirect);
     }
 
     /**
@@ -117,7 +120,53 @@ class UserController extends Controller
     public function destroy(User $user)
     {
         //
+        $user = $user->delete();
+
+        // Add flash message
+        if ($user) {
+            session()->flash('success', 'User Deleted successfully.');
+        } else {
+            session()->flash('error', 'Failed to Delete user.');
+        }
+
+        return redirect()->route('users.index');
     }
 
-    public function forceDelete(string $id) {}
+    public function forceDelete(string $id)
+    {
+        $redirect = request()->query('redirect', route('users.index'));
+        $user = $this->userService->forceDelete($id);
+
+        if ($user) {
+            session()->flash('success', 'User Deleted successfully.');
+        } else {
+            session()->flash('error', 'Failed to Delete user.');
+        }
+
+        return redirect($redirect);
+    }
+
+    public function restore(string $id)
+    {
+        $user = $this->userService->restore($id);
+
+        if ($user) {
+            session()->flash('success', 'User Restored successfully.');
+        } else {
+            session()->flash('error', 'Failed to Restore user.');
+        }
+
+        return redirect()->route('users.trashed');
+    }
+
+    public function trashedUsers(Request $request)
+    {
+        $entries_number = $request->input('entries_number', 5);
+        $users = $this->userService->getAllTrashedUsersAfterFiltering($request, $entries_number);
+
+        return view('dashboard.manager.members.users.trashed_users', [
+            'users' => $users,
+            'entries_number' => $entries_number,
+        ]);
+    }
 }

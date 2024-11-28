@@ -1,24 +1,7 @@
 @extends('/dashboard/manager/layout')
 @section('content')
+@include('components.alert')
 
-@if (session('success'))
-    <div class="alert alert-success alert-dismissible fade show d-flex align-items-center" role="alert">
-        <i class="far fa-check-circle me-2"></i> 
-        <span style="font-weight: 500">
-            {{ session('success') }}
-        </span>
-        <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-@endif
-@if (session('error'))
-    <div class="alert alert-success alert-dismissible fade show d-flex align-items-center" role="alert">
-        <i class="far fa-close me-2"></i>
-        <span style="font-weight: 500">
-            {{ session('error') }}
-        </span>
-        <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-@endif
 <div class="container mt-4">
     <div class="row">
         <div class="col-md-6 d-flex align-items-center">
@@ -100,7 +83,7 @@
                                 <th data-sortable="true" style="width:  19.720112517580873%;">
                                   Email
                                 </th>
-                                <th data-sortable="true" style="width:19.239099859353026%;">
+                                <th data-sortable="true" style="width:23%;">
                                     Created At
                                 </th>
                             </tr>
@@ -140,7 +123,7 @@
                                             </li>
                                             <li>
                                                 <a class="dropdown-item" href="javascript:{}" onclick="document.getElementById('force_delete_user_{{$user->id}}').submit();">
-                                                    <form id="force_delete_user_{{$user->id}}" action="{{ route('users.forceDelete', $user->id) }}" method="POST" style="display: none;">
+                                                    <form id="force_delete_user_{{$user->id}}" action="{{ route('users.forceDelete', ['id' => $user->id, 'redirect' => url()->current()]) }}" method="POST" style="display: none;">
                                                         @csrf 
                                                         @method('DELETE')
                                                     </form>

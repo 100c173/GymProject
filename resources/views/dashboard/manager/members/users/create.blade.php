@@ -1,24 +1,7 @@
 @extends('/dashboard/manager/layout')
 @section('content')
+@include('components.alert')
 
-@if (session('success'))
-    <div class="alert alert-success alert-dismissible fade show d-flex align-items-center" role="alert">
-        <i class="far fa-check-circle me-2"></i> 
-        <span style="font-weight: 500">
-            {{ session('success') }}
-        </span>
-        <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-@endif
-@if (session('error'))
-    <div class="alert alert-success alert-dismissible fade show d-flex align-items-center" role="alert">
-        <i class="far fa-close me-2"></i>
-        <span style="font-weight: 500">
-            {{ session('error') }}
-        </span>
-        <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-@endif
 <div class="container">
     <div class="row justify-content-center">
 
