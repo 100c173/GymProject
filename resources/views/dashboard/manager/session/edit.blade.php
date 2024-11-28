@@ -1,130 +1,90 @@
 @extends('/dashboard/manager/layout')
 @section('content')
 
-<br><br>
-<style>
-        /* General Reset */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+<!-- Show messages in case of errors -->
+@if ($errors->any())
+<div class="alert alert-danger">
+    <ul>
+        @foreach ($errors->all() as $error)
+        <li>{{ $error }}</li>
+        @endforeach
+    </ul>
+</div>
 
-        /* Body Styling */
-        body {
-            font-family: 'Georgia', serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
+@endif
 
-        /* Form Container Styling */
-        .form-container {
-            background-color: #fff;
-            padding: 40px;
-            border-radius: 10px;
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
-            max-width: 450px;
-            width: 100%;
-            border: 1px solid #ccc;
-        }
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-5">
+            <div class="card shadow-lg border-0 rounded-lg mt-5">
+                <div class="card-header">
+                    <h3 class="text-center font-weight-light my-4">Edit Session</h3>
+                </div>
+                <div class="card-body">
+                    <form action="{{route('sessions.update',$session->id)}}" method="post">
+                        @csrf
+                        @method('PUT')
+                        <div class="form-floating mb-3">
+                            <input class="form-control" id="inputName" name="name" value="{{$session->name}}">
+                            <label for="inputName" >Session Name</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <textarea class="form-control" name="description" id="inputDescription" >{{$session->description}}</textarea>
+                            <label for="inputDescription">Session Description</label>
+                        </div>
 
-        .form-container h1 {
-            text-align: center;
-            margin-bottom: 30px;
-            color: #2c3e50;
-            font-size: 28px;
-            text-transform: uppercase;
-            border-bottom: 2px solid #7f8c8d;
-            padding-bottom: 10px;
-        }
+                        <div class="form-floating mb-3">
+                            <input class="form-control" id="inputNumberofmembers" name="members_number" value="{{$session->max_members}}">
+                            <label for="inputNumberofmembers">Number of members</label>
+                        </div>
 
-        /* Form Group Styling */
-        .form-group {
-            margin-bottom: 20px;
-        }
+                        <div class="form-floating mb-3">
+                            <select class="form-select" name="time_id" id="time_id">
+                                <option value="">Select Time</option>
+                                @foreach($times as $time)
+                                <option value="{{ $time->id }}">
+                                    {{ $time->day }} | {{ $time->start_time }} - {{ $time->end_time }}
+                                </option>
+                                @endforeach
+                            </select>
+                            <label for="time_id">Available Times</label>
+                        </div>
 
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-size: 16px;
-            color: #34495e;
-        }
+                        <div class="form-floating mb-3">
+                            <input type="hidden" id="selected_trainer" name="trainer_id">
+                            <div class="dropdown-center">
+                                <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Select a Coach
+                                </button>
+                                <ul class="dropdown-menu">
+                                    @foreach($trainers as $trainer)
+                                    <li>
+                                        <button class="dropdown-item" type="button" data-value="{{ $trainer->id }}">{{ $trainer->name }}</button>
+                                    </li>
 
-        .form-group input,
-        .form-group textarea {
-            width: 100%;
-            padding: 12px;
-            font-size: 16px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            transition: border-color 0.3s ease;
-        }
+                                    @endforeach
+                                </ul>
+                            </div>
+                        </div>
 
-        .form-group input:focus,
-        .form-group textarea:focus {
-            border-color: #3498db;
-            outline: none;
-            box-shadow: 0 0 5px rgba(52, 152, 219, 0.2);
-        }
+                        <div class="d-flex align-items-center justify-content-between mt-4 mb-0">
+                            <input type="submit" class="btn btn-primary">
 
-        /* Submit Button Styling */
-        .submit-btn {
-            width: 100%;
-            background-color: #3498db;
-            color: #fff;
-            padding: 12px;
-            border: none;
-            border-radius: 5px;
-            font-size: 18px;
-            cursor: pointer;
-            transition: background-color 0.3s ease, transform 0.2s ease;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
+                        </div>
 
-        .submit-btn:hover {
-            background-color: #2980b9;
-            transform: translateY(-2px);
-        }
+                    </form>
+                </div>
 
-        .submit-btn:active {
-            transform: translateY(1px);
-        }
-
-    </style>
-    <div class="form-container">
-        <h1>Edit Session</h1>
-        <form action="{{route('sessions.update',$session->id)}}" method="POST">
-
-            <div class="form-group">
-                <label for="name">Name</label>
-                <input type="text" name="name" value="{{$session->name}}">
             </div>
+        </div>
+    </div>
+</div>
 
-            <div class="form-group">
-                <label for="name">Date</label>
-                <input type="text" name="date" value="{{$session->times->first()->day}}">
-            </div>
-
-            <div class="form-group">
-                <label for="name">Start Time</label>
-                <input type="text" name="start_time" value="{{$session->times->first()->start_time}}">
-            </div>
-
-            <div class="form-group">
-                <label for="name">End Time</label>
-                <input type="text" name="end_time" value="{{$session->times->first()->end_time}}">
-            </div>
-
-            <div class="form-group">
-                <label for="name">Session status</label>
-                <input type="text" name="end_time" value="">
-            </div>
-
-
-            <!-- Submit Button -->
-            <button type="submit" class="submit-btn">Save</button>
-        </form>
-
+<script>
+    document.querySelectorAll('.dropdown-item').forEach(item => {
+        item.addEventListener('click', function() {
+            document.getElementById('selected_trainer').value = this.getAttribute('data-value');
+        });
+    });
+</script>
 @endsection

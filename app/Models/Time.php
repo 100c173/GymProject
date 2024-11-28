@@ -18,6 +18,6 @@ class Time extends Model
     */
     public function sessions()
     {
-        return $this->belongsToMany(Session::class,'session_time');
+        return $this->belongsToMany(Session::class);
     }
 }

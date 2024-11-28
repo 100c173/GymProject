@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\SessionController;
+use App\Models\Session;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Symfony\Component\Console\Input\Input;
@@ -19,10 +21,11 @@ Route::get('/', function () {
     return view('auth.login');
 });
 
-Route::get('test', function () {
-    return view('test');
+Route::get('/dashboard', function () {
+    return view('dashboard');
 });
 
+Route::resource('sessions',SessionController::class);
 
 Auth::routes();
 

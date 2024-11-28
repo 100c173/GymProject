@@ -9,16 +9,16 @@ class Session extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'description', 'max_members', 'user_id'];
+    protected $fillable = ['name', 'description', 'max_members', 'user_id' , 'time_id'];
     
     
     /**
      * A session can have multiple times associated with it through a many-to-many relationship.
      * This relationship is managed via the 'sessions_times' pivot table.
      */
-    public function times()
+    public function time()
     {
-        return $this->belongsToMany(Time::class)->as('sessions_times')->withTimestamps();
+        return $this->belongsTo(Time::class);
     }
 
     
@@ -45,4 +45,15 @@ class Session extends Model
         return $this->hasMany(Appointment::class);
     }
 
+       
+       protected static function booted()
+       {
+           static::deleting(function ($session) {
+               // Delete associated appointments
+               $session->appointments()->delete();
+   
+               // Delete relationships with `plans`
+               $session->plans()->detach();
+           });
+       }
 }
