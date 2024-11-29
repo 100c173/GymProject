@@ -72,6 +72,7 @@ class Kernel extends HttpKernel
         'PreventDuplicateUser' => \App\Http\Middleware\PreventDuplicateUser::class,
         'redirect' => \App\Http\Middleware\RedirectToAfterLogin::class,
         'role' => \Spatie\Permission\Middleware\RoleMiddleware::class,
-        'permission' => \Spatie\Permission\Middleware\PermissionMiddleware::class
+        'permission' => \Spatie\Permission\Middleware\PermissionMiddleware::class,
+        'check.application' => \App\Http\Middleware\CheckExistingApplication::class,
     ];
 }
