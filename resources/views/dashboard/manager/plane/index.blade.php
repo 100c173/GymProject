@@ -1,24 +1,20 @@
 @extends('/dashboard/manager/layout')
 @section('content')
-<div class="card mb-4">
+<div class="d-flex align-items-center justify-content-end me-4 mt-4 mb-0">
+    <a class="btn btn-success" href="{{route('plans.create')}}">create new plan</a>
+</div>
+<div class="container">
+    <div class="d-flex align-items-center justify-content-end mt-2 mb-0">
+
+        <div class="container-fluid px-4">
+            <div class="row justify-content-center">
+                    <div class="card shadow-lg border-0 rounded-lg mt-4">
     <div class="card-header">
-        <form method="GET"action="{{route('plans.search')}}" class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
-            @csrf
-            <div class="input-group">
-                 <input class="form-control" type="text"name="search" placeholder="Search for..." aria-label="Search for..." aria-describedby="btnNavbarSearch" />
-                 <button class="btn btn-primary" id="btnNavbarSearch" type="submit">Search<i class="fas fa-search"></i></button>
-             </div>
-         </form>
+      
         <i class="fas fa-table me-1"></i>
-  Subscribtion Plans
+   Plans
     </div>
-    
            
-    <div class="d-flex align-items-center justify-content-between mt-4 mb-0">
-        <a class="btn btn-primary" href="{{route('plans.create')}}">create new plan</a>
-        <a class="btn btn-primary" href="{{route('plan_types.index')}}">create new plan type</a>
-    </div>
-    
     <div class="card-body">
         <table id="datatablesSimple">
             <thead>
@@ -39,10 +35,10 @@
                      <td>  {{$plan->planType->name}}</td>
                      <td>{{$plan->period}}</td>
                     <td>{{$plan->price}}</td>
-                    <td> {{$plan->with_trainer==0?"None":(($plan->with_trainer==1)?"Personal trainer":"Group")}}</td>
+                    <td> {{$plan->with_trainer == 0 ? 'No' : 'yes'}}</td>
                      <th> 
                         <a href="{{route('plans.show',$plan)}}" class="btn btn-sm btn-secondary btn-animate">Show</a>
-                        <a href="{{route('plans.edit',$plan)}}" class="btn btn-sm btn-secondary btn-animate">Edit</a>
+                        <a href="{{route('plans.edit',$plan)}}" class="btn btn-sm btn-warning btn-animate">Edit</a>
                         <form action="{{route('plans.destroy',$plan)}}" method="POST" style="display: inline-block;">
                             @csrf
                             @method('DELETE')
@@ -53,5 +49,9 @@
             </tbody>
         </table>
     </div>
+</div>
+</div>
+</div>
+</div>
 </div>
 @endsection
