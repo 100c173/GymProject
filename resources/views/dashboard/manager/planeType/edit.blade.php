@@ -6,7 +6,7 @@
             <div class="card shadow-lg border-0 rounded-lg mt-5">
                 <div class="card-header"><h3 class="text-center font-weight-light my-4">Create New Session</h3></div>
                 <div class="card-body">
-                    <form  action="{{route('plans.update',$plan)}}" method="POST" enctype="multipart/form-data">
+                    <form  action="{{route('plan_types.update',$plan_type)}}" method="POST" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
                         <div class="form-floating mb-3">

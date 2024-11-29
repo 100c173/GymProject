@@ -42,7 +42,9 @@ class PlanTypeController extends Controller
      */
     public function edit(PlanType $plan_type)
     {
-        return redirect()->route('plan_types.edit',compact('plan_type'));
+        return view('dashboard.manager.planeType.edit', [
+            'plan_type' => $plan_type,
+        ]);
     }
 
     /**
