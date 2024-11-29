@@ -5,62 +5,64 @@ namespace App\Http\Controllers;
 use App\Models\Plan;
 use App\Models\PlanType;
 use Illuminate\Http\Request;
-use App\Http\Requests\PlanControllerRequest;
+use App\Http\Requests\PlanRequest;
+use App\Services\PlanService;
 
 class PlanController extends Controller
 {
+
+
+    /**
+     * Service to handle plan-related logic 
+     * and separating it from the controller
+     * 
+     * @var PlanService
+     */
+    protected $planService;
+
+    /**
+     * PlanController constructor
+     *
+     * @param PlanService $planService
+     */
+    public function __construct(PlanService $planService)
+    {
+        // Apply the auth middleware to ensure the user is authenticated
+        $this->middleware(['auth']);
+
+        // Inject the UserService to handle user-related logic
+        $this->planService = $planService;
+    }
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-     
-        $plans=Plan::all();
 
-      return view('dashboard.manager.plane.index',compact('plans'));
-    
+        $plans = Plan::all();
+
+        return view('dashboard.manager.plane.index', compact('plans'));
     }
-    public function search(Request $request)
-    {
-        
-        if(!$request){
-            $plans = Plan::all();
-            return view('dashboard.manager.plane.index',compact('plans'));
-        }else{
-            $plans = Plan::where( 'period',$request->search)->orWhere('price','<=',$request->search)
-            ->orWhereHas('PlanType', function ($query) use ($request) {
-                $query->where('name', 'like', '%' . $request->search . '%');
-            })
-            ->get();
-            return view('dashboard.manager.plane.index',compact('plans'));
-        }
-        return view('dashboard.manager.plane.index',compact('plans','search'));
-    }
+
     /**
      * Show the form for creating a new resource.
      */
     public function create()
     {
-        $plans=PlanType::all();
-        return view('dashboard.manager.plane.create',compact('plans'));
+        $plans = PlanType::all();
+        return view('dashboard.manager.plane.create', compact('plans'));
     }
-   
+
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(PlanControllerRequest $request)
+    public function store(PlanRequest $request)
     {
-             Plan::create([
-            'name'=>$request->input('name'),
-            'description'=>$request->input('description'),
-            'price'=>$request->input('price'),
-            'with_trainer'=>$request->input('with_trainer'),
-            'period'=>$request->input('period'),
-            'plan_type_id'=>$request->input('plan_type_id'),
-                    ]);
+       $this->planService->create($request);
 
-          return redirect()->route('plans.index');
+        return redirect()->route('plans.index');
     }
 
     /**
@@ -68,7 +70,7 @@ class PlanController extends Controller
      */
     public function show(Plan $plan)
     {
-        return view('dashboard.manager.plane.show',compact('plan'));
+        return view('dashboard.manager.plane.show', compact('plan'));
     }
 
     /**
@@ -76,25 +78,17 @@ class PlanController extends Controller
      */
     public function edit(Plan $plan)
     {
-        $plans=PlanType::all();
-        return view('dashboard.manager.plane.edit',compact('plan','plans'));
+        $plans = PlanType::all();
+        return view('dashboard.manager.plane.edit', compact('plan', 'plans'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request,Plan $plan)
+    public function update(Request $request, Plan $plan)
     {
-       $plan->update([
-            'name'=>$request->input('name'),
-            'description'=>$request->input('description'),
-            'price'=>$request->input('price'),
-            'with_trainer'=>$request->input('with_trainer'),
-            'period'=>$request->input('period'),
-            'plan_type_id'=>$request->input('plan_type_id'),
-                    ]);
-
-         
+        $this->planService->update($request,$plan);
+        
         return redirect()->route('plans.index');
     }
 
@@ -105,5 +99,22 @@ class PlanController extends Controller
     {
         $plan->delete();
         return redirect()->route('plans.index');
+    }
+
+    public function search(Request $request)
+    {
+
+        if (!$request) {
+            $plans = Plan::all();
+            return view('dashboard.manager.plane.index', compact('plans'));
+        } else {
+            $plans = Plan::where('period', $request->search)->orWhere('price', '<=', $request->search)
+                ->orWhereHas('PlanType', function ($query) use ($request) {
+                    $query->where('name', 'like', '%' . $request->search . '%');
+                })
+                ->get();
+            return view('dashboard.manager.plane.index', compact('plans'));
+        }
+        return view('dashboard.manager.plane.index', compact('plans', 'search'));
     }
 }
