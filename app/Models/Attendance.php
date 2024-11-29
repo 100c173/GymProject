@@ -18,4 +18,14 @@ class Attendance extends Model
     public function appointment(){
         return $this->belongsTo(Appointment::class);
     }
+
+    protected static function booted()
+    {
+        static::deleting(function ($attendance) {
+            
+            // Delete associated appointment
+            $attendance->appointment->delete();
+
+        });
+    }
 }

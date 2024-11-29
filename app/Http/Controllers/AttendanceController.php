@@ -8,7 +8,7 @@ use App\Models\Attendance;
 
 class AttendanceController extends Controller
 {
-   
+
     public function index(Request $request)
     {
         $appointments = $this->filterAppointment($request)->get();
@@ -16,7 +16,7 @@ class AttendanceController extends Controller
         return view('dashboard/manager/attendance/Record', compact('appointments'));
     }
 
-   
+
     private function filterAppointment(Request $request)
     {
         $query = Appointment::with(['user', 'session', 'attendances']);
@@ -34,69 +34,68 @@ class AttendanceController extends Controller
         return $query;
     }
     public function store(Request $request)
-{
-    $request->validate([
-        'attendance_status' => 'required|array',
-        'attendance_status.*' => 'in:present,absent,late',
-    ]);
+    {
+        $request->validate([
+            'attendance_status' => 'required|array',
+            'attendance_status.*' => 'in:present,absent,late',
+        ]);
 
-    $message = '';
+        $message = '';
 
-    foreach ($request->attendance_status as $appointmentId => $status) {
-        $appointment = Appointment::find($appointmentId);
+        foreach ($request->attendance_status as $appointmentId => $status) {
+            $appointment = Appointment::find($appointmentId);
 
-        if ($appointment) {
-            $attendance = $appointment->attendances->first();
+            if ($appointment) {
+                $attendance = $appointment->attendances->first();
 
-            if (!$attendance) {
-                Attendance::create([
-                    'status' => $status,
-                    'appointment_id' => $appointmentId,
-                ]);
-                $message = 'Attendance recorded successfully.';
-            } else {
-                $message = 'Attendance already recorded.';
+                if (!$attendance) {
+                    Attendance::create([
+                        'status' => $status,
+                        'appointment_id' => $appointmentId,
+                    ]);
+                    $message = 'Attendance recorded successfully.';
+                } else {
+                    $message = 'Attendance already recorded.';
+                }
             }
         }
+
+        return redirect()->route('attendance.index')->with('success', $message);
     }
 
-    return redirect()->route('attendance.index')->with('success', $message);
-}
-public function edit($id)
-{
-    $appointment = Appointment::with(['user', 'session', 'attendances'])->findOrFail($id);
-    $attendance = $appointment->attendances->first();
+    public function update($id , $type)
+    {
+        $appointment = Appointment::findOrFail($id);
 
-    return view('dashboard.manager.attendance.edit', compact('appointment', 'attendance'));
+        $attendance = $appointment->attendances->first();
 
-}
-public function update(Request $request, $id)
-{
-    $request->validate([
-        'status' => 'required|in:present,absent,late',
-    ]);
+        if ($attendance) {
+            if($type){
+                if($type==1)
+                   $attendance->update(['status' => 'present']);
+                else
+                    $attendance->update(['status' => 'nnconfirmed']);
+            }
+            else
+              $attendance->update(['status' => 'absent']);
 
-    $appointment = Appointment::findOrFail($id);
+            return redirect()->route('attendance.index')->with('success', 'Attendance updated successfully.');
+        }
 
-    $attendance = $appointment->attendances->first();
-
-    if ($attendance) {
-        // تحديث السجل إذا كان موجودًا
-        $attendance->update(['status' => $request->status]);
-        return redirect()->route('attendance.index')->with('success', 'Attendance updated successfully.');
+        return redirect()->route('attendance.index')->with('error', 'No attendance record found to update.');
     }
 
-    return redirect()->route('attendance.index')->with('error', 'No attendance record found to update.');
-}   
-public function destroy($id)
-{
-    $appointment = Appointment::findOrFail($id);
-    $attendance = $appointment->attendances->first();
-    if ($attendance) {
-        $attendance->delete();
-        return redirect()->route('attendance.index')->with('success', 'Attendance record deleted successfully.');
-    }
 
-    return redirect()->route('attendance.index')->with('error', 'No attendance record found to delete.');
-}
+    public function destroy($id)
+    {
+        $appointment = Appointment::findOrFail($id);
+        $attendance = $appointment->attendances->first();
+       
+        if ($attendance) {
+            $attendance->delete();
+            return redirect()->route('attendance.index')->with('success', 'Attendance record deleted successfully.');
+        }
+
+        return redirect()->route('attendance.index')->with('error', 'No attendance record found to delete.');
+    }
 }
