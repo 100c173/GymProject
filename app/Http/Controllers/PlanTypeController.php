@@ -14,7 +14,7 @@ class PlanTypeController extends Controller
     public function index()
     {
         $plan_types = PlanType::all();
-        return view('dashboard.manager.planeType.list_and_create', compact('plan_types'));
+        return view('dashboard.manager.planeType.list', compact('plan_types'));
     }
 
     /**
