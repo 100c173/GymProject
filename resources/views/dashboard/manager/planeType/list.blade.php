@@ -7,7 +7,7 @@
     </div>
     <div class="container-fluid px-4">
         <div class="row justify-content-center">
-                <div class="card shadow-lg border-0 rounded-lg mt-4">
+                <div class="card shadow-lg border-0 rounded-lg mt-4 mb-4">
                     <div class="card-header">
                         <svg class="svg-inline--fa fa-table me-1" aria-hidden="true" focusable="false" data-prefix="fas"
                             data-icon="table" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"

@@ -4,7 +4,7 @@
     <a class="btn btn-success" href="{{route('plans.create')}}">create new plan</a>
 </div>
 <div class="container">
-    <div class="d-flex align-items-center justify-content-end mt-2 mb-0">
+    <div class="d-flex align-items-center justify-content-end mt-2 mb-4">
 
         <div class="container-fluid px-4">
             <div class="row justify-content-center">

@@ -30,7 +30,7 @@ class PlanController extends Controller
         // Apply the auth middleware to ensure the user is authenticated
         $this->middleware(['auth']);
 
-        // Inject the UserService to handle user-related logic
+        // Inject the PlanService to handle plan-related logic
         $this->planService = $planService;
     }
 
