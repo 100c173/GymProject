@@ -1,9 +1,11 @@
 <?php
 
+use App\Http\Controllers\AppointmentController;
+use App\Http\Controllers\SessionController;
 use App\Models\Appointment;
+use Illuminate\Contracts\Session\Session;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AppointmentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,11 +22,15 @@ Route::get('/', function () {
     return view('auth.login');
 });
 
+Route::get('test', function () {
+    return view('test');
+});
 
+Route::get('/appointments',[AppointmentController::class,'index']);
+Route::get('/appointments/update_status/{id}/{type}',[AppointmentController::class,'updateStatus']);
 Route::get('/appointments/search',[AppointmentController::class,'search'])->name('appointment.search');
-Route::post('/appointment/update-status', [AppointmentController::class, 'updateStatus'])->name('appointment.updateStatus');
 
-Route::resource('/appointments',AppointmentController::class);
+Route::resource('sessions',SessionController::class);
 
 Auth::routes();
 

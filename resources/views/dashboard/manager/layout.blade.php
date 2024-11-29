@@ -6,39 +6,17 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>Dashboard </title>
+        <title>Dashboard - SB Admin</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
-        <link href="{{ asset('/css/styles.css') }}" rel="stylesheet" />
 
+        <link href="{{ asset('css/styles.css')}}" rel="stylesheet" />
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
-        <style>
-          
-          body, html {
-              height: 100%;
-              margin: 0;
-          }
-  
-         
-          body {
-              background-image: url('assets/img/lifestyle-7331253_1920.jpg'); 
-              background-size: cover; 
-              background-position: center; 
-              background-attachment: fixed; 
-              color: black; 
-              font-family: Arial, sans-serif;
-          }
-  
-         
-          .content {
-              text-align: center;
-              padding: 50px;
-          }
-      </style>
     </head>
     <body class="sb-nav-fixed">
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
             <!-- Navbar Brand-->
-            <a class="navbar-brand ps-3" href="index.html">wellcome</a>
+            <a class="navbar-brand ps-3" href="index.html">Start Bootstrap</a>
             <!-- Sidebar Toggle-->
             <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
             <!-- Navbar Search-->
@@ -53,7 +31,7 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                     
+                        <li><a class="dropdown-item" href="#!">Settings</a></li>
                         <li><a class="dropdown-item" href="#!">Activity Log</a></li>
                         <li><hr class="dropdown-divider" /></li>
                         <li><a class="dropdown-item" href="#!">Logout</a></li>
@@ -71,7 +49,7 @@
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                                 Dashboard
                             </a>
-                            <a class="nav-link" href="index.html">
+                            <a class="nav-link" href="{{route('sessions.index')}}">
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                                 Managing training sessions
                             </a>
@@ -98,10 +76,10 @@
                      
                         <a class="nav-link" href="index.html">
                             <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
-                            Members' attendance
+                            Member's attendance
                         </a>
                   
-                        <a class="nav-link" href="{{route('appointments.index')}}">
+                        <a class="nav-link" href="appointments">
                             <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                             Appointment
                         </a>
@@ -119,20 +97,14 @@
             </div>
             <div id="layoutSidenav_content">
                 <main>
-            @yield("content")
+                      @yield("content")
                 </main>
-                <footer class="py-4 bg-light mt-auto">
-                    <div class="container-fluid px-4">
-                        <div class="d-flex align-items-center justify-content-between small">
-                            <div class="text-muted">Copyright &copy; Your Website 2023</div>
-                            <div>
-                                <a href="#">Privacy Policy</a>
-                                &middot;
-                                <a href="#">Terms &amp; Conditions</a>
-                            </div>
-                        </div>
+                
+                    <div class="sb-sidenav-footer">
+                        <div class="small">Logged in as:</div>
+                        Start Bootstrap
                     </div>
-                </footer>
+            
             </div>
         </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>

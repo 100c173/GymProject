@@ -17,8 +17,6 @@ class MembershipApplication extends Model
         'user_id',
     ];
 
-    //Automatically load the related user model to prevent lazy loading.
-    protected $with = ['user'];
 
     /**
      * The membersihp application s associated with a specific user

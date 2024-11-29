@@ -1,5 +1,13 @@
 @extends('/dashboard/manager/layout')
 @section('content')
+
+@if(session('success'))
+<div class="alert alert-success alert-dismissible fade show" role="alert">
+    {{ session('success') }}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+@endif
+
 <div class="container-fluid px-4">
     <h1 class="mt-4">Appoinment Members</h1>
     <ol class="breadcrumb mb-4">
@@ -67,12 +75,21 @@
                         <tr  id="appointment-{{ $appointment->id }}">
                         <td>{{$appointment->user->name}}</td>
                         <td>{{$appointment->session->name}}</td>
-                        <td>{{ $appointment->session->times->first()?->day_of_week ?? 'No time selected'  }}</td>
-                        <td>{{ $appointment->session->times->first()?->start_time ?? 'No time selected' }}</td>
-                        <td>{{ $appointment->session->times->first()?->end_time ?? 'No time selected' }}</td>
+                        <td>{{ $appointment->session->time->day }}</td>
+                        <td>{{ $appointment->session->time->start_time }}</td>
+                        <td>{{ $appointment->session->time->end_time  }}</td>
                         <td>
-                            <button class="btn btn-success btn-sm accept" data-id="{{ $appointment->id }}">Accept</button>
-                            <button class="btn btn-danger btn-sm reject" data-id="{{ $appointment->id }}">Reject</button>
+                           @if($appointment->status == 'pending' )
+                           <a href="/appointments/update_status/{{$appointment->id}}/1"><button class="btn btn-success btn-sm accept" >Accept</button></a>
+                           <a href="/appointments/update_status/{{$appointment->id}}/0"><button class="btn btn-danger btn-sm reject" >Reject</button></a> 
+                           @endif
+                           @if($appointment->status == 'accepted')
+                                <button class="btn btn-success btn-sm accept" >approved</button>
+                           @endif
+                           @if($appointment->status == 'cancelled')
+                                <button class="btn btn-danger btn-sm reject" >rejected</button>
+                           @endif
+
                         </td>
                     </tr>
                     @endforeach
@@ -81,67 +98,5 @@
         </div>
     </div>
 </div>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-<script>
-    $(document).ready(function() {
-        // عند الضغط على زر قبول
-        $('.accept').click(function() {
-            var appointmentId = $(this).data('id');  // جلب ID الحجز
-            var status = 'accepted';    // ثابت، الحالة عند القبول
-
-            // إرسال طلب AJAX
-            $.ajax({
-                url: '{{ route('appointment.updateStatus') }}', // المسار الذي سيرسل الطلب إليه
-                method: 'POST',
-                data: {
-                    appointment_id: appointmentId,
-                    status: status, // إرسال حالة القبول
-                    _token: '{{ csrf_token() }}'  // إرسال التوكن
-                },
-                success: function(response) {
-                    if (response.success) {
-                        // إذا كانت العملية ناجحة، قم بحذف السطر من الواجهة
-                        $('#appointment-' + appointmentId).fadeOut();
-                    } else {
-                        alert('هناك خطأ في تحديث الحالة.');
-                    }
-                },
-                error: function() {
-                    alert('هناك خطأ في تحديث الحالة.');
-                }
-            });
-        });
-
-        // عند الضغط على زر رفض
-        $('.reject').click(function() {
-            var appointmentId = $(this).data('id');  // جلب ID الحجز
-            var status = 'cancelled';    // ثابت، الحالة عند الرفض
-
-            // إرسال طلب AJAX
-            $.ajax({
-                url: '{{ route('appointment.updateStatus') }}', // المسار الذي سيرسل الطلب إليه
-                method: 'POST',
-                data: {
-                    appointment_id: appointmentId,
-                    status: status, // إرسال حالة الرفض
-                    _token: '{{ csrf_token() }}'  // إرسال التوكن
-                },
-                success: function(response) {
-                    if (response.success) {
-                        // إذا كانت العملية ناجحة، قم بحذف السطر من الواجهة
-                        $('#appointment-' + appointmentId).fadeOut();
-                    } else {
-                        alert('هناك خطأ في تحديث الحالة.');
-                    }
-                },
-                error: function() {
-                    alert('هناك خطأ في تحديث الحالة.');
-                }
-            });
-        });
-    });
-</script>
-
 
 @endsection

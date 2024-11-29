@@ -14,42 +14,35 @@ class AppointmentController extends Controller
      */
     public function index()
     {
-    $appointments=Appointment::with('session.times','user')->get();
-    $user = User::whereHas('appointments')->get();
-    return view('dashboard.manager.appointment.index',[
-     
-        'appointments'=>$appointments,'user'=>$user
-    ]);
-}
-public function search(Request $request)
-{
-    $search = $request->search;
+        $appointments = Appointment::with('session.time', 'user')->get();
+        $user = User::whereHas('appointments')->get();
+        return view('dashboard.manager.appointment.index', [
 
-    // 
-    $appointments = Appointment::whereHas('user', function ($query) use ($search) {
-        $query->where('name', 'like', "%$search%"); // 
-    })
-    ->orWhereHas('session', function ($query) use ($search) {
-        $query->where('name', 'like', "%$search%"); //
-    })
-    ->get();
-
-    return view('dashboard.manager.appointment.index', ['appointments' => $appointments]);
-}
-
-public function updateStatus(Request $request)
-{
-    try {
-
-        $appointment = Appointment::findOrFail($request->appointment_id);
-        $appointment->status = $request->status;
-        $appointment->save();
-
-
-        return response()->json(['success' => true]);
-    } catch (\Exception $e) {
-        return response()->json(['success' => false, 'message' => $e->getMessage()]);
+            'appointments' => $appointments,
+            'user' => $user
+        ]);
     }
-}
+    public function search(Request $request)
+    {
+        $search = $request->search;
 
+        // 
+        $appointments = Appointment::whereHas('user', function ($query) use ($search) {
+            $query->where('name', 'like', "%$search%"); // 
+        })
+            ->orWhereHas('session', function ($query) use ($search) {
+                $query->where('name', 'like', "%$search%"); //
+            })
+            ->get();
+
+        return view('dashboard.manager.appointment.index', ['appointments' => $appointments]);
+    }
+
+    public function updateStatus($id, $type)
+    {
+        $appointment = Appointment::findOrFail($id);
+        $appointment->status = ($type) ? 'accepted': 'cancelled';
+        $appointment->save();
+        return redirect('/appointments')->with('success');
+    }
 }

@@ -11,10 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('sessions_times', function (Blueprint $table) {
+        Schema::create('times', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('session_id')->constrained('sessions')->cascadeOnDelete();
-            $table->foreignId('time_id')->constrained('times')->cascadeOnDelete();
+            $table->time('start_time');
+            $table->time('end_time');
+            $table->date('day');
             $table->timestamps();
         });
     }
@@ -24,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('sessions_times');
+        Schema::dropIfExists('times');
     }
 };
