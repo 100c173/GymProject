@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\PlanType;
 use Illuminate\Http\Request;
-use App\Http\Requests\PlanTypeControllerRequest;
+use App\Http\Requests\PlanTypeRequest;
 
 class PlanTypeController extends Controller
 {
@@ -13,8 +13,19 @@ class PlanTypeController extends Controller
      */
     public function index()
     {
-        $plan_types=PlanType::all();
-        return view('dashboard.manager.planeType.list_and_create',compact('plan_types'));
+        $plan_types = PlanType::all();
+        return view('dashboard.manager.planeType.list_and_create', compact('plan_types'));
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(PlanType $plan_type)
+    {
+        //
+        return view('dashboard.manager.planeType.show',[
+            'plan_type' => $plan_type,
+        ]);
     }
 
     /**
@@ -22,17 +33,17 @@ class PlanTypeController extends Controller
      */
     public function create()
     {
-        return redirect()->route('plan_types.index');
+        return view('dashboard.manager.planeType.create');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(PlanTypeControllerRequest $request)
+    public function store(PlanTypeRequest $request)
     {
         PlanType::create([
 
-            'name'=>$request->name,
+            'name' => $request->name,
         ]);
         return redirect()->route('plan_types.index');
     }
@@ -52,9 +63,9 @@ class PlanTypeController extends Controller
      */
     public function update(Request $request, PlanType $plan_type)
     {
-       $plan_type->update([
+        $plan_type->update([
 
-            'name'=>$request->name,
+            'name' => $request->name,
         ]);
         return redirect()->route('plan_types.index');
     }
@@ -66,6 +77,5 @@ class PlanTypeController extends Controller
     {
         $plan_type->delete();
         return redirect()->route('plan_types.index');
-
     }
 }
