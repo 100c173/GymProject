@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Appointment;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Attendance extends Model
 {
@@ -16,5 +17,15 @@ class Attendance extends Model
      */
     public function appointment(){
         return $this->belongsTo(Appointment::class);
+    }
+
+    protected static function booted()
+    {
+        static::deleting(function ($attendance) {
+            
+            // Delete associated appointment
+            $attendance->appointment->delete();
+
+        });
     }
 }
