@@ -76,15 +76,12 @@
                             <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                             Appointment
                         </a>
-<<<<<<< HEAD
                         <a class="nav-link" href="">
                             <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                             Rating
                         </a>
                         <a class="nav-link" href="index.html">
-=======
                         <a class="nav-link" href="{{route('plans.index')}}">
->>>>>>> feature/planfilter
                             <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                             Plane
                         </a>
