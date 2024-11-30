@@ -23,6 +23,7 @@
                 <div class="card-body">
                     <form action="{{route('sessions.store')}}" method="post">
                         @csrf
+                        <input type="hidden" name="status" value="active">
                         <div class="form-floating mb-3">
                             <input class="form-control" id="inputName" name="name" placeholder="SessionName">
                             <label for="inputName">Session Name</label>
