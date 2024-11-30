@@ -16,6 +16,11 @@ class Subscription extends Model
         'user_id',
     ];
 
+<<<<<<< HEAD
+=======
+    //Automatically load the related user and plan models with each subscription to prevent lazy loading and improve query efficiency.
+    // protected $with = ['user', 'plan'];
+>>>>>>> feature/users
 
     /**
      * The subscription belongs to a specific user.

@@ -1,9 +1,13 @@
 <?php
 
+<<<<<<< HEAD
 use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\SessionController;
 use App\Models\Appointment;
 use Illuminate\Contracts\Session\Session;
+=======
+use App\Http\Controllers\UserController;
+>>>>>>> feature/users
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
@@ -20,14 +24,14 @@ use App\Http\Controllers\PlanTypeController;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-
+Route::get('users/trash', [UserController::class, 'trashedUsers'])->name('users.trashed');
+Route::delete('users/{id}/forceDelete', [UserController::class, 'forceDelete'])->name('users.forceDelete');
+Route::post('users/{id}/restore', [UserController::class, 'restore'])->name('users.restore');
+Route::resource('users', UserController::class);
 Route::get('/', function () {
     return view('auth.login');
 });
 
-Route::get('test', function () {
-    return view('test');
-});
 
 Route::get('/appointments',[AppointmentController::class,'index']);
 Route::get('/appointments/update_status/{id}/{type}',[AppointmentController::class,'updateStatus']);

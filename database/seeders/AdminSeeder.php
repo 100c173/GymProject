@@ -18,12 +18,14 @@ class AdminSeeder extends Seeder
     {
         $Admins= [
             [
-                'name' => 'Admin One',
+                'first_name' => 'Admin',
+                'last_name' => 'One',
                 'email' => 'admin1@example.com',
                 'password' => bcrypt('password'),
             ],
             [
-                'name' => 'Admin Two',
+                'first_name' => 'Admin',
+                'last_name' => 'Two',
                 'email' => 'admin2@example.com',
                 'password' => bcrypt('password'),
             ],

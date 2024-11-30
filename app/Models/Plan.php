@@ -11,6 +11,11 @@ class Plan extends Model
     // protected $guarded=[];
      protected $fillable = ['name', 'description', 'price', 'with_trainer', 'period', 'plan_type_id'];
 
+<<<<<<< HEAD
+=======
+    //Automatically load the related subscriptions and planType and sessions  models to prevent lazy loading.
+    // protected $with = ['subscriptions', 'planType', 'sessions'];
+>>>>>>> feature/users
 
     /**
      * A plan can have multiple subscriptions associated with it.

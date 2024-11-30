@@ -5,6 +5,7 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -12,8 +13,12 @@ use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
+<<<<<<< HEAD
     use HasApiTokens, HasFactory, Notifiable , HasRoles;
 
+=======
+    use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
+>>>>>>> feature/users
 
     /**
      * The attributes that are mass assignable.
@@ -43,28 +48,50 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
     /**
-    * A user can have multiple subscriptions associated with them.
-    */
-    public function subscriptions(){
+     * A user can have multiple subscriptions associated with them.
+     */
+    public function subscriptions()
+    {
         return $this->hasMany(Subscription::class);
     }
 
     /**
-    * A user can give multiple ratings.
-    */
-    public function ratings(){
+     * A user can give multiple ratings.
+     */
+    public function ratings()
+    {
         return $this->hasMany(Rating::class);
     }
 
     /**
-    * A user can submit multiple membership applications.
-    */
-    public function membershipApplications(){
+     * A user can submit multiple membership applications.
+     */
+    public function membershipApplications()
+    {
         return $this->hasMany(MembershipApplication::class);
     }
 
+<<<<<<< HEAD
 
     public function appointments(){
         return $this->hasMany(Appointment::class);
     }
+=======
+    /**
+     * A user can be in many sessions 
+     */
+    public function appointments()
+    {
+        return $this->hasMany(Appointment::class);
+    }
+
+    /**
+     * Scope for searching user based on the first name
+     * 
+     */
+    public function scopeSearchByFirstName($query, $firstName)
+    {
+        return $query->where('first_name', 'like', '%' . $firstName . '%');
+    }
+>>>>>>> feature/users
 }
