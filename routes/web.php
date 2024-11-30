@@ -1,18 +1,15 @@
 <?php
 
-<<<<<<< HEAD
 use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\SessionController;
 use App\Models\Appointment;
 use Illuminate\Contracts\Session\Session;
-=======
-use App\Http\Controllers\UserController;
->>>>>>> feature/users
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PlanController;
 use App\Http\Controllers\PlanTypeController;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------

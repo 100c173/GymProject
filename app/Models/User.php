@@ -13,12 +13,8 @@ use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
-<<<<<<< HEAD
-    use HasApiTokens, HasFactory, Notifiable , HasRoles;
 
-=======
-    use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
->>>>>>> feature/users
+    use HasApiTokens, HasFactory, Notifiable,HasRoles;
 
     /**
      * The attributes that are mass assignable.
@@ -71,12 +67,6 @@ class User extends Authenticatable
         return $this->hasMany(MembershipApplication::class);
     }
 
-<<<<<<< HEAD
-
-    public function appointments(){
-        return $this->hasMany(Appointment::class);
-    }
-=======
     /**
      * A user can be in many sessions 
      */
@@ -93,5 +83,4 @@ class User extends Authenticatable
     {
         return $query->where('first_name', 'like', '%' . $firstName . '%');
     }
->>>>>>> feature/users
 }
