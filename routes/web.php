@@ -6,6 +6,9 @@ use App\Models\Appointment;
 use Illuminate\Contracts\Session\Session;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\PlanController;
+use App\Http\Controllers\PlanTypeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -34,4 +37,8 @@ Route::resource('sessions',SessionController::class);
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/home', [HomeController::class, 'index'])->name('home');
+
+Route::resource('plans',PlanController::class);
+Route::resource('plan_types',PlanTypeController::class);
+Route::get('/search',[PlanController::class,'search'])->name("plans.search");
