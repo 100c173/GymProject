@@ -36,13 +36,12 @@ class TrainerAvailable implements ValidationRule
 
         // Create Carbon instances for the start and end times of the session.
         $startTime1 = Carbon::createFromFormat('H:i:s', $time->start_time);
-        $endTime1 = Carbon::createFromFormat('H:i:s', $time->end_time);
+        $endTime1   = Carbon::createFromFormat('H:i:s', $time->end_time);
 
         // Fetch all the trainer's sessions .
         $sessions = Session::where('user_id', $this->trainerId)->get();
 
-       
-
+      
         // Loop through all the sessions of the trainer.
         foreach ($sessions as $session) {
 

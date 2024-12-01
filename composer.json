@@ -33,8 +33,12 @@
             "Database\\Seeders\\": "database/seeders/"
         },
         "files": [
+<<<<<<< HEAD
             "app/Helpers/FlashMessageHelper.php",
             "app/Helpers/FileHelper.php" 
+=======
+            "app/Helpers/FlashMessageHelper.php"
+>>>>>>> develop
         ]
     },
     "autoload-dev": {

@@ -8,12 +8,16 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\HomeController;
+
 use App\Http\Controllers\MembershipApplicationController;
+
+use Illuminate\Database\Capsule\Manager;
+use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
+
 use App\Http\Controllers\PlanController;
 use App\Http\Controllers\PlanTypeController;
 use App\Http\Controllers\UserController;
-use Illuminate\Database\Capsule\Manager;
-use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -62,8 +66,10 @@ Route::delete('/membership_applications/{id}/destroy',[MembershipApplicationCont
 
 
 
+
 Route::get('/attendance', [AttendanceController::class, 'index'])->name('attendance.index');
 Route::post('/attendance/store', [AttendanceController::class, 'store'])->name('attendance.store');
 Route::get('/attendance/{id}/{type}', [AttendanceController::class, 'update'])->name('attendance.update');
 Route::delete('/attendance/{id}', [AttendanceController::class, 'destroy'])->name('attendance.destroy');
+
 
