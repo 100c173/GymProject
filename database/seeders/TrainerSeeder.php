@@ -14,12 +14,14 @@ class TrainerSeeder extends Seeder
     {        
         $trainers = [
             [
-                'name' => 'Trainer One',
+                'first_name' => 'Trainer',
+                'last_name' => 'One', 
                 'email' => 'trainer1@example.com',
                 'password' => bcrypt('password'),
             ],
             [
-                'name' => 'Trainer Two',
+                'first_name' => 'Trainer',
+                'last_name' => 'Two',
                 'email' => 'trainer2@example.com',
                 'password' => bcrypt('password'),
             ],

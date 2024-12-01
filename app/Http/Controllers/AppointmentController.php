@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Appointment;
+use App\Models\Session;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class AppointmentController extends Controller
@@ -11,54 +14,35 @@ class AppointmentController extends Controller
      */
     public function index()
     {
-        //
+        $appointments = Appointment::with('session.time', 'user')->get();
+        $user = User::whereHas('appointments')->get();
+        return view('dashboard.manager.appointment.index', [
+
+            'appointments' => $appointments,
+            'user' => $user
+        ]);
+    }
+    public function search(Request $request)
+    {
+        $search = $request->search;
+
+        // 
+        $appointments = Appointment::whereHas('user', function ($query) use ($search) {
+            $query->where('name', 'like', "%$search%"); // 
+        })
+            ->orWhereHas('session', function ($query) use ($search) {
+                $query->where('name', 'like', "%$search%"); //
+            })
+            ->get();
+
+        return view('dashboard.manager.appointment.index', ['appointments' => $appointments]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function updateStatus($id, $type)
     {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        $appointment = Appointment::findOrFail($id);
+        $appointment->status = ($type) ? 'accepted': 'cancelled';
+        $appointment->save();
+        return redirect('/appointments')->with('success');
     }
 }

@@ -97,8 +97,8 @@
                                         <td>{{$session->appointments->count()}}</td>
                                         <td>{{$session->status}}</td>
                                         <td>
-                                            <a href="acceptance.html" class="btn btn-sm btn-secondary btn-animate">Manage</a>
-                                            <a href="attendence.html" class="btn btn-sm btn-info btn-animate">Log</a>
+                                            <a href="" class="btn btn-sm btn-secondary btn-animate">Manage</a>
+                                            <a href="/appointments" class="btn btn-sm btn-info btn-animate">Log</a>
                                         </td>
                                         <td>
                                             <a href="{{route('sessions.show',$session->id)}}" class="btn btn-sm btn-info btn-animate">View</a>

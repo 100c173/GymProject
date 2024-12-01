@@ -41,6 +41,7 @@ class TrainerAvailable implements ValidationRule
         // Fetch all the trainer's sessions .
         $sessions = Session::where('user_id', $this->trainerId)->get();
 
+       
 
         // Loop through all the sessions of the trainer.
         foreach ($sessions as $session) {

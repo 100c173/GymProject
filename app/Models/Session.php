@@ -20,12 +20,13 @@ class Session extends Model
     {
         return $this->belongsTo(Time::class);
     }
-
+   
+    
     
     /**
     * A session can be associated with multiple plans through a many-to-many relationship.
     * This relationship is managed via the 'plans_sessions' pivot table.
-     */
+    */
     public function plans()
     {
         return $this->belongsToMany(Plan::class,'plans_sessions')->withTimestamps();
