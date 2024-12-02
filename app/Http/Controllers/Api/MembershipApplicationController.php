@@ -23,7 +23,8 @@ class MembershipApplicationController extends Controller
     public function index()
     {
         //Retrieve membership requests for the current user
-        $applications = auth()->user() ; 
+        $user = auth()->user() ; 
+        $applications = $user()->membershipApplications()->get();
 
         return response()->json([
             'message' => 'Membership request has been successfully retrieved.' ,
@@ -90,11 +91,11 @@ class MembershipApplicationController extends Controller
     {
         try {
             // Upload Files
-            $imagePath = $request->hasFile('image') 
-                ? FileHelper::uploadFile($request->file('image'), 'images/MembershipApplications') : $application->image;
+            $imagePath = $request->hasFile('image') ?
+                 FileHelper::uploadFile($request->file('image'), 'images/MembershipApplications') : $application->image;
  
-            $pdfPath = $request->hasFile('pdf') 
-                ? FileHelper::uploadFile($request->file('pdf'), 'MembershipApplications_CV') : $application->pdf;
+            $pdfPath = $request->hasFile('pdf') ? 
+                FileHelper::uploadFile($request->file('pdf'), 'MembershipApplications_CV') : $application->pdf;
     
             // Update the application record
             $application->update([
@@ -125,7 +126,6 @@ class MembershipApplicationController extends Controller
         }
     }
     
-
     /**
      * Remove the specified resource from storage.
      */
