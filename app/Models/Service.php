@@ -10,4 +10,10 @@ class Service extends Model
     use HasFactory;
 
     protected $fillable = ['name', 'description'];
+
+
+    public function scopeSearchName($query, $name)
+    {
+        return  $query->where('name', 'like', '%' . $name . '%');
+    }
 }
