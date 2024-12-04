@@ -46,13 +46,13 @@ class MembershipApplicationController extends Controller
         if ($request->hasFile('image')) {
             $file = $request->file('image');
 
-            $imagePath = uploadImage($file, "images/MembershipApplications"); // public disk by default
+            $imagePath = uploadFile($file, "images/MembershipApplications"); // public disk by default
         }
 
         if ($request->hasFile('pdf')) {
             $file = $request->file('pdf');
 
-            $pdfPath = uploadImage($file, "MembershipApplications_CV"); // public disk by default
+            $pdfPath = uploadFile($file, "MembershipApplications_CV"); // public disk by default
         }
 
 
@@ -97,13 +97,13 @@ class MembershipApplicationController extends Controller
         if ($request->hasFile('image')) {
             $file = $request->file('image');
 
-            $imagePath = uploadImage($file, "images/MembershipApplications"); // public disk by default
+            $imagePath = uploadFile($file, "images/MembershipApplications"); // public disk by default
         }
 
         if ($request->hasFile('pdf')) {
             $file = $request->file('pdf');
 
-            $pdfPath = uploadImage($file, "MembershipApplications_CV"); // public disk by default
+            $pdfPath = uploadFile($file, "MembershipApplications_CV"); // public disk by default
         }
 
 
