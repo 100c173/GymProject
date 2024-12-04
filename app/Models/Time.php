@@ -20,4 +20,9 @@ class Time extends Model
     {
         return $this->belongsToMany(Session::class);
     }
+
+    public function getStartAndEndtime()
+    {
+        return "{$this->start_time}  -  {$this->start_time}";
+    }
 }
