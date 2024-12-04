@@ -12,11 +12,12 @@ class AppointmentController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $appointments = Appointment::with('session.time', 'user')->get();
+
+        $appointments = Appointment::with('session.time', 'user')->paginate(10);
         $user = User::whereHas('appointments')->get();
-        return view('dashboard.manager.appointment.index', [
+        return view('new-dashboard.appointment.list_appointments', [
 
             'appointments' => $appointments,
             'user' => $user
@@ -24,18 +25,20 @@ class AppointmentController extends Controller
     }
     public function search(Request $request)
     {
+        $entries_number = $request->input('entries_number', 10);
+
         $search = $request->search;
 
         // 
         $appointments = Appointment::whereHas('user', function ($query) use ($search) {
-            $query->where('name', 'like', "%$search%"); // 
+            $query->SearchFullName($search);// 
         })
             ->orWhereHas('session', function ($query) use ($search) {
                 $query->where('name', 'like', "%$search%"); //
             })
-            ->get();
+            ->paginate($entries_number);
 
-        return view('dashboard.manager.appointment.index', ['appointments' => $appointments]);
+        return view('new-dashboard.appointment.list_appointments', ['appointments' => $appointments]);
     }
 
     public function updateStatus($id, $type)
@@ -43,6 +46,6 @@ class AppointmentController extends Controller
         $appointment = Appointment::findOrFail($id);
         $appointment->status = ($type) ? 'accepted': 'cancelled';
         $appointment->save();
-        return redirect('/appointments')->with('success');
+        return redirect()->route('appointments.index')->with('success');
     }
 }
