@@ -7,12 +7,14 @@ use App\Http\Requests\MemberShipApplicationRequest;
 use App\Http\Resources\MembershipApplicationResource;
 use App\Models\MembershipApplication;
 use App\Models\User;
+use App\Traits\ApiResponseTrait;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 
 
 class MembershipApplicationController extends Controller
 {
+    use ApiResponseTrait;
     public function __construct()
     {
         $this->middleware('auth:sanctum');
@@ -27,10 +29,8 @@ class MembershipApplicationController extends Controller
         $id = auth()->user()->id;
         $user = User::FindOrFail($id);
         $applications = MembershipApplication::where('user_id', $user->id)->get();
-        return response()->json([
-            'message' => 'Membership request has been successfully retrieved.',
-            'datat'  => MembershipApplicationResource::collection($applications),
-        ]);
+
+        return $this->successResponse('Membership request has been successfully retrieved.' , MembershipApplicationResource::collection($applications));
     }
 
     /**
@@ -67,10 +67,7 @@ class MembershipApplicationController extends Controller
         ]);
 
         //Successful response
-        return response()->json([
-            'message' => 'Your membership application has been submitted successfully.',
-            'data' => new MembershipApplicationResource($application),
-        ], 201);
+        return $this->successResponse('Your membership application has been submitted successfully.' , new MembershipApplicationResource($application), 201);
     }
 
     /**
@@ -78,11 +75,7 @@ class MembershipApplicationController extends Controller
      */
     public function show(MembershipApplication $membership_application)
     {
-
-        return response()->json([
-            'message' => 'The specified membership request has been successfully retrieved.',
-            'data' => new MembershipApplicationResource($membership_application),
-        ], 200);
+        return $this->successResponse('The specified membership request has been successfully retrieved.' , new MembershipApplicationResource($membership_application));
     }
 
     /**
@@ -114,10 +107,7 @@ class MembershipApplicationController extends Controller
         ]);
 
         // Return success response
-        return response()->json([
-            'message' => 'Your membership application has been updated successfully.',
-            'data' => new MembershipApplicationResource($membership_application),
-        ], 200);
+        return $this->successResponse('Your membership application has been updated successfully.' ,new MembershipApplicationResource($membership_application));
     }
 
     /**
@@ -125,10 +115,7 @@ class MembershipApplicationController extends Controller
      */
     public function destroy(MembershipApplication $membership_application)
     {
-
         $membership_application->delete();
-        return response()->json([
-            'message' => 'The membership application has been deleted successfully.',
-        ], 200);
+        return $this->successResponse('The membership application has been deleted successfully.');
     }
 }
