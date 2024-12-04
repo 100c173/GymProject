@@ -3,6 +3,8 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Contracts\Validation\Validator;
 
 class MemberShipApplicationRequest extends FormRequest
 {
@@ -22,10 +24,8 @@ class MemberShipApplicationRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'first_name' => 'required|string|max:255',
-            'last_name' => 'required|string|max:255',
-            'image' => 'required|nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048', 
-            'pdf' => 'required|nullable|mimes:pdf|max:5120', 
+            'image' => 'required|nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'pdf' => 'required|nullable|mimes:pdf|max:5120',
         ];
     }
 
@@ -37,13 +37,6 @@ class MemberShipApplicationRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'first_name.required' => 'The first name is required.',
-            'first_name.string' => 'The first name must be a valid string.',
-            'first_name.max' => 'The first name must not exceed 255 characters.',
-
-            'last_name.required' => 'The last name is required.',
-            'last_name.string' => 'The last name must be a valid string.',
-            'last_name.max' => 'The last name must not exceed 255 characters.',
 
             'image.required' => 'An image is required.',
             'image.image' => 'The file must be a valid image.',
@@ -54,5 +47,14 @@ class MemberShipApplicationRequest extends FormRequest
             'pdf.mimes' => 'The file must be a valid PDF.',
             'pdf.max' => 'The PDF size must not exceed 5MB.',
         ];
+    }
+
+    public function failedValidation(Validator $validator)
+    {
+        throw new HttpResponseException(response()->json([
+            'success'   => false,
+            'message'   => 'Validation errors',
+            'data'      => $validator->errors()
+        ]));
     }
 }

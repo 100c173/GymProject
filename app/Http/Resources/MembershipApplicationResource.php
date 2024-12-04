@@ -15,9 +15,9 @@ class MembershipApplicationResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'first_name' => $this->first_name,
-            'last_name' => $this->last_name,
             'status' => $this->status,
+            'image'  => $this->image_path , 
+            'pdf'    => $this->pdf_path,
             'message' => $this->status == 'pending' ? 'Your request is being processed.' : $this->status,
         ];
     }

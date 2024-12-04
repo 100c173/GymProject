@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Helpers\FileHelper;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\MemberShipApplicationRequest;
 use App\Http\Resources\MembershipApplicationResource;
 use App\Models\MembershipApplication;
+use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 
 
@@ -16,19 +17,19 @@ class MembershipApplicationController extends Controller
     {
         $this->middleware('auth:sanctum');
     }
-    
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
         //Retrieve membership requests for the current user
-        $user = auth()->user() ; 
-        $applications = $user()->membershipApplications()->get();
-
+        $id = auth()->user()->id;
+        $user = User::FindOrFail($id);
+        $applications = MembershipApplication::where('user_id', $user->id)->get();
         return response()->json([
-            'message' => 'Membership request has been successfully retrieved.' ,
-             MembershipApplicationResource::collection($applications),
+            'message' => 'Membership request has been successfully retrieved.',
+            'datat'  => MembershipApplicationResource::collection($applications),
         ]);
     }
 
@@ -37,103 +38,97 @@ class MembershipApplicationController extends Controller
      */
     public function store(MemberShipApplicationRequest $request)
     {
-        try {
 
-            // Upload files
-            $imagePath = FileHelper::uploadFile($request->file('image'), 'images/MembershipApplications');
-            $pdfPath = FileHelper::uploadFile($request->file('pdf'), 'MembershipApplications_CV');
-    
-            // Create record in database
-            $application = MembershipApplication::create([
-                'first_name' => $request->first_name,
-                'last_name' => $request->last_name,
-                'image' => $imagePath,
-                'pdf' => $pdfPath,
-                'status' => 'pending',
-            ]);
-    
-            //Successful response
-            return response()->json([
-                'message' => 'Your membership application has been submitted successfully.',
-                'data' => new MembershipApplicationResource($application),
-            ], 201);
-    
-        } catch (ValidationException $e) {
-            // When there are validation errors
-            return response()->json([
-                'message' => 'Validation error occurred.',
-                'errors' => $e->errors(),
-            ], 422);
+        // Upload files
+        $imagePath = null;
+        $pdfPath  = null;
 
-        } catch (\Exception $e) {
-            // When a general error occurs
-            return response()->json([
-                'message' => 'An unexpected error occurred. Please try again later.',
-            ], 500);
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+
+            $imagePath = uploadImage($file, "images/MembershipApplications"); // public disk by default
         }
+
+        if ($request->hasFile('pdf')) {
+            $file = $request->file('pdf');
+
+            $pdfPath = uploadImage($file, "MembershipApplications_CV"); // public disk by default
+        }
+
+
+        $user = auth()->user();
+
+        // Create record in database
+        $application = MembershipApplication::create([
+            'user_id' => $user->id,
+            'image_path' => $imagePath,
+            'pdf_path' => $pdfPath,
+            'status' => 'pending',
+        ]);
+
+        //Successful response
+        return response()->json([
+            'message' => 'Your membership application has been submitted successfully.',
+            'data' => new MembershipApplicationResource($application),
+        ], 201);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(MembershipApplication $application)
+    public function show(MembershipApplication $membership_application)
     {
+
         return response()->json([
-           'message' => 'The specified membership request has been successfully retrieved.', 
-            new MembershipApplicationResource($application),
-        ],200);
+            'message' => 'The specified membership request has been successfully retrieved.',
+            'data' => new MembershipApplicationResource($membership_application),
+        ], 200);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(MemberShipApplicationRequest $request, MembershipApplication $application)
+    public function update(MembershipApplicationRequest $request, MembershipApplication $membership_application)
     {
-        try {
-            // Upload Files
-            $imagePath = $request->hasFile('image') ?
-                 FileHelper::uploadFile($request->file('image'), 'images/MembershipApplications') : $application->image;
- 
-            $pdfPath = $request->hasFile('pdf') ? 
-                FileHelper::uploadFile($request->file('pdf'), 'MembershipApplications_CV') : $application->pdf;
-    
-            // Update the application record
-            $application->update([
-                'first_name' => $request->first_name ?? $application->first_name,
-                'last_name' => $request->last_name ?? $application->last_name,
-                'image' => $imagePath,
-                'pdf' => $pdfPath,
-                'status' => $application->status, 
-            ]);
-    
-            // Return success response
-            return response()->json([
-                'message' => 'Your membership application has been updated successfully.',
-                'data' => new MembershipApplicationResource($application),
-            ], 200);
-    
-        } catch (ValidationException $e) {
-            // Return validation error response
-            return response()->json([
-                'message' => 'Validation error occurred.',
-                'errors' => $e->errors(),
-            ], 422);
-        } catch (\Exception $e) {
-            // Return general error response
-            return response()->json([
-                'message' => 'An unexpected error occurred. Please try again later.',
-            ], 500);
+        // Upload files
+        $imagePath = $membership_application->image_path;
+        $pdfPath  = $membership_application->pdf_path;
+        
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+
+            $imagePath = uploadImage($file, "images/MembershipApplications"); // public disk by default
         }
+
+        if ($request->hasFile('pdf')) {
+            $file = $request->file('pdf');
+
+            $pdfPath = uploadImage($file, "MembershipApplications_CV"); // public disk by default
+        }
+
+
+        // Update the application record
+        $membership_application->update([
+            'image' => $imagePath,
+            'pdf' => $pdfPath,
+        ]);
+
+        // Return success response
+        return response()->json([
+            'message' => 'Your membership application has been updated successfully.',
+            'data' => new MembershipApplicationResource($membership_application),
+        ], 200);
     }
-    
+
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(MembershipApplication $application)
+    public function destroy(MembershipApplication $membership_application)
     {
-        $application->delete();
+
+        $membership_application->delete();
         return response()->json([
             'message' => 'The membership application has been deleted successfully.',
-            ], 200);
+        ], 200);
     }
 }
