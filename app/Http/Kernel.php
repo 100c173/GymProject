@@ -64,5 +64,11 @@ class Kernel extends HttpKernel
         'signed' => \App\Http\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
+        'admin' => \App\Http\Middleware\IsAdmin::class,
+        'unique.plan' => \App\Http\Middleware\EnsurePlanIsUnique::class,
+        'unique.plantype' => \App\Http\Middleware\EnsurePlanTypeIsUnique::class,
+        'checkSessionExists' => \App\Http\Middleware\CheckSessionExists::class,
+        'preventDoubleBooking' => \App\Http\Middleware\PreventDoubleBooking::class,
+        'PreventDuplicateUser' => \App\Http\Middleware\PreventDuplicateUser::class,
     ];
 }

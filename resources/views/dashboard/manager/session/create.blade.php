@@ -21,6 +21,7 @@
                     <h3 class="text-center font-weight-light my-4">Create New Session</h3>
                 </div>
                 <div class="card-body">
+
                     <form action="{{route('sessions.store')}}" method="post">
                         @csrf
 
@@ -61,7 +62,7 @@
                                 <ul class="dropdown-menu">
                                     @foreach($trainers as $trainer)
                                     <li>
-                                        <button class="dropdown-item" type="button" data-value="{{ $trainer->id }}">{{ $trainer->name }}</button>
+                                        <button class="dropdown-item" type="button" data-value="{{ $trainer->id }}">{{ $trainer->first_name }} {{ $trainer->last_name }}</button>
                                     </li>
 
                                     @endforeach
