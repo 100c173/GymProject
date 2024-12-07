@@ -74,7 +74,7 @@
                                 @foreach ($appointments as $appointment)
                                 <tr>
                                     <!-- اسم العضو -->
-                                    <td>{{ $appointment->user->name }}</td>
+                                    <td>{{ $appointment->user->first_name }}</td>
 
                                     <!-- اسم الجلسة -->
                                     <td>{{ $appointment->session->name }}</td>
