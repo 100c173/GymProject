@@ -8,7 +8,14 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\HomeController;
+
+
 use App\Http\Controllers\MembershipApplicationController;
+
+use Illuminate\Database\Capsule\Manager;
+use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
+
+
 use App\Http\Controllers\PlanController;
 use App\Http\Controllers\PlanTypeController;
 use App\Http\Controllers\RatingController;
@@ -16,6 +23,7 @@ use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\SportEquipmentController;
 use App\Http\Controllers\TimeController;
 use App\Http\Controllers\UserController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -64,9 +72,17 @@ Route::get('dashboard', function () {
     return view('new-dashboard.users.list_users');
 });
 
+Route::get('/membership_applications',[MembershipApplicationController::class,'index'])->name('membership_applications');
+Route::post('/membership_applications/{id}/update_status', [MembershipApplicationController::class, 'updateStatus'])->name('membership_applications.update_status');
+Route::delete('/membership_applications/{id}/destroy',[MembershipApplicationController::class,'destroy'])->name('membership_applications.destroy');
+
+
+
+
 
 Route::get('/attendance', [AttendanceController::class, 'index'])->name('attendance.index');
 Route::post('/attendance/store', [AttendanceController::class, 'store'])->name('attendance.store');
 Route::get('/attendance/{id}/{type}', [AttendanceController::class, 'update'])->name('attendance.update');
 Route::delete('/attendance/{id}', [AttendanceController::class, 'destroy'])->name('attendance.destroy');
+
 
