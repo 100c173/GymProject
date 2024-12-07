@@ -9,13 +9,19 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\HomeController;
 
+
 use App\Http\Controllers\MembershipApplicationController;
 
 use Illuminate\Database\Capsule\Manager;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
+
 use App\Http\Controllers\PlanController;
 use App\Http\Controllers\PlanTypeController;
+use App\Http\Controllers\RatingController;
+use App\Http\Controllers\ServiceController;
+use App\Http\Controllers\SportEquipmentController;
+use App\Http\Controllers\TimeController;
 use App\Http\Controllers\UserController;
 
 
@@ -39,11 +45,18 @@ Route::get('/', function () {
 });
 
 
-Route::get('/appointments',[AppointmentController::class,'index']);
+Route::get('/appointments',[AppointmentController::class,'index'])->name('appointments.index');
 Route::get('/appointments/update_status/{id}/{type}',[AppointmentController::class,'updateStatus']);
 Route::get('/appointments/search',[AppointmentController::class,'search'])->name('appointment.search');
 
+Route::put('sessions/update_status/{session}',[SessionController::class,'updateStatus'])->name('sessions.updateStatus');
 Route::resource('sessions',SessionController::class);
+
+Route::resource('times',TimeController::class);
+
+Route::resource('services', ServiceController::class);
+
+Route::resource('ratings', RatingController::class);
 
 Auth::routes();
 
@@ -56,7 +69,7 @@ Route::get('/search',[PlanController::class,'search'])->name("plans.search");
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::get('dashboard', function () {
-    return view('dashboard');
+    return view('new-dashboard.users.list_users');
 });
 
 Route::get('/membership_applications',[MembershipApplicationController::class,'index'])->name('membership_applications');

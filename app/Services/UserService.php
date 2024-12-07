@@ -25,6 +25,8 @@ class UserService
             'password' => bcrypt($request->password),
         ]);
 
+        $user->assignRole($request->role);
+
         return $user;
     }
 
@@ -49,15 +51,22 @@ class UserService
      * To get all users after filtering with paginated data
      * 
      * @param Request $request To Apply the filtering if it's found
-     * @param $entries_number to know how many recordes per page
      */
-    public function getAllUsersAfterFiltering(Request $request, $entries_number)
+    public function getAllUsersAfterFiltering(Request $request)
     {
+        // To define how many rows per page
+        $entries_number = $request->input('entries_number', 10);
+
         $q = User::query();
 
-        // Search by name
-        if ($request->input('searched_name'))
-            $q->SearchByFirstName($request->input('searched_name'));
+        // Search using SearchFullName scope in the User model
+        if ($request->filled('name')) {
+            $q->SearchFullName($request->name);
+        }
+
+        if ($request->filled('role') && $request->role !== 'All') {
+            $q->role($request->role);
+        }
 
         return $q->paginate($entries_number);
     }
@@ -101,13 +110,18 @@ class UserService
      */
     public function getAllTrashedUsersAfterFiltering(Request $request, $entries_number)
     {
-        $q = User::query();
+        $q = User::onlyTrashed();
 
-        // Search using SearchByFirstName scope in the User model
-        if ($request->input('searched_name'))
-            $q->SearchByFirstName($request->input('searched_name'));
+        // Search using SearchFullName scope in the User model
+        if ($request->filled('name')) {
+            $q->SearchFullName($request->name);
+        }
 
-        return $q->onlyTrashed()->paginate($entries_number);
+        if ($request->filled('role') && $request->role !== 'All') {
+            $q->role($request->role);
+        }
+
+        return $q->paginate($entries_number);
     }
 
     /**

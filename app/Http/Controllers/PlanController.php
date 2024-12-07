@@ -37,12 +37,16 @@ class PlanController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
+        $plan_types = PlanType::all();
 
-        $plans = Plan::all();
+        $plans = $this->planService->getAllPlansAfterFiltering($request);
 
-        return view('dashboard.manager.plane.index', compact('plans'));
+        return view('new-dashboard.plan.list_plans',[
+            'plan_types' => $plan_types,
+            'plans' => $plans
+        ]);
     }
 
     /**
@@ -50,8 +54,10 @@ class PlanController extends Controller
      */
     public function create()
     {
-        $plans = PlanType::all();
-        return view('dashboard.manager.plane.create', compact('plans'));
+        $plan_types = PlanType::all();
+        return view('new-dashboard.plan.create_plan',[
+            'plan_types' => $plan_types
+        ]);
     }
 
 
@@ -60,7 +66,10 @@ class PlanController extends Controller
      */
     public function store(PlanRequest $request)
     {
-       $this->planService->create($request);
+       $plan = $this->planService->create($request);
+
+        // using the method from FlashMessageHelper to alert the user about success or faild
+        flashMessage($plan, 'Plan created successfully.', 'Failed to Create plan.');
 
         return redirect()->route('plans.index');
     }
@@ -70,7 +79,7 @@ class PlanController extends Controller
      */
     public function show(Plan $plan)
     {
-        return view('dashboard.manager.plane.show', compact('plan'));
+        return view('new-dashboard.plan.show_plan', compact('plan'));
     }
 
     /**
@@ -78,8 +87,8 @@ class PlanController extends Controller
      */
     public function edit(Plan $plan)
     {
-        $plans = PlanType::all();
-        return view('dashboard.manager.plane.edit', compact('plan', 'plans'));
+        $plan_types = PlanType::all();
+        return view('new-dashboard.plan.edit_plan', compact('plan', 'plan_types'));
     }
 
     /**
@@ -87,7 +96,10 @@ class PlanController extends Controller
      */
     public function update(Request $request, Plan $plan)
     {
-        $this->planService->update($request,$plan);
+        $plan = $this->planService->update($request,$plan);
+
+        // using the method from FlashMessageHelper to alert the user about success or faild
+        flashMessage($plan, 'Plan updated successfully.', 'Failed to update plan.');
         
         return redirect()->route('plans.index');
     }
@@ -97,24 +109,12 @@ class PlanController extends Controller
      */
     public function destroy(Plan $plan)
     {
-        $plan->delete();
+       $plan = $plan->delete();
+
+        // using the method from FlashMessageHelper to alert the user about success or faild
+        flashMessage($plan, 'Plan Deleted successfully.', 'Failed to Delete plan.');
+
         return redirect()->route('plans.index');
     }
 
-    public function search(Request $request)
-    {
-
-        if (!$request) {
-            $plans = Plan::all();
-            return view('dashboard.manager.plane.index', compact('plans'));
-        } else {
-            $plans = Plan::where('period', $request->search)->orWhere('price', '<=', $request->search)
-                ->orWhereHas('PlanType', function ($query) use ($request) {
-                    $query->where('name', 'like', '%' . $request->search . '%');
-                })
-                ->get();
-            return view('dashboard.manager.plane.index', compact('plans'));
-        }
-        return view('dashboard.manager.plane.index', compact('plans', 'search'));
-    }
 }

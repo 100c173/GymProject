@@ -19,4 +19,33 @@ class Rating extends Model
     {
         return $this->morphTo();
     }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+
+    /**
+     * Scope a query to search for rateable by name
+     *
+     * This scope applies a filter to the query to search for rateable (either User or Service)
+     * based on the provided name
+     * It handles the polymorphic relationship and applies the appropriate
+     * search logic depending on the type of the rateable
+     *
+     * @param Builder $query The query builder instance
+     * @param string $name The name to search for in the rateable
+     * @return Builder The modified query builder instance
+     */
+    public function scopeSearchRateableName($query, $name)
+    {
+        return  $query->whereHasMorph('rateable', ['App\Models\User', 'App\Models\Service'], function ($q, $type) use ($name) {
+            if ($type === 'App\Models\User') {
+                $q->SearchFullName($name);
+            } elseif ($type === 'App\Models\Service') {
+                $q->SearchName($name);
+            }
+        });
+    }
 }

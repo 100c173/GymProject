@@ -31,7 +31,8 @@ class CreateUserRequest extends FormRequest
             'last_name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
-            'redirect_to' => 'in:index,create'
+            'redirect_to' => 'in:index,create',
+            'role' => 'required|exists:roles,name',
         ];
     }
 
