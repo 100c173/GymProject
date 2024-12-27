@@ -1,9 +1,10 @@
 <?php
 
-use App\Http\Controllers\Api\AuthController;
-use App\Http\Controllers\API\MembershipApplicationController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\services;
+use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\API\MembershipApplicationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,3 +26,10 @@ Route::post('login', [AuthController::class, 'login']);
 Route::post('user/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
 
 Route::apiResource('membership-applications',MembershipApplicationController::class);
+
+//services route 
+Route::get('/service', [Services::class, 'index']);
+Route::post('/services/store/{id}', [Services::class, 'store']);
+Route::get('/services/show/{id}', [Services::class, 'show']);
+Route::put('/services/update/{id}', [Services::class, 'update']);
+Route::delete('/services/destroy/{id}', [Services::class, 'destroy']);
