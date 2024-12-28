@@ -850,6 +850,11 @@
                       <div class="text-truncate" data-i18n="Analytics">Plans</div>
                     </a>
                   </li>
+                  <li class="menu-item {{Route::current()->uri() == "subscriptions" ? "active" : ''}}">
+                    <a href="{{route('subscription.index')}}" class="menu-link">
+                      <div class="text-truncate" data-i18n="Analytics">Subscriptions</div>
+                    </a>
+                  </li>
                   <li class="menu-item {{Route::current()->uri() == "plan_types" ? "active" : ''}}">
                     <a href="{{route('plan_types.index')}}" class="menu-link">
                       <div class="text-truncate" data-i18n="Analytics">Plan Types</div>
@@ -876,6 +881,11 @@
                   <li class="menu-item {{Route::current()->uri() == "users/trash" ? "active" : ''}}">
                     <a href="{{route('users.trashed')}}" class="menu-link">
                       <div class="text-truncate" data-i18n="Analytics">Users</div>
+                    </a>
+                  </li>
+                  <li class="menu-item {{Route::current()->uri() == "users/trash" ? "active" : ''}}">
+                    <a href="{{route('subscription.trashed')}}" class="menu-link">
+                      <div class="text-truncate" data-i18n="Analytics">Subscription</div>
                     </a>
                   </li>
                 </ul>

@@ -1,28 +1,29 @@
 <?php
 
-use App\Http\Controllers\AppointmentController;
-use App\Http\Controllers\SessionController;
 use App\Models\Appointment;
-use Illuminate\Contracts\Session\Session;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\HomeController;
-
-
-use App\Http\Controllers\MembershipApplicationController;
-
-use Illuminate\Database\Capsule\Manager;
-use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
-
-
 use App\Http\Controllers\PlanController;
-use App\Http\Controllers\PlanTypeController;
-use App\Http\Controllers\RatingController;
-use App\Http\Controllers\ServiceController;
-use App\Http\Controllers\SportEquipmentController;
 use App\Http\Controllers\TimeController;
 use App\Http\Controllers\UserController;
+use Illuminate\Database\Capsule\Manager;
+
+
+use Illuminate\Contracts\Session\Session;
+
+use App\Http\Controllers\RatingController;
+use App\Http\Controllers\ServiceController;
+
+
+use App\Http\Controllers\SessionController;
+use App\Http\Controllers\PlanTypeController;
+use App\Http\Controllers\AttendanceController;
+use App\Http\Controllers\AppointmentController;
+use App\Http\Controllers\SubscriptionController;
+use App\Http\Controllers\SportEquipmentController;
+use App\Http\Controllers\MembershipApplicationController;
+use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
 
 /*
@@ -86,3 +87,8 @@ Route::get('/attendance/{id}/{type}', [AttendanceController::class, 'update'])->
 Route::delete('/attendance/{id}', [AttendanceController::class, 'destroy'])->name('attendance.destroy');
 
 
+Route::get('/subscriptions', [SubscriptionController::class, 'index'])->name('subscription.index');
+Route::get('/subscriptions/trashed', [SubscriptionController::class, 'trashed'])->name('subscription.trashed');
+Route::delete('/subscription/{subscription}', [SubscriptionController::class, 'destroy'])->name('subscription.destroy');
+Route::delete('/subscriptions/force-delete/{id}', [SubscriptionController::class, 'forceDelete'])->name('subscription.forceDelete');
+Route::post('subscriptions/all-move-to-trash', [SubscriptionController::class, 'AllMoveToTrash'])->name('subscription.AllMoveToTrash');
