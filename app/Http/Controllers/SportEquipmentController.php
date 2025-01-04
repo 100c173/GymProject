@@ -38,7 +38,10 @@ class SportEquipmentController extends Controller
 
 
     /**
-     * Display a listing of the resource.
+     * Display a listing of the equipments after applying filters
+     * 
+     * @param EquipmentFilterRequest $request The request object containing filter data 
+     * @return View The view displaying the list of equipments
      */
     public function index(EquipmentFilterRequest $request)
     {
