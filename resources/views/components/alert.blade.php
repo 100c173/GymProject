@@ -1,35 +1,54 @@
 @if (session('success'))
-    <div class="alert alert-success alert-dismissible fade show d-flex align-items-center" role="alert">
-        <i class="far fa-check-circle me-2"></i> 
-        <span style="font-weight: 500">
-            {{ session('success') }}
-        </span>
-        <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert" aria-label="Close"></button>
+<div class="main-content">
+    <!-- Your main content here -->
+    <div class="alert alert-success alert-dismissible custom-alert" role="alert">
+      <h4 class="alert-heading d-flex align-items-center"><span class="alert-icon rounded-circle"><i class="bx bx-badge-check"></i></span>Success</h4>
+      <hr>
+      <p class="mb-0">{{session('success')}}</p>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+      </button>
     </div>
+  </div>
 @endif
 @if (session('error'))
-    <div class="alert alert-danger alert-dismissible fade show d-flex align-items-center" role="alert">
-        <i class="far fa-close me-2"></i>
-        <span style="font-weight: 500">
-            {{ session('error') }}
-        </span>
-        <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert" aria-label="Close"></button>
+<div class="main-content">
+    <!-- Your main content here -->
+    <div class="alert alert-danger alert-dismissible custom-alert" role="alert">
+      <h4 class="alert-heading d-flex align-items-center"><span class="alert-icon rounded-circle"><i class="bx bx-error-alt"></i></span>Error</h4>
+      <hr>
+      <p class="mb-0">{{session('error')}}</p>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+      </button>
     </div>
+  </div>
 @endif
 @if ($errors->any())
-    <div class="alert alert-danger alert-dismissible fade show d-flex align-items-center" role="alert">
-        <i class="far fa-close me-2"></i>
-        <span style="font-weight: 500">
-            Please check the form and try again.
-            <br><i class="ms-4">Notice:</i>
-            <ul class="mb-0 ms-4">
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
+<div class="main-content">
+    <!-- Your main content here -->
+    <div class="alert alert-warning alert-dismissible custom-alert" role="alert">
+      <h4 class="alert-heading d-flex align-items-center"><span class="alert-icon rounded-circle"><i class="bx bx-info-circle"></i></span>Note</h4>
+      <hr>
+          <ul class="mb-0 ms-4">
+              @foreach ($errors->all() as $error)
+              <li>{{ $error }}</li>
+              @endforeach
             </ul>
-        </span>
-        <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert" aria-label="Close"></button>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+      </button>
     </div>
-    
+  </div>
 @endif
 
+<style>
+
+.main-content {
+    margin-left: 250px; /* Adjust based on your sidebar width */
+    padding: 20px;
+}
+
+.custom-alert {
+    z-index: 1050; /* Ensure it appears above other content */
+    position: relative; /* Ensure the z-index is applied */
+}
+
+</style>

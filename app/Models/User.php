@@ -14,7 +14,9 @@ use Spatie\Permission\Traits\HasRoles;
 class User extends Authenticatable
 {
 
-    use HasApiTokens, HasFactory, Notifiable,HasRoles;
+
+    use HasApiTokens, HasFactory, Notifiable, HasRoles, SoftDeletes;
+
 
     /**
      * The attributes that are mass assignable.
@@ -76,11 +78,19 @@ class User extends Authenticatable
     }
 
     /**
-     * Scope for searching user based on the first name
-     * 
+     * Scope for Search By Full Name
      */
-    public function scopeSearchByFirstName($query, $firstName)
+    public function scopeSearchFullName($query, $name)
     {
-        return $query->where('first_name', 'like', '%' . $firstName . '%');
+        return $query->whereRaw("CONCAT(first_name, ' ', last_name) LIKE ?", ['%' . $name . '%']);
+    }
+
+    /**
+     * Accessor for full name
+     */
+    public function getFullName()
+    {
+        return "{$this->first_name} {$this->last_name}";
     }
 }
+

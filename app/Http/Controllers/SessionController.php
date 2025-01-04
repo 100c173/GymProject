@@ -28,9 +28,9 @@ class SessionController extends Controller
             $sessions->where('max_members', '<=', $maxMembers);
         }
         
-        $sessions = $sessions->get();
+        $sessions = $sessions->paginate($request->entries_number);
 
-        return view('dashboard\manager.session.index',compact('sessions')) ; 
+        return view('new-dashboard.sessions.llist_sessions',compact('sessions')) ; 
     }
 
     /**
@@ -40,7 +40,7 @@ class SessionController extends Controller
     {
         $trainers = User::role('trainer')->get();
         $times = Time::all();
-        return view('dashboard\manager.session.create',compact('trainers','times'));
+       return view('new-dashboard.sessions.create_session',compact('trainers','times'));
     }
 
     /**
@@ -66,7 +66,7 @@ class SessionController extends Controller
     public function show(Session $session)
     {
 
-        return view('dashboard\manager.session.view',compact('session'));
+        return view('new-dashboard.sessions.show_session',compact('session'));
     }
 
     /**
@@ -76,7 +76,7 @@ class SessionController extends Controller
     {
         $trainers = User::role('trainer')->get();
         $times = Time::all();
-        return view('dashboard\manager.session.edit',compact('session','trainers','times'));
+        return view('new-dashboard.sessions.edit_session',compact('session','trainers','times'));
     }
 
     /**
@@ -106,5 +106,14 @@ class SessionController extends Controller
         return redirect()->route('sessions.index')->with('success', 'Session deleted successfully');
     }
 
+    public function updateStatus(Request $request, Session $session)
+    {
+        
+        $session->update([
+            'status' => $request->status,
+        ]);
+        
+        return redirect()->route('sessions.index')->with('success', 'Session updated successfully');
+    }
     
 }

@@ -11,10 +11,10 @@ class MembershipApplication extends Model
     use HasFactory;
 
     protected $fillable = [
-        'status',
-        'pdf_path',
+        'status'    ,
+        'pdf_path'  ,
         'image_path',
-        'user_id',
+        'user_id'   ,
     ];
 
 

@@ -9,6 +9,8 @@ use App\Services\UserService;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Spatie\Permission\Contracts\Role;
+use Spatie\Permission\Models\Role as ModelsRole;
 
 class UserController extends Controller
 {
@@ -41,14 +43,11 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        // To define how many rows per page
-        $entries_number = $request->input('entries_number', 5);
 
-        $users = $this->userService->getAllUsersAfterFiltering($request, $entries_number);
+        $users = $this->userService->getAllUsersAfterFiltering($request);
 
-        return view('dashboard.manager.members.users.list_users', [
+        return view('new-dashboard.users.list_users', [
             'users' => $users,
-            'entries_number' => $entries_number,
         ]);
     }
 
@@ -58,7 +57,11 @@ class UserController extends Controller
     public function create()
     {
         //
-        return view('dashboard.manager.members.users.create');
+        $roles = ModelsRole::all();
+
+        return view('new-dashboard.users.create_user', [
+            'roles' => $roles,
+        ]);
     }
 
     /**
@@ -90,7 +93,7 @@ class UserController extends Controller
         $subscriptions = $this->userService->getUserActiveSubscriptions($user);
 
 
-        return view('dashboard.manager.members.users.view', [
+        return view('new-dashboard.users.view', [
             'user' => $user,
             'serviceRatings' => $serviceRatings,
             'userRatings' => $userRatings,
@@ -104,8 +107,11 @@ class UserController extends Controller
     public function edit(User $user)
     {
         //
-        return view('dashboard.manager.members.users.edit', [
+        $roles = ModelsRole::all();
+
+        return view('new-dashboard.users.edit_user', [
             'user' => $user,
+            'roles' => $roles,
         ]);
     }
 
@@ -178,12 +184,13 @@ class UserController extends Controller
      */
     public function trashedUsers(Request $request)
     {
-        $entries_number = $request->input('entries_number', 5);
+        $entries_number = $request->input('entries_number', 10);
         $users = $this->userService->getAllTrashedUsersAfterFiltering($request, $entries_number);
 
-        return view('dashboard.manager.members.users.trashed_users', [
+        return view('new-dashboard.users.trashed_users', [
             'users' => $users,
             'entries_number' => $entries_number,
         ]);
     }
+
 }

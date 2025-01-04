@@ -11,9 +11,9 @@ class AttendanceController extends Controller
 
     public function index(Request $request)
     {
-        $appointments = $this->filterAppointment($request)->get();
+        $appointments = $this->filterAppointment($request)->paginate(10);
 
-        return view('dashboard/manager/attendance/Record', compact('appointments'));
+        return view('new-dashboard.attendance.list_attendances', compact('appointments'));
     }
 
 
