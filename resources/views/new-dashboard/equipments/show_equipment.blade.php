@@ -1,5 +1,7 @@
 @extends('new-dashboard.layouts.app_dashborad')
-@section('title', 'Show Equipment')
+@section('title')
+{{$equipment->name}}
+@endsection
 @section('content')
 <div class="container-xxl flex-grow-1 container-p-y">
     <div class="card">
