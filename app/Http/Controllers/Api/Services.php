@@ -9,10 +9,11 @@ use App\Http\Requests\ServiceRequest;
 
 class Services extends Controller
 {
-    public function index(){
+    public function index()
+    {
 
-        $services=Service::all();
-     return response($services,200,['response returned succsesfully']);
+        $services = Service::all();
+        return response($services, 200, ['response returned succsesfully']);
     }
 
     public function store(ServiceRequest $request)
@@ -20,39 +21,38 @@ class Services extends Controller
         $services = Service::create([
             'name' => $request->name,
             'description' => $request->description,
-           
+
         ]);
-        return response($services,201,['created succsesfully']);
+        return response($services, 201, ['created succsesfully']);
     }
 
     public function show(string $id)
     {
-     
-        $service=Service::findorfail($id);
 
-        return response($service,200,['element returned succsesfully']);
+        $service = Service::findorfail($id);
+
+        return response($service, 200, ['element returned succsesfully']);
     }
 
-    public function update(ServiceRequest $request,string $id)
+    public function update(ServiceRequest $request, string $id)
     {
-     
-        $service=Service::findorfail($id);
+
+        $service = Service::findorfail($id);
 
         $service->update([
             'name' => $request->name,
             'description' => $request->description,
-           
+
         ]);
-        return response($service,200,['updated succsesfully']);
+        return response($service, 200, ['updated succsesfully']);
     }
 
 
     public function destroy(string $id)
     {
-     
-        $service=Service::findorfail($id);
-        $service->delete();
-        return response(200,['element deleted succsesfully']);
-    }
 
+        $service = Service::findorfail($id);
+        $service->delete();
+        return response(200, ['element deleted succsesfully']);
+    }
 }

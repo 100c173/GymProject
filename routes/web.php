@@ -21,8 +21,7 @@ use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\SportEquipmentController;
 use App\Http\Controllers\TimeController;
 use App\Http\Controllers\UserController;
-
-
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------

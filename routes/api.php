@@ -5,7 +5,10 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Api\services;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\LoginRegisterController;
 use App\Http\Controllers\API\MembershipApplicationController;
+use App\Http\Controllers\Api\PlanController;
+use App\Http\Controllers\Api\SubscriptionController;
 
 /*
 |--------------------------------------------------------------------------
