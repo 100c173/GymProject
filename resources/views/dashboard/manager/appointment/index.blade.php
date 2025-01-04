@@ -6,8 +6,7 @@
     {{ session('success') }}
     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 </div>
-@endif
-
+@endif 
 <div class="container-fluid px-4">
     <h1 class="mt-4">Appoinment Members</h1>
     <ol class="breadcrumb mb-4">
@@ -31,6 +30,12 @@
         </div>
 
         <div class="card-body">
+        @if (session('error'))
+    <div class="alert alert-danger" role="alert">
+        {{ session('error') }}
+    </div>
+                @endif
+
             <div class="datatable-wrapper datatable-loading no-footer sortable searchable fixed-columns">
                 <div class="datatable-top">
                     <div class="datatable-dropdown">
@@ -73,7 +78,7 @@
                         @foreach ($appointments as $appointment )
                        
                         <tr  id="appointment-{{ $appointment->id }}">
-                        <td>{{$appointment->user->name}}</td>
+                        <td>{{$appointment->user->first_name}} {{$appointment->user->last_name}}</td>
                         <td>{{$appointment->session->name}}</td>
                         <td>{{ $appointment->session->time->day }}</td>
                         <td>{{ $appointment->session->time->start_time }}</td>

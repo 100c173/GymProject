@@ -6,7 +6,14 @@
             <div class="card shadow-lg border-0 rounded-lg mt-5">
                 <div class="card-header"><h3 class="text-center font-weight-light my-4">Create New Plan</h3></div>
                 <div class="card-body">
-                    <form  action="{{route('plans.store')}}" method="POST" enctype="multipart/form-data">
+                    <!-- Display error message -->
+                    @if(session('error'))
+                        <div class="alert alert-danger">
+                            {{ session('error') }}
+                        </div>
+                    @endif
+                    
+                    <form action="{{route('plans.store')}}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div class="form-floating mb-3">
                             <input name="name" class="form-control" id="inputName" type="text" placeholder="plan name">
@@ -37,16 +44,14 @@
                         </div>
                         
                         <div>
-                            
                             <label>
-                                <input type="radio" name="with_trainer"value="1"  required>
+                                <input type="radio" name="with_trainer" value="1"  required>
                                 With Trainer
                             </label>
                         </div>
                         <div>
-                            
                             <label>
-                                <input type="radio" name="with_trainer"value="0"  required>
+                                <input type="radio" name="with_trainer" value="0"  required>
                                 Without Trainer
                             </label>
                         </div>
@@ -55,7 +60,6 @@
                         </div>
                     </form>
                 </div>
-               
             </div>
         </div>
     </div>

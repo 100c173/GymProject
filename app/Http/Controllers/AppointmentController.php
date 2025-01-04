@@ -40,12 +40,12 @@ class AppointmentController extends Controller
 
         return view('new-dashboard.appointment.list_appointments', ['appointments' => $appointments]);
     }
-
-    public function updateStatus($id, $type)
-    {
-        $appointment = Appointment::findOrFail($id);
-        $appointment->status = ($type) ? 'accepted': 'cancelled';
-        $appointment->save();
-        return redirect()->route('appointments.index')->with('success');
-    }
+ 
+    public function updateStatus($id, $type) 
+    { 
+        $appointment = Appointment::findOrFail($id); 
+        $appointment->status = ($type) ? 'accepted': 'cancelled'; 
+        $appointment->save(); 
+        return redirect('/appointments')->with('success'); 
+    } 
 }

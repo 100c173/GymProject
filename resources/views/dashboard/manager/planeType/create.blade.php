@@ -6,6 +6,12 @@
             <div class="card shadow-lg border-0 rounded-lg mt-5">
                 <div class="card-header"><h3 class="text-center font-weight-light my-4">Create New Session</h3></div>
                 <div class="card-body">
+                      <!-- Display error message -->
+                      @if(session('error'))
+                        <div class="alert alert-danger">
+                            {{ session('error') }}
+                        </div>
+                    @endif
                     <form  action="{{route('plan_types.store')}}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div class="form-floating mb-3">
