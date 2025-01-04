@@ -8,11 +8,11 @@
   <div class="col-xxl">
         <div class="card mb-6">
           <div class="card-header d-flex align-items-center justify-content-between">
-            <h5 class="mb-0">Create New Sport Equipment</h5>
+            <h5 class="mb-0">Create New Equipment</h5>
             {{-- <small class="text-muted float-end">Merged input group</small> --}}
           </div>
           <div class="card-body">
-            <form action="" method="POST" id="create_session" enctype="multipart/form-data">
+            <form action="{{route('equipments.store')}}" method="POST" id="create_session" enctype="multipart/form-data">
               @csrf
 
               <div class="row mb-6">
@@ -20,7 +20,7 @@
                 <div class="col-sm-10">
                   <div class="input-group input-group-merge">
                     <span id="basic-icon-default-fullname2" class="input-group-text"><i class="bx bx-dumbbell"></i></span>
-                    <input name="name" type="text" class="form-control" id="basic-icon-default-fullname" placeholder="John" aria-label="John Doe" aria-describedby="basic-icon-default-fullname2">
+                    <input name="name" type="text" class="form-control" id="basic-icon-default-fullname" placeholder="" aria-label="John Doe" aria-describedby="basic-icon-default-fullname2">
                   </div>
                 </div>
               </div>
@@ -30,7 +30,7 @@
                 <div class="col-sm-10">
                   <div class="input-group input-group-merge">
                     <span id="basic-icon-default-fullname2" class="input-group-text"><i class='bx bxl-sketch'></i></span>
-                    <input name="brand" type="text" class="form-control" id="basic-icon-default-fullname" placeholder="John" aria-label="John Doe" aria-describedby="basic-icon-default-fullname2">
+                    <input name="brand" type="text" class="form-control" id="basic-icon-default-fullname" placeholder="" aria-label="John Doe" aria-describedby="basic-icon-default-fullname2">
                   </div>
                 </div>
               </div>
@@ -69,7 +69,7 @@
                 <div class="col-sm-10">
                   <button type="submit" id = "submit_redirect_index" class="btn btn-primary">Create</button>
                   <button type="submit" id="submit_redirect_create" class="btn btn-light">Create & Create Another one</button>
-                  <a href="" class="btn btn-light">Cancel</a>
+                  <a href="{{route('equipments.index')}}" class="btn btn-light">Cancel</a>
                 </div>
               </div>
             </form>

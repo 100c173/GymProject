@@ -23,7 +23,7 @@
       </a>
 
       <!-- Create User -->
-      <a class="btn btn-primary me-1" href="" role="button">
+      <a class="btn btn-primary me-1" href="{{route('equipments.create')}}" role="button">
         Create New Equipment
       </a>
     </div>
@@ -31,50 +31,77 @@
   
 <!-- Filter Content -->
 <div class="collapse" id="collapseExample">
-  <div class="d-flex p-4">
-    <div class="card mb-6 w-100">
+  <div class="card mb-6 w-100">
       <h4 class="card-header">Filter</h4>
-      <form id="FilterForm" action="" method="GET">
-        <div class="card-body">
-          <div class="row mb-3 d-flex align-items-center">
-            <!-- Search -->
-            <div class="col-sm-4 d-flex align-items-center">
-              <label class="col-form-label me-2" for="basic-icon-default-fullname2">Search</label>
-              <div class="input-group input-group-merge flex-grow-1">
-                <span id="basic-icon-default-fullname2" class="input-group-text"><i class="bx bx-search"></i></span>
-                <input name="name" value="{{request('name')}}" type="text" class="form-control" id="basic-icon-default-fullname2" placeholder="Search Something" aria-label="John Doe" aria-describedby="basic-icon-default-fullname2">
+      <form id="FilterForm" action="{{ route('equipments.index') }}" method="GET">
+          <div class="card-body">
+
+              <div class="row mb-3">
+                  <!-- Name -->
+                  <div class="col-sm-4 d-flex align-items-center">
+                      <label class="col-form-label me-2" for="rater_name">Name</label>
+                      <div class="input-group input-group-merge flex-grow-1">
+                          <span id="equipment_name" class="input-group-text"><i class="bx bx-search"></i></span>
+                          <input name="name" value="{{ request('name') }}" placeholder="Enter The Equipment Name" class="form-control" type="text" id="equipment_name">
+                      </div>
+                  </div>
+
+                  <!-- Brand -->
+                  <div class="col-sm-4 d-flex align-items-center">
+                      <label class="col-form-label me-2" for="rateable_name">Brand</label>
+                      <div class="input-group input-group-merge flex-grow-1">
+                          <span id="brand" class="input-group-text"><i class="bx bx-search"></i></span>
+                          <input name="brand" value="{{ request('brand') }}" placeholder="Enter the brand" class="form-control" type="text" id="brand">
+                      </div>
+                  </div>
               </div>
-            </div>
 
-            <!-- Entries Number Dropdown -->
-            <div class="col-sm-2 d-flex align-items-center">
-              <input type="hidden" name="entries_number" value="{{request('entries_number')}}" id="entries_number">
-              <div class="btn-group me-2">
-                <button class="btn btn-primary dropdown-toggle" type="button" id="entriesDropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  Entries Number
-                </button>
-                <ul class="dropdown-menu" aria-labelledby="entriesDropdown">
-                  <li><a class="dropdown-item {{request('entries_number') == 5 ? 'active' : ''}}" href="javascript:void(0);" onclick="selectEntries('5')">5</a></li>
-                  <li><a class="dropdown-item {{request('entries_number') == 10 ? 'active' : ''}}" href="javascript:void(0);" onclick="selectEntries('10')">10</a></li>
-                  <li><a class="dropdown-item {{request('entries_number') == 15 ? 'active' : ''}}" href="javascript:void(0);" onclick="selectEntries('15')">15</a></li>
-                  <li><a class="dropdown-item {{request('entries_number') == 20 ? 'active' : ''}}"  href="javascript:void(0);" onclick="selectEntries('20')">20</a></li>
-                </ul>
+              <div class="row mt-5">
+                      <!-- Entries Number Dropdown -->
+                      <div class="col-sm-2 d-flex align-items-center">
+                          <input type="hidden" name="entries_number" value="{{ request('entries_number') }}" id="entries_number">
+                          <div class="btn-group me-2">
+                              <button class="btn btn-primary dropdown-toggle" type="button" id="entriesDropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                  Entries Number
+                              </button>
+                              <ul class="dropdown-menu" aria-labelledby="entriesDropdown">
+                                  <li><a class="dropdown-item {{ request('entries_number') == 5 ? 'active' : '' }}" href="javascript:void(0);" onclick="selectEntries('5')">5</a></li>
+                                  <li><a class="dropdown-item {{ request('entries_number') == 10 ? 'active' : '' }}" href="javascript:void(0);" onclick="selectEntries('10')">10</a></li>
+                                  <li><a class="dropdown-item {{ request('entries_number') == 15 ? 'active' : '' }}" href="javascript:void(0);" onclick="selectEntries('15')">15</a></li>
+                                  <li><a class="dropdown-item {{ request('entries_number') == 20 ? 'active' : '' }}" href="javascript:void(0);" onclick="selectEntries('20')">20</a></li>
+                              </ul>
+                          </div>
+                      </div>
+
+                         <!-- Equipment Status -->
+                          <div class="col-sm-2 d-flex align-items-center">
+                              <input type="hidden" name="equipment_status" value="{{ request('equipment_status') }}" id="equipment_status">
+                              <div class="btn-group me-2">
+                                  <button class="btn btn-primary dropdown-toggle" type="button" id="EquipmentStatusDropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Equipment Status
+                                  </button>
+                                  <ul class="dropdown-menu" aria-labelledby="EquipmentStatusDropdown">
+                                      <li><a class="dropdown-item {{ request('equipment_status') == 'available' ? 'active' : '' }}" href="javascript:void(0);" onclick="selectEquipmentStatus('available')">Available</a></li>
+                                      <li><a class="dropdown-item {{ request('equipment_status') == 'damaged' ? 'active' : '' }}" href="javascript:void(0);" onclick="selectEquipmentStatus('damaged')">Damaged</a></li>
+                                      <li><a class="dropdown-item {{ request('equipment_status') == 'under maintenance' ? 'active' : '' }}" href="javascript:void(0);" onclick="selectEquipmentStatus('under maintenance')">Under Maintenance</a></li>
+                                      <li><a class="dropdown-item {{ request('equipment_status') == '' ? 'active' : '' }}" href="javascript:void(0);" onclick="selectEquipmentStatus('')">All</a></li>
+                                  </ul>
+                              </div>
+                          </div>
+                        </div>
+
+
+              <!-- Apply Button -->
+              <div class="row mb-3">
+                  <div class="col-sm-12 d-flex justify-content-end">
+                      <button type="submit" class="btn btn-primary">Apply</button>
+                  </div>
               </div>
-            </div>
-
           </div>
-
-          <!-- Apply Button -->
-          <div class="row">
-            <div class="col-sm-12 d-flex justify-content-end">
-              <button class="btn btn-primary me-1">APPLY</button>
-            </div>
-          </div>
-        </div>
       </form>
-    </div>
   </div>
 </div>
+
 
   
   
@@ -90,33 +117,40 @@
             </tr>
           </thead>
           <tbody>
+            @foreach ($equipments as $equipment)
+              
             
               <tr>
                 <td><i class="fab fa-angular fa-xl text-danger me-4"></i>
                      <span>
-                        1
+                        {{$equipment->id}}
                     </span>
                 </td>
-                <td>Equipment name</td>
+                <td>{{$equipment->name}}</td>
                 <td>
-                  Brand
+                  {{$equipment->brand}}
                   </ul>
                 </td>
                 <td>
-                    <!-- Please use danger for damaged and warning for under maintenance -->
-                    <span class="badge bg-label-success me-1">available</span>
+                    @if ($equipment->equipment_status == 'available')
+                    <span class="badge bg-label-success me-1">{{$equipment->equipment_status}}</span>  
+                    @elseif ($equipment->equipment_status == 'damaged')
+                    <span class="badge bg-label-danger me-1">{{$equipment->equipment_status}}</span>  
+                    @elseif ($equipment->equipment_status == 'under maintenance')
+                    <span class="badge bg-label-warning me-1">{{$equipment->equipment_status}}</span>  
+                    @endif
+                    
                 </td>
                 <td>
                   <div class="dropdown">
                     <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="bx bx-dots-vertical-rounded"></i></button>
                     <div class="dropdown-menu">
 
-                      <a class="dropdown-item" href=""><i class="bx bx-show me-1"></i>Show</a>
-                      <a class="dropdown-item" href=""><i class="bx bx-edit-alt me-1"></i>Edit</a>
+                      <a class="dropdown-item" href="{{route('equipments.show', $equipment)}}"><i class="bx bx-show me-1"></i>Show</a>
+                      <a class="dropdown-item" href="{{route('equipments.edit',$equipment)}}"><i class="bx bx-edit-alt me-1"></i>Edit</a>
                         
-                      {{-- Please don't forget to replace the $equipment->id with real one in the form id and js like it should be remove_equipment_{{$equipment->id}}  --}}
-                      <a class="dropdown-item" href="javascript:{}" onclick="document.getElementById('remove_equipment_$equipment->id').submit();"><i class="bx bx-trash me-1"></i>
-                          <form id="remove_equipment_$equipment->id" action="" method="POST" style="display: none;">
+                      <a class="dropdown-item" href="javascript:{}" onclick="document.getElementById('remove_equipment_{{$equipment->id}}').submit();"><i class="bx bx-trash me-1"></i>
+                          <form id="remove_equipment_{{$equipment->id}}" action="{{route('equipments.destroy', $equipment)}}" method="POST" style="display: none;">
                               @csrf 
                               @method('DELETE')
                           </form>
@@ -127,46 +161,46 @@
                   </div>
                 </td>
               </tr>
-            
+              @endforeach
           </tbody>
         </table>
 
-        <!-- Please uncomment under below and replace the $sessions with $equipments
-             .. Don't forget to use paginate on your controller first! -->
-
-
-        {{-- <nav aria-label="Page navigation">
+        <nav aria-label="Page navigation">
             <ul class="pagination justify-content-center">
               <!-- Previous Page Link -->
-              <li class="page-item {{ $sessions->onFirstPage() ? 'disabled' : '' }}">
-                <a class="page-link" href="{{ $sessions->appends(['entries_number' => request('entries_number'), 'session_name' => request('session_name'), 'max_members' => request('max_members')])->previousPageUrl() }}">
+              <li class="page-item {{ $equipments->onFirstPage() ? 'disabled' : '' }}">
+                <a class="page-link" href="{{ $equipments->appends(['entries_number' => request('entries_number'), 'name' => request('name'),'brand' => request('brand'),'equipment_status' => request('equipment_status'),])->previousPageUrl() }}">
                   <i class="tf-icon bx bx-chevrons-left bx-sm"></i>
                 </a>
               </li>
           
               <!-- Pagination Links -->
-              @for ($i = 1; $i <= $sessions->lastPage(); $i++)
-                <li class="page-item {{ $sessions->currentPage() == $i ? 'active' : '' }}">
-                  <a class="page-link" href="{{ $sessions->appends(['entries_number' => request('entries_number'), 'session_name' => request('session_name'), 'max_members' => request('max_members')])->url($i) }}">
+              @for ($i = 1; $i <= $equipments->lastPage(); $i++)
+                <li class="page-item {{ $equipments->currentPage() == $i ? 'active' : '' }}">
+                  <a class="page-link" href="{{ $equipments->appends(['entries_number' => request('entries_number'), 'name' => request('name'), 'brand' => request('brand'),'equipment_status' => request('equipment_status'),])->url($i) }}">
                     {{ $i }}
                   </a>
                 </li>
               @endfor
           
               <!-- Next Page Link -->
-              <li class="page-item {{ $sessions->hasMorePages() ? '' : 'disabled' }}">
-                <a class="page-link" href="{{ $sessions->appends(['entries_number' => request('entries_number'), 'session_name' => request('session_name'), 'max_members' => request('max_members')])->nextPageUrl() }}">
+              <li class="page-item {{ $equipments->hasMorePages() ? '' : 'disabled' }}">
+                <a class="page-link" href="{{ $equipments->appends(['entries_number' => request('entries_number'), 'name' => request('name'), 'brand' => request('brand'),'equipment_status' => request('equipment_status'),])->nextPageUrl() }}">
                   <i class="tf-icon bx bx-chevrons-right bx-sm"></i>
                 </a>
               </li>
             </ul>
-          </nav> --}}
+          </nav>
         
       </div>
 </div>
 <script>
-  function selectEntries(value) {
-    document.getElementById('entries_number').value = value;
-  }
+function selectEntries(number) {
+    document.getElementById('entries_number').value = number;
+}
+
+function selectEquipmentStatus(type) {
+    document.getElementById('equipment_status').value = type;
+}
 </script>
 @endsection
