@@ -31,6 +31,7 @@ class TrainerAvailable implements ValidationRule
      */
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
+        
         // Retrieve the current session time based on its ID.
         $time = Time::find($this->timeId);
 
@@ -40,8 +41,7 @@ class TrainerAvailable implements ValidationRule
 
         // Fetch all the trainer's sessions .
         $sessions = Session::where('user_id', $this->trainerId)->get();
-
-      
+        
         // Loop through all the sessions of the trainer.
         foreach ($sessions as $session) {
 

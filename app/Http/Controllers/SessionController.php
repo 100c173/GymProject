@@ -11,6 +11,11 @@ use Illuminate\Http\Request;
 
 class SessionController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('checkSessionExists')->only('create');
+    }
+    
     /**
      * Display a listing of the resource.
      */
@@ -86,7 +91,9 @@ class SessionController extends Controller
     {
         $trainers = User::role('trainer')->get();
         $times = Time::all();
-        return view('new-dashboard.sessions.edit_session', compact('session', 'trainers', 'times'));
+        $plans = Plan::all();
+        $cur_plan = $session->plans;
+        return view('new-dashboard.sessions.edit_session', compact('session', 'trainers', 'times' ,'plans' , 'cur_plan'));
     }
 
     /**
@@ -94,15 +101,19 @@ class SessionController extends Controller
      */
     public function update(SessionRequest $request, Session $session)
     {
-
-        $session->update([
+        $data=[
             'name' => $request->name,
             'description' => $request->description,
             'max_number' => $request->members_number,
-            'user_id' => $request->trainer_id,
             'time_id' => $request->time_id,
             'status' => $request->status,
-        ]);
+        ];
+
+        if($request->trainer_id){
+            $data['user_id'] =  $request->trainer_id; 
+        }
+        $session->update($data);
+        $session->plans()->sync($request->plan_id);
 
         return redirect()->route('sessions.index')->with('success', 'Session updated successfully');
     }

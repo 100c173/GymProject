@@ -65,7 +65,7 @@ Route::get('/appointments/search', [AppointmentController::class, 'search'])->na
 
 // Sessions routes
 Route::put('sessions/update_status/{session}', [SessionController::class, 'updateStatus'])->name('sessions.updateStatus');
-Route::resource('sessions', SessionController::class)->middleware('checkSessionExists');
+Route::resource('sessions', SessionController::class);
 
 // Other resources
 Route::resource('times', TimeController::class);
