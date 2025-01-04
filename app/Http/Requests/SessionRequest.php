@@ -28,6 +28,7 @@ class SessionRequest extends FormRequest
             'description' => 'nullable|string|max:1000',
             'members_number' => 'required|integer|min:1|max:100',
             'trainer_id' => 'required',
+            'plan_id' => 'required',
             'status' => 'required',
             'time_id' => ['required',new TrainerAvailable($this->input('time_id'), $this->input('trainer_id') ,$this->input('session_id') )],
         ];
