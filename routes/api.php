@@ -1,9 +1,11 @@
 <?php
 
-use App\Http\Controllers\Api\AuthController;
-use App\Http\Controllers\API\MembershipApplicationController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\PlanController;
+use App\Http\Controllers\Api\SubscriptionController;
+use App\Http\Controllers\Api\LoginRegisterController;
+use App\Http\Controllers\API\MembershipApplicationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,12 +18,26 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+// Public routes of authtication
+Route::controller(LoginRegisterController::class)->group(function() {
+    Route::post('/register', 'register');
+    Route::post('/login', 'login');
 });
-
-Route::post('register', [AuthController::class, 'register']);
-Route::post('login', [AuthController::class, 'login']);
-Route::post('user/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
+// Protected routes 
+Route::middleware('auth:sanctum')->group( function () {
+    Route::post('/logout', [LoginRegisterController::class, 'logout']);
+//الاشتراك في خطة
+Route::post('/subscriptions', [SubscriptionController::class, 'subscribe']);
+//لغاء الاشتراك
+Route::delete('/subscriptions/{id}', [SubscriptionController::class, 'cancelSubscription']);
+//عرض اشتراكات المستخدم
+Route::get('/users/{id}/subscriptions', [SubscriptionController::class, 'getUserSubscriptions']);
+});
+//plans
+//عرض جميع الخطط
+Route::get('/plans', [PlanController::class, 'index']);
+//عرض تفاصيل خطة محددة
+Route::get('/plans/{id}', [PlanController::class, 'show']);
 
 Route::apiResource('membership-applications',MembershipApplicationController::class);
+
