@@ -57,6 +57,19 @@
                     </select>
                 </div>
               </div>
+              
+              <div class="row mb-6">
+                <label for="exampleFormControlSelect1" class="col-sm-2 col-form-label">Plans</label>
+                <div class="col-sm-10">
+                    <select name="time_id" class="form-select" id="exampleFormControlSelect1" aria-label="Default select example">
+                        <option selected>Open To Select A Plan</option>
+                        @foreach ($plans as $plan)
+                        <option value="{{$plan->id}}">{{$plan->name}}</option>
+                        @endforeach
+                    </select>
+                </div>
+              </div>
+
               <div class="row mb-6">
                 <label for="exampleFormControlSelect1" class="col-sm-2 col-form-label">Time</label>
                 <div class="col-sm-10">

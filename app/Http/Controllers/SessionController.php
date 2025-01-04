@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\SessionRequest;
+use App\Models\Plan;
 use App\Models\Session;
 use App\Models\Time;
 use App\Models\User;
@@ -40,7 +41,8 @@ class SessionController extends Controller
     {
         $trainers = User::role('trainer')->get();
         $times = Time::all();
-       return view('new-dashboard.sessions.create_session',compact('trainers','times'));
+        $plans = Plan::all();
+       return view('new-dashboard.sessions.create_session',compact('trainers','times','plans'));
     }
 
     /**
