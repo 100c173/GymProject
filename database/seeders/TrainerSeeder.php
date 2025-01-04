@@ -16,7 +16,6 @@ class TrainerSeeder extends Seeder
             [
                 'first_name' => 'Trainer',
                 'last_name' => 'One',
-
                 'email' => 'trainer1@example.com',
                 'password' => bcrypt('password'),
             ],
