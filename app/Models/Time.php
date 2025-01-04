@@ -23,6 +23,6 @@ class Time extends Model
 
     public function getStartAndEndtime()
     {
-        return "{$this->start_time}  -  {$this->start_time}";
+        return "{$this->start_time}  -  {$this->end_time}  - {$this->day}";
     }
 }
