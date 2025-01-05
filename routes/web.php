@@ -9,7 +9,7 @@ use App\Http\Controllers\HomeController;
 
 
 use App\Http\Controllers\MembershipApplicationController;
-
+use App\Http\Controllers\PermissionController;
 use Illuminate\Database\Capsule\Manager;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
@@ -17,6 +17,7 @@ use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 use App\Http\Controllers\PlanController;
 use App\Http\Controllers\PlanTypeController;
 use App\Http\Controllers\RatingController;
+use App\Http\Controllers\RoleController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\SportEquipmentController;
 use App\Http\Controllers\TimeController;
@@ -37,6 +38,26 @@ Route::get('/', function () {
     return view('auth.login');
 });
 
+
+Route::get('/appointments',[AppointmentController::class,'index'])->name('appointments.index');
+Route::get('/appointments/update_status/{id}/{type}',[AppointmentController::class,'updateStatus']);
+Route::get('/appointments/search',[AppointmentController::class,'search'])->name('appointment.search');
+
+Route::put('sessions/update_status/{session}',[SessionController::class,'updateStatus'])->name('sessions.updateStatus');
+Route::resource('sessions',SessionController::class);
+
+Route::resource('times',TimeController::class);
+
+Route::resource('services', ServiceController::class);
+
+Route::resource('ratings', RatingController::class);
+
+Route::resource('equipments', SportEquipmentController::class);
+
+Route::resource('permissions', PermissionController::class);
+
+Route::resource('roles', RoleController::class);
+
 Auth::routes();
 
 // Home route
@@ -51,11 +72,9 @@ Route::group(['middleware' => 'admin'], function () {
 
     Route::resource('plans', PlanController::class)->middleware('unique.plan');
     Route::resource('plan_types', PlanTypeController::class)->middleware('unique.plantype');
-    Route::get('/search', [PlanController::class, 'search'])->name('plans.search');
-
-    Route::get('dashboard', function () {
-        return view('dashboard');
-    });
+    Route::get('/search', [PlanController::class, 'search'])->name('plans.search');});
+Route::get('dashboard', function (){ 
+    return view('new-dashboard.dashboard.dashboard');
 });
 
 // Appointments routes
