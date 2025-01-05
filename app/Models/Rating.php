@@ -48,4 +48,26 @@ class Rating extends Model
             }
         });
     }
+
+    public function scopeOfRating($query, $rating)
+    {
+        return $query->where('rating', $rating);
+    }
+
+    public function scopeOfType($query, $type)
+    {
+        return $query->where('rateable_type', $type);
+    }
+
+    public function scopeOfRaterName($query, $name)
+    {
+        return $query->whereHas('user', function ($query) use ($name) {
+            $query->SearchFullName($name);
+        });
+    }
+
+    public function scopeOfRateableName($query, $name)
+    {
+        return $query->SearchRateableName($name);
+    }
 }
