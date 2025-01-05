@@ -26,7 +26,7 @@ class EquipmentFilterRequest extends FormRequest
             'name' => 'nullable|string|max:255',
             'brand' => 'nullable|string|max:255',
             'equipment_status' => 'nullable|string|max:255',
-            'entries_number' => 'nullable|integer|min:1',
+            'entries_number' => 'nullable|integer|min:5',
         ];
     }
 }
