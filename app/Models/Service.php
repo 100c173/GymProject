@@ -11,7 +11,14 @@ class Service extends Model
 
     protected $fillable = ['name', 'description'];
 
+    public function ratings()
+    {
+        return $this->morphMany(Rating::class, 'rateable');
+    }
 
+    /**
+     * Scope for Search By Name
+     */
     public function scopeSearchName($query, $name)
     {
         return  $query->where('name', 'like', '%' . $name . '%');
