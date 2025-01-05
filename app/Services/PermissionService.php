@@ -2,9 +2,12 @@
 
 namespace App\Services;
 
-use App\Http\Requests\PermissionRequest;
-use Illuminate\Http\Request;
-use Spatie\Permission\Models\Permission;
+/**
+ * this custom model because the basic model in the vendor folder can't be tracked
+ * by good so i make custom one to track it and put the scope inside it
+ */
+use App\Models\CustomPermission as Permission;
+
 
 class PermissionService
 {
