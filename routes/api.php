@@ -1,12 +1,13 @@
 <?php
 
+use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\API\MembershipApplicationController;
+use App\Http\Controllers\Api\RatingController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Api\services;
-use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\LoginRegisterController;
-use App\Http\Controllers\API\MembershipApplicationController;
 use App\Http\Controllers\Api\PlanController;
 use App\Http\Controllers\Api\SubscriptionController;
 
@@ -51,3 +52,15 @@ Route::get('/services/show/{id}', [Services::class, 'show']);
 Route::put('/services/update/{id}', [Services::class, 'update']);
 Route::delete('/services/destroy/{id}', [Services::class, 'destroy']);
 
+
+Route::post('register', [AuthController::class, 'register']);
+Route::post('login', [AuthController::class, 'login']);
+
+
+Route::apiResource('membership-applications', MembershipApplicationController::class);
+
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::apiResource('ratings', RatingController::class);
+    Route::post('user/logout', [AuthController::class, 'logout']);
+});
