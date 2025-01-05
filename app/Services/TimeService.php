@@ -13,14 +13,14 @@ class TimeService
     /**
      * To Create a new time
      * 
-     * @param TimeRequest
+     * @param array $data The create data
      */
-    public function create(TimeRequest $request)
+    public function create(array $data)
     {
         $time = Time::create([
-            'start_time' => $request->start_time,
-            'end_time' => $request->end_time,
-            'day' => $request->day,
+            'start_time' => $data['start_time'],
+            'end_time' => $data['end_time'],
+            'day' => $data['day'],
         ]);
 
         return $time;
@@ -29,49 +29,25 @@ class TimeService
     /**
      * To Edit a time
      * 
-     * @param TimeRequest
-     * @param Time
+     * @param array $data The update data
+     * @param Time $time The time to update
      */
-    public function update(TimeRequest $request, Time $time)
+    public function update(array $data, Time $time)
     {
-        $time = $time->update([
-            'start_time' => $request->start_time,
-            'end_time' => $request->end_time,
-            'day' => $request->day,
-        ]);
+        $time = $time->update($data);
 
         return $time;
     }
 
     /**
-     * To Delete a time
+     *  Delete the specified time
      * 
-     * @param Time
+     *  @param Time $time The time to delete
+     *  @return bool|null True if the time was deleted, false otherwise
      */
     public function delete(Time $time)
     {
         return $time->delete();
-    }
-
-    /**
-     * Convert times to 12-hour format
-     *
-     * This function takes a paginated collection of times and transforms
-     * the 'start_time' and 'end_time' fields to a 12-hour format with AM/PM
-     * It uses the Carbon library to parse and format the times
-     *
-     * @param LengthAwarePaginator $times The paginated collection of times
-     * @return LengthAwarePaginator The paginated collection with times in 12-hour format
-     */
-    public function getAllTimesWith12HoursFormat($times)
-    {
-        $times->getCollection()->transform(function ($time) {
-            $time->start_time = Carbon::parse($time->start_time)->format('h:i A');
-            $time->end_time = Carbon::parse($time->end_time)->format('h:i A');
-            return $time;
-        });
-
-        return $times;
     }
 
     /**
@@ -88,31 +64,26 @@ class TimeService
      * The function formats the times to a 24-hour format for comparison and
      * returns the filtered results paginated with 10 items per page
      *
-     * @param Request $request The incoming request containing filter parameters
+     * @param array $data The incoming data containing filter parameters
      * @return LengthAwarePaginator The paginated list of filtered times
      */
-    public function getAllTimesAfterFilttering(Request $request)
+    public function getAllTimesAfterFiltering(array $data)
     {
-        $entries_number = $request->input('entries_number', 10);
-        $q = Time::query();
+        $entries_number = $data['entries_number'] ?? 10;
 
-        if ($request->filled('min_time')) {
-            $q->where('start_time', '>=', Carbon::parse($request->input('min_time'))->format('H:i:s'));
-        }
+        $times = Time::query()->when(isset($data['min_time']), function ($query) use ($data) {
 
-        if ($request->filled('max_time')) {
-            $q->where('end_time', '<=', Carbon::parse($request->input('max_time'))->format('H:i:s'));
-        }
+            return $query->minTime($data['min_time']);
+        })->when(isset($data['max_time']), function ($query) use ($data) {
 
-        if ($request->filled('min_date')) {
-            $q->where('day', '>=', $request->input('min_date'));
-        }
+            return $query->maxTime($data['max_time']);
+        })->when(isset($data['min_date']), function ($query) use ($data) {
 
-        if ($request->filled('max_date')) {
-            $q->where('day', '<=', $request->input('max_date'));
-        }
+            return $query->minDate($data['min_date']);
+        })->when(isset($data['max_date']), function ($query) use ($data) {
 
-        $times = $q->paginate($entries_number);
+            return $query->maxDate($data['max_date']);
+        })->paginate($entries_number);
 
         return $times;
     }
