@@ -11,7 +11,7 @@ use App\Http\Controllers\HomeController;
 
 
 use App\Http\Controllers\MembershipApplicationController;
-
+use App\Http\Controllers\PermissionController;
 use Illuminate\Database\Capsule\Manager;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
@@ -19,6 +19,7 @@ use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 use App\Http\Controllers\PlanController;
 use App\Http\Controllers\PlanTypeController;
 use App\Http\Controllers\RatingController;
+use App\Http\Controllers\RoleController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\SportEquipmentController;
 use App\Http\Controllers\TimeController;
@@ -58,6 +59,12 @@ Route::resource('services', ServiceController::class);
 
 Route::resource('ratings', RatingController::class);
 
+Route::resource('equipments', SportEquipmentController::class);
+
+Route::resource('permissions', PermissionController::class);
+
+Route::resource('roles', RoleController::class);
+
 Auth::routes();
 
 Route::get('/home', [HomeController::class, 'index'])->name('home');
@@ -69,7 +76,7 @@ Route::get('/search',[PlanController::class,'search'])->name("plans.search");
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::get('dashboard', function () {
-    return view('new-dashboard.users.list_users');
+    return view('new-dashboard.dashboard.dashboard');
 });
 
 Route::get('/membership_applications',[MembershipApplicationController::class,'index'])->name('membership_applications');
