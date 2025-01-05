@@ -159,15 +159,15 @@
                 <td>
                     <div class="col-md-1 offset-md-2">
                         <div class="rating d-flex flex-row-reverse justify-content-center">
-                          <input type="radio" id="star5" class="d-none" name="rating-{{$rating->rateable}}" value="5" readonly {{$rating->rating == 5 ? 'checked' : ''}}> 
+                          <input type="radio" id="star5" class="d-none" name="rating-{{$rating->id}}" value="5" readonly {{$rating->rating == 5 ? 'checked' : ''}}> 
                         <label ></label>
-                        <input type="radio" id="star4" class="d-none" name="rating-{{$rating->rateable}}" value="4" readonly {{$rating->rating == 4 ? 'checked' : ''}}>
+                        <input type="radio" id="star4" class="d-none" name="rating-{{$rating->id}}" value="4" readonly {{$rating->rating == 4 ? 'checked' : ''}}>
                         <label ></label>
-                        <input type="radio" id="star3" class="d-none" name="rating-{{$rating->rateable}}" value="3" readonly {{$rating->rating == 3 ? 'checked' : ''}}>
+                        <input type="radio" id="star3" class="d-none" name="rating-{{$rating->id}}" value="3" readonly {{$rating->rating == 3 ? 'checked' : ''}}>
                         <label ></label>
-                        <input type="radio" id="star2" class="d-none" name="rating-{{$rating->rateable}}" value="2" readonly {{$rating->rating == 2 ? 'checked' : ''}}>
+                        <input type="radio" id="star2" class="d-none" name="rating-{{$rating->id}}" value="2" readonly {{$rating->rating == 2 ? 'checked' : ''}}>
                         <label ></label>
-                        <input type="radio" id="star1" class="d-none" name="rating-{{$rating->rateable}}" value="1"  readonly {{$rating->rating == 1 ? 'checked' : ''}}>
+                        <input type="radio" id="star1" class="d-none" name="rating-{{$rating->id}}" value="1"  readonly {{$rating->rating == 1 ? 'checked' : ''}}>
                         <label ></label>
                       </div>
                     </div>
@@ -181,11 +181,10 @@
                     <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="bx bx-dots-vertical-rounded"></i></button>
                     <div class="dropdown-menu">
 
-                      <a class="dropdown-item" href="{{route('times.show',$rating)}}"><i class="bx bx-show me-1"></i>Show</a>
-                      <a class="dropdown-item" href="{{route('times.edit',$rating)}}"><i class="bx bx-edit-alt me-1"></i>Edit</a>
+                      <a class="dropdown-item" href="{{route('ratings.show',$rating)}}"><i class="bx bx-show me-1"></i>Show</a>
                         
                       <a class="dropdown-item" href="javascript:{}" onclick="document.getElementById('remove_rating_{{$rating->id}}').submit();"><i class="bx bx-trash me-1"></i>
-                          <form id="remove_rating_{{$rating->id}}" action="{{route('times.destroy',$rating)}}" method="POST" style="display: none;">
+                          <form id="remove_rating_{{$rating->id}}" action="{{route('ratings.destroy',$rating)}}" method="POST" style="display: none;">
                               @csrf 
                               @method('DELETE')
                           </form>
