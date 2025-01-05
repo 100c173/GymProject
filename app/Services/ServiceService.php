@@ -9,36 +9,42 @@ use Illuminate\Http\Request;
 class ServiceService
 {
     /**
-     * For create a new user
+     * For create a new service
      * 
-     * @param ServiceRequest $request To Create the user
+     * @param array $data To Create the service
      */
-    public function create(ServiceRequest $request)
+    public function create(array $data)
     {
         $service = Service::create([
-            'name' => $request->name,
-            'description' => $request->description,
+            'name' => $data['name'],
+            'description' => $data['description'],
         ]);
 
         return $service;
     }
 
     /**
-     * For update a user
+     * For update a service
      * 
-     * @param ServiceRequest $request To Update the user
-     * @param User $user To know which user will be updated
+     * @param array $data To Update the service
+     * @param Service $service To know which service will be updated
      */
-    public function update(ServiceRequest $request, Service $service)
+    public function update(array $data, Service $service)
     {
         $service = $service->update([
-            'name' => $request->name,
-            'description' => $request->description,
+            'name' => $data['name'],
+            'description' => $data['description'],
         ]);
 
         return $service;
     }
 
+    /**
+     *  Delete the specified service
+     * 
+     *  @param Service $service The service to delete
+     *  @return bool|null True if the service was deleted, false otherwise
+     */
     public function delete(Service $service)
     {
         return $service->delete();
@@ -51,21 +57,17 @@ class ServiceService
      * applying filters based on the request parameters. The filters include:
      * - Name ('name'): Filters services by name using a 'like' query
      *
-     * @param Request $request The incoming request containing filter parameters
+     * @param array $data The incoming data containing filter parameters
      * @return LengthAwarePaginator The paginated list of filtered services
      */
-    public function getAllServicesAfterFilttering(Request $request)
+    public function getAllServicesAfterFiltering(array $data)
     {
-        // To define how many rows per page
-        $entries_number = $request->input('entries_number', 10);
+        $entries_number = $data['entries_number'] ?? 10;
 
-        $q = Service::query();
+        $services = Service::query()->when(isset($data['name']), function ($query) use ($data) {
 
-        if ($request->filled('name')) {
-            $q->where('name', 'like', '%' . $request->input('name') . '%');
-        }
-
-        $services = $q->paginate($entries_number);
+            return $query->SearchName($data['name']);
+        })->paginate($entries_number);
 
         return $services;
     }
