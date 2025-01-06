@@ -5,6 +5,7 @@ use App\Http\Controllers\SessionController;
 use App\Models\Appointment;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AttendanceController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HomeController;
 
 
@@ -60,8 +61,7 @@ Route::resource('roles', RoleController::class);
 
 Auth::routes();
 
-// Home route
-Route::get('/home', [HomeController::class, 'index'])->name('home');
+Route::get('/dashboards', [DashboardController::class, 'index'])->name('dashboard.index');
 
 // Routes for admin middleware
 Route::group(['middleware' => 'admin'], function () {
@@ -76,6 +76,8 @@ Route::group(['middleware' => 'admin'], function () {
 Route::get('dashboard', function (){ 
     return view('new-dashboard.dashboard.dashboard');
 });
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
 
 // Appointments routes
 Route::get('/appointments', [AppointmentController::class, 'index'])->name('appointments.index');
