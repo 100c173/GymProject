@@ -20,7 +20,7 @@
                             <h4> Description: {{$session->description}}</h4>
                         </div>
                         <div class="form-floating mb-3">
-                            <h4> period : {{$session->time->getStartAndEndtime }}</h4>
+                            <h4> period : {{$session->time->getStartAndEndtime() }}</h4>
                         </div>
                         <div class="form-floating mb-3">
                             <h4>Coach: {{ $session->getFullName ?? 'No coach assigned' }}</h4>

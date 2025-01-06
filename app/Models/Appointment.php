@@ -30,4 +30,11 @@ class Appointment extends Model
         return $this->belongsTo(User::class);
     }
     
+    protected static function booted()
+    {
+        static::deleting(function ($appointment) {
+            // Delete associated attendances
+            $appointment->attendances()->delete();
+        });
+    }
 }
