@@ -70,5 +70,6 @@ class Kernel extends HttpKernel
         'checkSessionExists' => \App\Http\Middleware\CheckSessionExists::class,
         'preventDoubleBooking' => \App\Http\Middleware\PreventDoubleBooking::class,
         'PreventDuplicateUser' => \App\Http\Middleware\PreventDuplicateUser::class,
+        'redirect' => \App\Http\Middleware\RedirectToAfterLogin::class,
     ];
 }
