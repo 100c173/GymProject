@@ -23,7 +23,7 @@
                             <h4> period : {{$session->time->getStartAndEndtime() }}</h4>
                         </div>
                         <div class="form-floating mb-3">
-                            <h4>Coach: {{ $session->user->getFullName() ?? 'No coach assigned' }}</h4>
+                            <h4>Coach: {{ optional($session->user)->getFullName() ?? 'No coach assigned' }}</h4>
                         </div>
                         <div class="form-floating mb-3">
                             <h4> Number of members: {{$session->max_members}} </h4>
