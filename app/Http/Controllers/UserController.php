@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Helpers\FlashMessageHelper;
-use App\Http\Requests\UpdateUserRequest;
-use App\Http\Requests\CreateUserRequest;
+use App\Http\Requests\UserRequest;
+use App\Http\Requests\UserFilterRequest;
 use App\Services\UserService;
 use App\Models\User;
 use Carbon\Carbon;
@@ -39,12 +38,15 @@ class UserController extends Controller
 
 
     /**
-     * Display a listing of the resource.
+     * Display a listing of the users after applying filters
+     * 
+     * @param UserFilterRequest $request The request object containing filter data 
+     * @return View The view displaying the list of users
      */
-    public function index(Request $request)
+    public function index(UserFilterRequest $request)
     {
-
-        $users = $this->userService->getAllUsersAfterFiltering($request);
+        $validated = $request->validated();
+        $users = $this->userService->getAllUsersAfterFiltering($validated);
 
         return view('new-dashboard.users.list_users', [
             'users' => $users,
@@ -67,13 +69,13 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      * 
-     * @param CreateUserRequest $request To store the user according to the conditions used
+     * @param UserRequest $request To store the user according to the conditions used
      * in this form request
      */
-    public function store(CreateUserRequest $request)
+    public function store(UserRequest $request)
     {
-        // Create user using the UserService class
-        $user = $this->userService->create($request);
+        $validated = $request->validated();
+        $user = $this->userService->create($validated);
 
         // using the method from FlashMessageHelper to alert the user about success or faild
         flashMessage($user, 'User created successfully.', 'Failed to Create user.');
@@ -118,13 +120,13 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      * 
-     * @param UpdateUserRequest $request To update the user according to the conditions used
+     * @param UserRequest $request To update the user according to the conditions used
      * in this form request
      */
-    public function update(UpdateUserRequest $request, User $user)
+    public function update(UserRequest $request, User $user)
     {
-        //Update user using the UserService class
-        $user = $this->userService->update($request, $user);
+        $validated = $request->validated();
+        $user = $this->userService->update($validated, $user);
         $redirect = request()->query('redirect', route('users.index'));
 
         // using the method from FlashMessageHelper to alert the user about success or faild
@@ -138,7 +140,7 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        $user = $user->delete();
+        $user = $this->userService->delete($user);
 
         // using the method from FlashMessageHelper to alert the user about success or faild
         flashMessage($user, 'User Deleted successfully.', 'Failed to Delete user.');
@@ -167,7 +169,7 @@ class UserController extends Controller
      * To restore the user which it's deleted
      * Notice: Can't restore the users who's deleted using forceDelete
      * 
-     * @param $id to find the user
+     * @param string $id to find the user
      */
     public function restore(string $id)
     {
@@ -192,5 +194,4 @@ class UserController extends Controller
             'entries_number' => $entries_number,
         ]);
     }
-
 }

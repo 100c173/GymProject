@@ -21,9 +21,11 @@ class AuthService
         $input = $request->all();
         $input['password'] = bcrypt($input['password']);
         $user = User::create($input);
+        $user->assignRole('user');
         $success['token'] = $user->createToken('MyApp')->plainTextToken;
         $success['first_name'] = $user->first_name;
         $success['last_name'] = $user->last_name;
+
 
         return $success;
     }

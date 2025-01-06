@@ -74,7 +74,7 @@
                 </li>
                 @forelse ($subscriptions as $subscription)
                 <li class=" d-flex justify-content-center align-items-center p-3 bg-light">
-                  <p class="mb-0 ">{{$subscription->plan->name}}</p>
+                  <p class="mb-0 ">{{$subscription->plan->name}} Plan</p>
                 </li>
                 <li class="list-group-item d-flex justify-content-between align-items-center p-3">
                   <p class="mb-0">Start: {{$subscription->start}}</p>

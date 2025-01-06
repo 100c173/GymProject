@@ -14,18 +14,18 @@ class UserService
     /**
      * For create a new user
      * 
-     * @param CreateUserRequest $request To Create the user
+     * @param array $data To Create the user
      */
-    public function create(CreateUserRequest $request)
+    public function create(array $data)
     {
         $user = User::create([
-            'first_name' => $request->first_name,
-            'last_name' => $request->last_name,
-            'email' => $request->email,
-            'password' => bcrypt($request->password),
+            'first_name' => $data['first_name'],
+            'last_name' => $data['last_name'],
+            'email' => $data['email'],
+            'password' => bcrypt($data['password']),
         ]);
 
-        $user->assignRole($request->role);
+        $user->assignRole($data['role']);
 
         return $user;
     }
@@ -33,43 +33,65 @@ class UserService
     /**
      * For update a user
      * 
-     * @param UpdateUserRequest $request To Update the user
+     * @param array $data To Update the user
      * @param User $user To know which user will be updated
      */
-    public function update(UpdateUserRequest $request, User $user)
+    public function update(array $data, User $user)
     {
-        $user = $user->update([
-            'first_name' => $request->first_name,
-            'last_name' => $request->last_name,
-            'email' => $request->email,
-        ]);
+        $user = $user->update($data);
 
         return $user;
     }
 
     /**
-     * To get all users after filtering with paginated data
+     *  Delete the specified user
      * 
-     * @param Request $request To Apply the filtering if it's found
+     *  @param User $user The user to delete
+     *  @return bool|null True if the user was deleted, false otherwise
      */
-    public function getAllUsersAfterFiltering(Request $request)
+    public function delete(User $user)
+    {
+        return $user->delete();
+    }
+
+    /**
+     * Get paginated users with applied filters
+     *
+     * This function retrieves a paginated list of users from the User model
+     * applying filters based on the request data parameter
+     * The filters include:
+     * - Full Name
+     * - Email
+     * - Role
+     *
+     * The function returns the filtered results paginated with 10 items per page
+     *
+     * @param array $data The incoming data containing filter parameters
+     * @return LengthAwarePaginator The paginated list of filtered users
+     */
+    public function getAllUsersAfterFiltering(array $data)
     {
         // To define how many rows per page
-        $entries_number = $request->input('entries_number', 10);
+        $entries_number = $data['entries_number'] ?? 10;
 
         $q = User::query();
 
-        // Search using SearchFullName scope in the User model
-        if ($request->filled('name')) {
-            $q->SearchFullName($request->name);
-        }
+        $q->when(isset($data['name']), function ($query) use ($data) {
+            $query->SearchFullName($data['name']);
+        });
 
-        if ($request->filled('role') && $request->role !== 'All') {
-            $q->role($request->role);
-        }
+        $q->when(isset($data['email']), function ($query) use ($data) {
+            $query->SearchEmail($data['email']);
+        });
+
+        $q->when(isset($data['role']) && $data['role'] !== 'All', function ($query) use ($data) {
+            $query->role($data['role']);
+        });
 
         return $q->paginate($entries_number);
     }
+
+
 
     /**
      * To get the subscriptions that are active and not expired

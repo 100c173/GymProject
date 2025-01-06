@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class UpdateUserRequest extends FormRequest
+class UserRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,9 +26,24 @@ class UpdateUserRequest extends FormRequest
             //
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
-            'password' => 'sometimes|string|min:8|confirmed',
-            'email' => 'required','string','email','max:255',
+            'email' => 'required',
+            'string',
+            'email',
+            'max:255',
+            'unique:users',
             Rule::unique('users')->ignore($this->route('users')),
+            'redirect_to' => '|nullable|in:index,create',
+            'role' => 'required|exists:roles,name',
         ];
+
+        if ($this->isMethod('post')) {
+
+            // Password is required when creating a new user
+            $rules['password'] = 'required|string|min:8|confirmed';
+        } elseif ($this->isMethod('put') || $this->isMethod('patch')) {
+
+            // Password is optional when updating an existing user
+            $rules['password'] = 'sometimes|string|min:8|confirmed';
+        }
     }
 }

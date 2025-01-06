@@ -86,6 +86,14 @@ class User extends Authenticatable
     }
 
     /**
+     * Scope for Search By Email
+     */
+    public function scopeSearchEmail($query, $email)
+    {
+        return $query->where('email', 'like', '%' . $email . '%');
+    }
+
+    /**
      * Accessor for full name
      */
     public function getFullName()
@@ -93,4 +101,3 @@ class User extends Authenticatable
         return "{$this->first_name} {$this->last_name}";
     }
 }
-
