@@ -82,7 +82,7 @@ class AppointmentController extends Controller
             'Appointment updated successfully.',
             new AppointmentResource($appointment)
         );
-                    return response()->json([
+        return response()->json([
                 'message' => 'Session is full or does not exist.',
             ], 400);
 

@@ -9,7 +9,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Api\services;
-use App\Http\Controllers\Api\LoginRegisterController;
 use App\Http\Controllers\Api\PlanController;
 use App\Http\Controllers\Api\SubscriptionController;
 
@@ -24,29 +23,25 @@ use App\Http\Controllers\Api\SubscriptionController;
 |
 */
 
-// Public routes of authtication
-Route::controller(LoginRegisterController::class)->group(function() {
-    Route::post('/register', 'register');
-    Route::post('/login', 'login');
-});
+
 // Protected routes 
-Route::middleware('auth:sanctum')->group( function () {
-    Route::post('/logout', [LoginRegisterController::class, 'logout']);
-    //الاشتراك في خطة
+Route::middleware('auth:sanctum')->group(function () {
+
+    //Subscribe to a plan
     Route::post('/subscriptions', [SubscriptionController::class, 'subscribe']);
-    //لغاء الاشتراك
+    //Unsubscribe
     Route::delete('/subscriptions/{id}', [SubscriptionController::class, 'cancelSubscription']);
-    //عرض اشتراكات المستخدم
+    //View user subscriptions
     Route::get('/users/{id}/subscriptions', [SubscriptionController::class, 'getUserSubscriptions']);
 });
 //plans
-//عرض جميع الخطط
+//View all plans
 Route::get('/plans', [PlanController::class, 'index']);
-//عرض تفاصيل خطة محددة
+//Display details of a specific plan
 Route::get('/plans/{id}', [PlanController::class, 'show']);
 
-Route::apiResource('membership-applications',MembershipApplicationController::class);
-Route::apiResource('appointments',AppointmentController::class);
+Route::apiResource('membership-applications', MembershipApplicationController::class);
+Route::apiResource('appointments', AppointmentController::class);
 
 //services route 
 Route::get('/service', [Services::class, 'index']);
