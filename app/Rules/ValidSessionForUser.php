@@ -3,6 +3,8 @@
 namespace App\Rules;
 
 use App\Models\Plan;
+use App\Models\Session;
+use App\Models\Subscription;
 use Closure;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Support\Facades\Auth;
@@ -17,20 +19,21 @@ class ValidSessionForUser implements ValidationRule
      */
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
-        $plans = Plan::all();
-        $ok = false ;
-        foreach($plans as $plan){
-            $sessions = $plan->sessions ;
+        $subscriptions = Subscription::all()->where('user_id',auth()->id());
+        $ok = false;
+        foreach($subscriptions as $subscription){
+            $plan = Plan::find($subscription->plan_id);
+            $sessions = $plan->sessions;
             foreach($sessions as $session){
                 if($session->id == $value){
-                    $ok = true ; 
+                    $ok = true ;
                     break; 
                 }
+                if($ok)break;
             }
-            if($ok)break;
         }
-        if(!$ok){
+        if(!$ok)
             $fail('session not avialable');
-        }
+        
     }
 }
