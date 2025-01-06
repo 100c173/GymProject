@@ -14,8 +14,7 @@ class MembershipApplicationController extends Controller
         $this->middleware(['auth']);
 
         // Apply the role middleware to ensure the user is admin
-        $this->middleware(['role:Admin'])->only('updateStatus', 'destroy' );
-
+        $this->middleware(['role:admin'])->only('updateStatus', 'destroy');
     }
     /**
      * Display a listing of the resource.
@@ -23,7 +22,7 @@ class MembershipApplicationController extends Controller
     public function index()
     {
         $memberships = MembershipApplication::with('user')->get();
-        return view('dashboard.manager.membership.membership',compact('memberships'));
+        return view('new-dashboard.membership_application.list_membership_applications', compact('memberships'));
     }
 
 
@@ -34,17 +33,29 @@ class MembershipApplicationController extends Controller
     {
         $application = MembershipApplication::findOrFail($id);
 
-        
+
         if ($request->status === 'accept') {
             $application->status = 'accepted';
-        } 
-        else {
-            $application->status = 'rejected';
+            ($application->user)->assignRole('trainer');
+        } else {
+            $application->status = 'declined';
         }
+
 
         $application->save();
 
         return redirect()->back()->with('success', '');
+    }
+
+    /**
+     * Display a listing of the resource.
+     */
+    public function show(string $id)
+    {
+        $membership = MembershipApplication::findOrFail($id);
+        return view('new-dashboard.membership_application.show_membership_applications', [
+            'membership' => $membership,
+        ]);
     }
 
     /**
@@ -53,7 +64,7 @@ class MembershipApplicationController extends Controller
     public function destroy(string $id)
     {
         $application = MembershipApplication::findOrFail($id);
-        $application->destroy();
-        return redirect()->back()->with('success', '');
+        $application->delete();
+        return redirect()->route('membership_applications')->with('success', '');
     }
 }

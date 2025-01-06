@@ -22,14 +22,9 @@ use App\Http\Controllers\Api\SubscriptionController;
 |
 */
 
-// Public routes of authtication
-Route::controller(LoginRegisterController::class)->group(function() {
-    Route::post('/register', 'register');
-    Route::post('/login', 'login');
-});
+
 // Protected routes 
 Route::middleware('auth:sanctum')->group( function () {
-    Route::post('/logout', [LoginRegisterController::class, 'logout']);
 //الاشتراك في خطة
 Route::post('/subscriptions', [SubscriptionController::class, 'subscribe']);
 //لغاء الاشتراك

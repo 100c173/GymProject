@@ -9,7 +9,7 @@
       <nav aria-label="breadcrumb">
         <ol class="breadcrumb breadcrumb-style1">
           <li class="breadcrumb-item">
-            <a href="#">Dashboard</a>
+            <a href="{{route('dashboard.index')}}">Dashboard</a>
           </li>
           <li class="breadcrumb-item active">Membership Applications</li>
         </ol>
@@ -86,38 +86,46 @@
             </tr>
           </thead>
           <tbody>
+            @foreach ($memberships as $membership)
+              
             
               <tr>
                 <td><i class="fab fa-angular fa-xl text-danger me-4"></i>
                      <span>
-                        1
+                        {{$membership->id}}
                     </span>
                 </td>
-                <td>User Name</td>
+                <td>{{$membership->user->getFullName()}}</td>
                 <td>
                     <!-- Please use success for accepted and danger for declined -->
-                    <span class="badge bg-label-info me-1">pending</span>
+                    <span class="badge bg-label-info me-1">{{$membership->status}}</span>
                   </ul>
                 </td>
                 <td>
-                   2024/10/5
+                   {{$membership->created_at}}
                 </td>
                 <td>
-                    <a class="btn btn-success btn-sm me-1" href="">Accept</a>
-                    <a class="btn btn-danger btn-sm" href="">Decline</a>
+                  @if ($membership->status == 'pending')
+                  <form id="status-form" action="{{ route('membership_applications.update_status', $membership->id) }}" method="POST" style="display: none;">
+                    @csrf
+                    <input type="hidden" id="status-input" name="status" value="">
+                  </form>
+                  <a class="btn btn-success btn-sm me-1" href="javascript:void(0);" onclick="submitStatus('accept')">Accept</a>
+                  <a class="btn btn-danger btn-sm" href="javascript:void(0);" onclick="submitStatus('decline')">Decline</a>                  
+                  @else
+                  <span class="badge bg-label-success me-1">Completed</span>
                 </td>
+                @endif
                 <td>
                     
                   <div class="dropdown">
                     <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="bx bx-dots-vertical-rounded"></i></button>
                     <div class="dropdown-menu">
 
-                      <a class="dropdown-item" href=""><i class="bx bx-show me-1"></i>Show</a>
-                      <a class="dropdown-item" href=""><i class="bx bx-edit-alt me-1"></i>Edit</a>
+                      <a class="dropdown-item" href="{{route('membership_applications.show', $membership->id)}}"><i class="bx bx-show me-1"></i>Show</a>
                         
-                      {{-- Please don't forget to replace the $membership->id with real one in the form id and js like it should be remove_equipment_{{$membership->id}}  --}}
-                      <a class="dropdown-item" href="javascript:{}" onclick="document.getElementById('remove_membership_$membership->id').submit();"><i class="bx bx-trash me-1"></i>
-                          <form id="remove_membership_$membership->id" action="" method="POST" style="display: none;">
+                      <a class="dropdown-item" href="javascript:{}" onclick="document.getElementById('remove_membership_{{$membership->id}}').submit();"><i class="bx bx-trash me-1"></i>
+                          <form id="remove_membership_{{$membership->id}}" action="{{route('membership_applications.destroy',$membership->id)}}" method="POST" style="display: none;">
                               @csrf 
                               @method('DELETE')
                           </form>
@@ -128,7 +136,7 @@
                   </div>
                 </td>
               </tr>
-            
+              @endforeach
           </tbody>
         </table>
 
@@ -166,8 +174,16 @@
       </div>
 </div>
 <script>
+
   function selectEntries(value) {
     document.getElementById('entries_number').value = value;
   }
+  function submitStatus(status) {
+
+      document.getElementById('status-input').value = status;
+
+      document.getElementById('status-form').submit();
+  }
+
 </script>
 @endsection

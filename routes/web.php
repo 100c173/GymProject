@@ -35,19 +35,20 @@ use Illuminate\Support\Facades\Auth;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+
 Route::get('/', function () {
     return view('auth.login');
 });
 
 
-Route::get('/appointments',[AppointmentController::class,'index'])->name('appointments.index');
-Route::get('/appointments/update_status/{id}/{type}',[AppointmentController::class,'updateStatus']);
-Route::get('/appointments/search',[AppointmentController::class,'search'])->name('appointment.search');
+Route::get('/appointments', [AppointmentController::class, 'index'])->name('appointments.index');
+Route::get('/appointments/update_status/{id}/{type}', [AppointmentController::class, 'updateStatus']);
+Route::get('/appointments/search', [AppointmentController::class, 'search'])->name('appointment.search');
 
-Route::put('sessions/update_status/{session}',[SessionController::class,'updateStatus'])->name('sessions.updateStatus');
-Route::resource('sessions',SessionController::class);
+Route::put('sessions/update_status/{session}', [SessionController::class, 'updateStatus'])->name('sessions.updateStatus');
+Route::resource('sessions', SessionController::class);
 
-Route::resource('times',TimeController::class);
+Route::resource('times', TimeController::class);
 
 Route::resource('services', ServiceController::class);
 
@@ -72,8 +73,9 @@ Route::group(['middleware' => 'admin'], function () {
 
     Route::resource('plans', PlanController::class)->middleware('unique.plan');
     Route::resource('plan_types', PlanTypeController::class)->middleware('unique.plantype');
-    Route::get('/search', [PlanController::class, 'search'])->name('plans.search');});
-Route::get('dashboard', function (){ 
+    Route::get('/search', [PlanController::class, 'search'])->name('plans.search');
+});
+Route::get('dashboard', function () {
     return view('new-dashboard.dashboard.dashboard');
 });
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
@@ -97,10 +99,10 @@ Route::resource('ratings', RatingController::class);
 Route::get('/membership_applications', [MembershipApplicationController::class, 'index'])->name('membership_applications');
 Route::post('/membership_applications/{id}/update_status', [MembershipApplicationController::class, 'updateStatus'])->name('membership_applications.update_status');
 Route::delete('/membership_applications/{id}/destroy', [MembershipApplicationController::class, 'destroy'])->name('membership_applications.destroy');
+Route::get('/membership_applications/{id}/show', [MembershipApplicationController::class, 'show'])->name('membership_applications.show');
 
 // Attendance routes
 Route::get('/attendance', [AttendanceController::class, 'index'])->name('attendance.index');
 Route::post('/attendance/store', [AttendanceController::class, 'store'])->name('attendance.store');
 Route::get('/attendance/{id}/{type}', [AttendanceController::class, 'update'])->name('attendance.update');
 Route::delete('/attendance/{id}', [AttendanceController::class, 'destroy'])->name('attendance.destroy');
-
