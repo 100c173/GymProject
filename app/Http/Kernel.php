@@ -72,5 +72,7 @@ class Kernel extends HttpKernel
         'PreventDuplicateUser' => \App\Http\Middleware\PreventDuplicateUser::class,
         'check.capacity' => \App\Http\Middleware\CheckSessionCapacity::class,
         'check.owner' => \App\Http\Middleware\CheckAppointmentOwner::class,
+        'redirect' => \App\Http\Middleware\RedirectToAfterLogin::class,
+
     ];
 }
