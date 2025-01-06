@@ -107,6 +107,7 @@
                 <!-- Apply Button -->
                 <div class="row mb-3">
                     <div class="col-sm-12 d-flex justify-content-end">
+                        <button class="btn btn-light me-1" onclick="resetFilters()">Reset</button>
                         <button type="submit" class="btn btn-primary">Apply</button>
                     </div>
                 </div>
@@ -259,6 +260,23 @@ function selectRateableType(type) {
 
 function selectRating(rating) {
     document.getElementById('rating').value = rating;
+}
+
+function resetFilters() {
+
+    // Get the filter form
+    var form = document.getElementById('FilterForm');
+
+    // Clear all input fields
+    var inputs = form.getElementsByTagName('input');
+
+    for (var i = 0; i < inputs.length; i++)
+    {
+        inputs[i].value = ''; 
+    }
+
+    // Reload the page without any query parameters
+    window.location.href = form.action;
 }
 </script>
 @endsection

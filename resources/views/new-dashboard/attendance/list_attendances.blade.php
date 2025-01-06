@@ -57,27 +57,12 @@
                 </ul>
               </div>
             </div>
-
-            <!-- Role Dropdown -->
-            <div class="col-sm-4 d-flex align-items-center">
-              <input type="hidden" name="role" id="role">
-              <div class="btn-group me-2">
-                <button class="btn btn-primary dropdown-toggle" type="button" id="roleDropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  Role
-                </button>
-                <ul class="dropdown-menu" aria-labelledby="roleDropdown">
-                  <li><a class="dropdown-item" href="javascript:void(0);" onclick="selectRole('All')">All</a></li>
-                  <li><a class="dropdown-item" href="javascript:void(0);" onclick="selectRole('admin')">Admin</a></li>
-                  <li><a class="dropdown-item" href="javascript:void(0);" onclick="selectRole('trainer')">Trainer</a></li>
-                  <li><a class="dropdown-item" href="javascript:void(0);" onclick="selectRole('member')">Member</a></li>
-                </ul>
-              </div>
-            </div>
           </div>
 
           <!-- Apply Button -->
           <div class="row">
             <div class="col-sm-12 d-flex justify-content-end">
+              <button class="btn btn-light me-1" onclick="resetFilters()">Reset</button>
               <button class="btn btn-primary me-1">APPLY</button>
             </div>
           </div>
@@ -198,5 +183,22 @@
   function selectEntries(value) {
     document.getElementById('entries_number').value = value;
   }
+
+  function resetFilters() {
+
+    // Get the filter form
+    var form = document.getElementById('FilterForm');
+
+    // Clear all input fields
+      var inputs = form.getElementsByTagName('input');
+
+      for (var i = 0; i < inputs.length; i++)
+      {
+          inputs[i].value = ''; 
+      }
+
+      // Reload the page without any query parameters
+      window.location.href = form.action;
+}
 </script>
 @endsection
