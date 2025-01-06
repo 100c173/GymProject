@@ -26,6 +26,7 @@ class TimeRequest extends FormRequest
             'start_time' => 'required|date_format:H:i',
             'end_time' => 'required|date_format:H:i|after:start_time',
             'day' => 'required|date|after_or_equal:today',
+            'redirect_to' => 'in:index,create',
         ];
     }
 }

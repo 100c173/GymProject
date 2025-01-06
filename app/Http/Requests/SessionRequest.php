@@ -31,6 +31,7 @@ class SessionRequest extends FormRequest
             'plan_id' => 'required',
             'status' => 'required',
             'time_id' => ['required',new TrainerAvailable($this->input('time_id'), $this->input('trainer_id') ,$this->input('session_id') )],
+            'redirect_to' => 'in:index,create',
         ];
     }
 }

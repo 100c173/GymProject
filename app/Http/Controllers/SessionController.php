@@ -68,7 +68,7 @@ class SessionController extends Controller
             // Attach plans (supports array of single ID)
             $session->plans()->attach($request->plan_id);
 
-            return redirect()->route('sessions.index')->with('success', 'Session created successfully');
+            return redirect()->route('sessions.' . $request->redirect_to)->with('success', 'Session created successfully');
         }
 
         // Handle save failure

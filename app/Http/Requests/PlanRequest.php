@@ -28,6 +28,7 @@ class PlanRequest extends FormRequest
             'with_trainer'=>'required|integer|max:1',
             'period'=>'required|integer|max:255',
             'plan_type_id'=>'required|integer|max:255',
+            'redirect_to' => 'in:index,create',
         ];
     }
 }

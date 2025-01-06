@@ -74,7 +74,7 @@ class TimeController extends Controller
         // using the method from FlashMessageHelper to alert the user about success or faild
         flashMessage($time, 'Time created successfully.', 'Failed to Create time.');
 
-        return redirect()->route('times.index');
+        return redirect()->route('times.'. $request->redirect_to);
     }
 
     /**

@@ -75,7 +75,7 @@ class PermissionController extends Controller
         // using the method from FlashMessageHelper to alert the user about success or faild
         flashMessage($permission, 'Permission created successfully.', 'Failed to Create permission.');
 
-        return redirect()->route('permissions.index');
+        return redirect()->route('permissions.'. $request->redirect_to);
     }
 
     /**

@@ -73,7 +73,7 @@ class ServiceController extends Controller
         // using the method from FlashMessageHelper to alert the user about success or faild
         flashMessage($service, 'Service created successfully.', 'Failed to Create service.');
 
-        return redirect()->route('services.index');
+        return redirect()->route('services.'. $request->redirect_to);
     }
 
     /**

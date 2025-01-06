@@ -27,6 +27,7 @@ class EquipmentRequest extends FormRequest
             'description' => 'required|string',
             'equipment_status' => 'required|in:available,damaged,under maintenance',
             'image_path' => 'required|file|mimes:jpeg,png,jpg,gif|max:2048',
+            'redirect_to' => 'in:index,create',
         ];
     }
 }

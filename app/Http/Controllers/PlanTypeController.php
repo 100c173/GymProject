@@ -56,7 +56,7 @@ class PlanTypeController extends Controller
         // using the method from FlashMessageHelper to alert the user about success or faild
         flashMessage($plan_type, 'Plan type created successfully.', 'Failed to Create plan type.');
 
-        return redirect()->route('plan_types.index');
+        return redirect()->route('plan_types.' . $request->redirect_to);
     }
 
     /**

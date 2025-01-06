@@ -40,6 +40,7 @@ class PermissionRequest extends FormRequest
             'name.string' => 'The permission name must be a string.',
             'name.max' => 'The permission name may not be greater than 255 characters.',
             'name.unique' => 'The permission name has already been taken.',
+            'redirect_to' => 'in:index,create',
         ];
     }
 }
