@@ -14,6 +14,8 @@ class SessionController extends Controller
     public function __construct()
     {
         $this->middleware('checkSessionExists')->only('create');
+        $this->middleware('check.plan.trainer')->only('store','update');
+
     }
     
     /**
@@ -62,6 +64,7 @@ class SessionController extends Controller
         $session->max_members = $request->members_number;
         if ($request->trainer_id) $session->user_id = $request->trainer_id;
         $session->time_id = $request->time_id;
+
 
         // Save session
         if ($session->save()) {

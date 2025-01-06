@@ -73,6 +73,7 @@ class Kernel extends HttpKernel
         'check.capacity' => \App\Http\Middleware\CheckSessionCapacity::class,
         'check.owner' => \App\Http\Middleware\CheckAppointmentOwner::class,
         'redirect' => \App\Http\Middleware\RedirectToAfterLogin::class,
+        'check.plan.trainer' => \App\Http\Middleware\CheckPlanTrainer::class,
 
     ];
 }
