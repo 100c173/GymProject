@@ -7,6 +7,7 @@ use App\Http\Requests\AppointmentRequest;
 use App\Http\Resources\AppointmentResource;
 use App\Models\Appointment;
 use App\Models\Attendance;
+use App\Models\Session;
 use Illuminate\Http\Request;
 
 class AppointmentController extends Controller
@@ -17,6 +18,9 @@ class AppointmentController extends Controller
     public function __construct()
     {
         $this->middleware('auth:sanctum');
+        $this->middleware('check.capacity')->only('store' , 'update');
+        $this->middleware('preventDoubleBooking')->only('store' , 'update');
+        $this->middleware('check.owner')->only('destroy');
     }
 
     public function index()
@@ -41,6 +45,9 @@ class AppointmentController extends Controller
         Attendance::create([
             'appointment_id' => $appointment->id,
         ]);
+
+        $session = Session::find($request->session_id);
+        $session->decrement('max_members', 1); //Subtracts 1 from max_members
 
         return $this->successResponse(
             'Appointment created successfully.',
@@ -68,10 +75,17 @@ class AppointmentController extends Controller
       
         $appointment->update($request->validated());
 
+        $session = Session::find($request->session_id);
+        $session->decrement('max_members', 1); //Subtracts 1 from max_members
+        
         return $this->successResponse(
             'Appointment updated successfully.',
             new AppointmentResource($appointment)
         );
+                    return response()->json([
+                'message' => 'Session is full or does not exist.',
+            ], 400);
+
     }
 
     /**

@@ -13,32 +13,17 @@ class PreventDoubleBooking
      */
     public function handle($request, Closure $next)
     {
-        // استرجاع معلومات الموعد المطلوب تحديثه
-        $appointmentId = $request->route('id');
-        $appointment = Appointment::find($appointmentId);
-
-        if (!$appointment) {
-            return redirect('/appointments')->with('error', 'Appointment not found.');
-        }
-
-        $session = $appointment->session;
-        $userId = $appointment->user_id;
-
-        $conflictingAppointment = Appointment::where('user_id', $userId)
-            ->whereHas('session', function ($query) use ($session) {
-                $query->where('time_id', $session->time_id);
-            })
-            ->where('id', '!=', $appointmentId) 
+        // Check if a record exists with the same session_id and user_id
+        $exists = Appointment::where('session_id', $request->session_id)
+            ->where('user_id', auth()->id())
             ->exists();
 
-        if ($conflictingAppointment) {
-          
-           $appointment->update(['status' => 'cancelled']);
-
-            return redirect('/appointments')->with('error', 'User is already booked in another session at the same time.');
-             
+        if ($exists) {
+            return response()->json([
+                'message' => 'You have already booked this session.',
+            ], 400);
         }
 
-        return $next($request);
+        return $next($request); 
     }
 }
