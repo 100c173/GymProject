@@ -114,31 +114,32 @@
           </tbody>
         </table>
         <nav aria-label="Page navigation">
-            <ul class="pagination justify-content-center">
-                <!-- Previous Page Link -->
-                <li class="page-item {{ $plan_types->onFirstPage() ? 'disabled' : '' }}">
-                    <a class="page-link" href="{{ $plan_types->appends(request()->except('page'))->previousPageUrl() }}">
-                        <i class="tf-icon bx bx-chevrons-left bx-sm"></i>
-                    </a>
-                </li>
-        
-                <!-- Pagination Links -->
-                @for ($i = 1; $i <= $plan_types->lastPage(); $i++)
-                    <li class="page-item {{ $plan_types->currentPage() == $i ? 'active' : '' }}">
-                        <a class="page-link" href="{{ $plan_types->appends(request()->except('page'))->url($i) }}">
-                            {{ $i }}
-                        </a>
-                    </li>
-                @endfor
-        
-                <!-- Next Page Link -->
-                <li class="page-item {{ $plan_types->hasMorePages() ? '' : 'disabled' }}">
-                    <a class="page-link" href="{{ $plan_types->appends(request()->except('page'))->nextPageUrl() }}">
-                        <i class="tf-icon bx bx-chevrons-right bx-sm"></i>
-                    </a>
-                </li>
-            </ul>
-        </nav>
+          <ul class="pagination justify-content-center">
+              <!-- Previous Page Link -->
+              <li class="page-item {{ $plan_types->onFirstPage() ? 'disabled' : '' }}">
+                  <a class="page-link" href="{{ $plan_types->previousPageUrl() }}">
+                      <i class="tf-icon bx bx-chevrons-left bx-sm"></i>
+                  </a>
+              </li>
+      
+              <!-- Pagination Links -->
+              @for ($i = 1; $i <= $plan_types->lastPage(); $i++)
+                  <li class="page-item {{ $plan_types->currentPage() == $i ? 'active' : '' }}">
+                      <a class="page-link" href="{{ $plan_types->url($i) }}">
+                          {{ $i }}
+                      </a>
+                  </li>
+              @endfor
+      
+              <!-- Next Page Link -->
+              <li class="page-item {{ $plan_types->hasMorePages() ? '' : 'disabled' }}">
+                  <a class="page-link" href="{{ $plan_types->nextPageUrl() }}">
+                      <i class="tf-icon bx bx-chevrons-right bx-sm"></i>
+                  </a>
+              </li>
+          </ul>
+      </nav>
+      
         
         
       </div>
