@@ -31,8 +31,8 @@ class UserRequest extends FormRequest
             'email',
             'max:255',
             'unique:users',
-            Rule::unique('users')->ignore($this->route('users')),
-            'redirect_to' => '|nullable|in:index,create',
+            Rule::unique('users')->ignore($this->route('user')),
+            'redirect_to' => 'nullable|in:index,create',
             'role' => 'required|exists:roles,name',
         ];
 
