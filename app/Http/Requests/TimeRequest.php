@@ -23,8 +23,8 @@ class TimeRequest extends FormRequest
     {
         return [
             //
-            'start_time' => 'required|date_format:H:i',
-            'end_time' => 'required|date_format:H:i|after:start_time',
+            'start_time' => 'required',
+            'end_time' => 'required|after:start_time',
             'day' => 'required|date|after_or_equal:today',
             'redirect_to' => 'in:index,create',
         ];
