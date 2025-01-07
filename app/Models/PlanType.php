@@ -10,7 +10,7 @@ class PlanType extends Model
     use HasFactory;
 
     //Automatically load the related namd model to prevent lazy loading.
-    protected $fillable = ['name'] ; 
+    protected $fillable = ['name'];
 
     /**
      * A plan type can have multiple plans associated with it.
@@ -18,5 +18,13 @@ class PlanType extends Model
     public function Plan()
     {
         return $this->hasMany(Plan::class);
+    }
+
+    /**
+     * Scope to search by name
+     */
+    public function scopeSearchByName($query, $name)
+    {
+        return $query->where('name', 'like', '%' . $name . '%');
     }
 }
