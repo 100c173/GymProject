@@ -10,7 +10,7 @@
           <nav aria-label="breadcrumb" class="bg-body-tertiary rounded-3 p-3">
             <ol class="breadcrumb breadcrumb-style1">
               <li class="breadcrumb-item">
-                <a href="#">Dashboard</a>
+                <a href="{{route('dashboard.index')}}">Dashboard</a>
               </li>
               <li class="breadcrumb-item">
                 <a href="{{route('users.index')}}">Users</a>
