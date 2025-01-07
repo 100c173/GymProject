@@ -71,19 +71,28 @@ class TimeService
     {
         $entries_number = $data['entries_number'] ?? 10;
 
-        $times = Time::query()->when(isset($data['min_time']), function ($query) use ($data) {
-
-            return $query->minTime($data['min_time']);
-        })->when(isset($data['max_time']), function ($query) use ($data) {
-
-            return $query->maxTime($data['max_time']);
-        })->when(isset($data['min_date']), function ($query) use ($data) {
-
-            return $query->minDate($data['min_date']);
-        })->when(isset($data['max_date']), function ($query) use ($data) {
-
-            return $query->maxDate($data['max_date']);
-        })->paginate($entries_number);
+        $times = Time::query()
+            ->when(
+                isset($data['min_time']),
+                function ($query) use ($data) {
+                    return $query->minTime($data['min_time']);
+                }
+            )->when(
+                isset($data['max_time']),
+                function ($query) use ($data) {
+                    return $query->maxTime($data['max_time']);
+                }
+            )->when(
+                isset($data['min_date']),
+                function ($query) use ($data) {
+                    return $query->minDate($data['min_date']);
+                }
+            )->when(
+                isset($data['max_date']),
+                function ($query) use ($data) {
+                    return $query->maxDate($data['max_date']);
+                }
+            )->paginate($entries_number);
 
         return $times;
     }
