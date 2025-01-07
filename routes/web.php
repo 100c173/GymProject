@@ -69,10 +69,10 @@ Route::group(['middleware' => 'admin'], function () {
     Route::get('users/trash', [UserController::class, 'trashedUsers'])->name('users.trashed');
     Route::delete('users/{id}/forceDelete', [UserController::class, 'forceDelete'])->name('users.forceDelete');
     Route::post('users/{id}/restore', [UserController::class, 'restore'])->name('users.restore');
-    Route::resource('users', UserController::class)->middleware('PreventDuplicateUser');
+    Route::resource('users', UserController::class);
 
-    Route::resource('plans', PlanController::class)->middleware('unique.plan');
-    Route::resource('plan_types', PlanTypeController::class)->middleware('unique.plantype');
+    Route::resource('plans', PlanController::class);
+    Route::resource('plan_types', PlanTypeController::class);
     Route::get('/search', [PlanController::class, 'search'])->name('plans.search');
 });
 Route::get('dashboard', function () {
