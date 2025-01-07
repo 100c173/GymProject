@@ -12,71 +12,100 @@ class PlanService
     /**
      * To Create a new plan
      * 
-     * @param PlanRequest
+     * @param array $data The create data
      */
-    public function create(PlanRequest $request)
+    public function create(array $data)
     {
-       $plan = Plan::create([
-            'name' => $request->input('name'),
-            'description' => $request->input('description'),
-            'price' => $request->input('price'),
-            'with_trainer' => $request->input('with_trainer'),
-            'period' => $request->input('period'),
-            'plan_type_id' => $request->input('plan_type_id'),
+        $plan = Plan::create([
+            'name' => $data['name'],
+            'description' => $data['description'],
+            'price' => $data['price'],
+            'with_trainer' => $data['with_trainer'],
+            'period' => $data['period'],
+            'plan_type_id' => $data['plan_type_id'],
         ]);
+
         return $plan;
     }
 
     /**
-     * To Edit a plan
+     * To Edit an plan
      * 
-     * @param Request
-     * @param Plan
+     * @param array $data The update data
+     * @param Plan $plan The plan to update
      */
-    public function update(Request $request, Plan $plan)
+    public function update(array $data, Plan $plan)
     {
-        $plan->update([
-            'name' => $request->input('name'),
-            'description' => $request->input('description'),
-            'price' => $request->input('price'),
-            'with_trainer' => $request->input('with_trainer'),
-            'period' => $request->input('period'),
-            'plan_type_id' => $request->input('plan_type_id'),
-        ]);
-        
+        $plan->update($data);
+
         return $plan;
     }
 
-    public function getAllPlansAfterFiltering(Request $request)
+    /**
+     *  Delete the specified plan
+     * 
+     *  @param Plan $plan The plan to delete
+     *  @return bool|null True if the plan was deleted, false otherwise
+     */
+    public function delete(Plan $plan)
     {
 
-        $q = Plan::query();
+        return $plan->delete();
+    }
 
-        $entries_number = $request->input('entries_number', 10);
+    /**
+     * Get paginated plans with applied filters
+     *
+     * This function retrieves a paginated list of plans from the Plan model
+     * applying filters based on the request parameters
+     * The filters include:
+     * - Plan name ('name')
+     * - Minimum price ('min_price')
+     * - Maximum price ('max_price')
+     * - With trainer on not ('with_trainer')
+     * - Plan type ('plan_type')
+     *
+     * The function returns the filtered results paginated with 10 items per page
+     *
+     * @param array $data The incoming data containing filter parameters
+     * @return LengthAwarePaginator The paginated list of filtered plans
+     */
+    public function getAllPlansAfterFiltering(array $data)
+    {
+        $entries_number = $data['entries_number'] ?? 10;
 
-        if ($request->filled('name')) {
-            $q->where('name', 'like', '%' . $request->input('name') . '%');
-        }
-
-        if ($request->filled('min_price')) {
-            $q->where('price', '>=', $request->input('min_price'));
-        }
-
-        if ($request->filled('max_price')) {
-            $q->where('price', '<=', $request->input('max_price'));
-        }
-
-        if ($request->filled('with_trainer')) {
-            $q->where('with_trainer', $request->input('with_trainer'));
-        }
-
-        if ($request->filled('plan_type_id')) {
-            $q->where('plan_type_id', $request->input('plan_type_id'));
-        }
-
-        $plans = $q->paginate($entries_number)->appends($request->except('page'));
+        $plans = Plan::query()
+            ->when(
+                isset($data['name']),
+                function ($query) use ($data) {
+                    return  $query->SearchByName($data['name']);
+                }
+            )
+            ->when(
+                isset($data['min_price']),
+                function ($query) use ($data) {
+                    return  $query->MinPrice($data['min_price']);
+                }
+            )
+            ->when(
+                isset($data['max_price']),
+                function ($query) use ($data) {
+                    return  $query->MaxPrice($data['max_price']);
+                }
+            )
+            ->when(
+                isset($data['with_trainer']),
+                function ($query) use ($data) {
+                    return  $query->WithTrainer($data['with_trainer']);
+                }
+            )
+            ->when(
+                isset($data['plan_type']),
+                function ($query) use ($data) {
+                    return  $query->PlanType($data['plan_type']);
+                }
+            )->paginate($entries_number)->appends(request()->except('page'));
 
         return $plans;
-
     }
 }
