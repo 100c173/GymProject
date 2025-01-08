@@ -92,7 +92,7 @@ class TimeService
                 function ($query) use ($data) {
                     return $query->maxDate($data['max_date']);
                 }
-            )->paginate($entries_number);
+            )->paginate($entries_number)->appends(request()->except('page'));
 
         return $times;
     }
