@@ -57,4 +57,19 @@ class Session extends Model
                $session->plans()->detach();
            });
        }
+
+        /**
+         * Scope for Search By Name
+         */
+       public function scopeSearchByName($query, $name)
+       {
+           return $query->where('name', 'like', '%' . $name . '%');
+       }
+            /**
+         * Scope for Search By Max Members
+         */
+       public function scopeMaxMembers($query, $maxMembers)
+       {
+           return $query->where('max_members', '<=', $maxMembers);
+       }
 }
