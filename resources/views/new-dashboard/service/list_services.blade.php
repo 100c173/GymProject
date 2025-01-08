@@ -123,7 +123,7 @@
           <ul class="pagination justify-content-center">
             <!-- Previous Page Link -->
             <li class="page-item {{ $services->onFirstPage() ? 'disabled' : '' }}">
-              <a class="page-link" href="{{ $services->appends(['entries_number' => request('entries_number'), 'name' => request('name'), 'role' => request('role')])->previousPageUrl() }}">
+              <a class="page-link" href="{{ $services->previousPageUrl() }}">
                 <i class="tf-icon bx bx-chevrons-left bx-sm"></i>
               </a>
             </li>
@@ -131,7 +131,7 @@
             <!-- Pagination Links -->
             @for ($i = 1; $i <= $services->lastPage(); $i++)
               <li class="page-item {{ $services->currentPage() == $i ? 'active' : '' }}">
-                <a class="page-link" href="{{ $services->appends(['entries_number' => request('entries_number'), 'name' => request('name'), 'role' => request('role')])->url($i) }}">
+                <a class="page-link" href="{{ $services->url($i) }}">
                   {{ $i }}
                 </a>
               </li>
@@ -139,7 +139,7 @@
         
             <!-- Next Page Link -->
             <li class="page-item {{ $services->hasMorePages() ? '' : 'disabled' }}">
-              <a class="page-link" href="{{ $services->appends(['entries_number' => request('entries_number'), 'name' => request('name'), 'role' => request('role')])->nextPageUrl() }}">
+              <a class="page-link" href="{{ $services->nextPageUrl() }}">
                 <i class="tf-icon bx bx-chevrons-right bx-sm"></i>
               </a>
             </li>
