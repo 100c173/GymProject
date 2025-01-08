@@ -10,12 +10,12 @@
           <nav aria-label="breadcrumb" class="bg-body-tertiary rounded-3 p-3">
             <ol class="breadcrumb breadcrumb-style1">
               <li class="breadcrumb-item">
-                <a href="#">Dashboard</a>
+                <a href="{{route('dashboard.index')}}">Dashboard</a>
               </li>
               <li class="breadcrumb-item">
                 <a href="{{route('times.index')}}">Times</a>
               </li>
-              <li class="breadcrumb-item active">{{$time->getStartAndEndtime()}}</li>
+              <li class="breadcrumb-item active">{{$time->getStartAndEndTime12Hours()}}</li>
             </ol>
           </nav>
         </div>
@@ -38,7 +38,7 @@
                   <p class="mb-0">Start Time</p>
                 </div>
                 <div class="col-sm-9">
-                  <p class="text-muted mb-0">{{TimeWith12HoursFormat($time->start_time)}}</p>
+                  <p class="text-muted mb-0">{{$time->getStartTime12Hours()}}</p>
                 </div>
               </div>
               <hr>
@@ -47,7 +47,7 @@
                   <p class="mb-0">End Time</p>
                 </div>
                 <div class="col-sm-9">
-                  <p class="text-muted mb-0">{{TimeWith12HoursFormat($time->end_time)}}</p>
+                  <p class="text-muted mb-0">{{$time->getEndTime12Hours()}}</p>
                 </div>
               </div>
        
