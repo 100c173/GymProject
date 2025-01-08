@@ -7,6 +7,7 @@ use App\Http\Requests\MemberShipApplicationRequest;
 use App\Http\Resources\MembershipApplicationResource;
 use App\Models\MembershipApplication;
 use App\Models\User;
+use App\Services\MembershipApplicationService;
 use App\Traits\ApiResponseTrait;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
@@ -14,10 +15,26 @@ use Illuminate\Validation\ValidationException;
 
 class MembershipApplicationController extends Controller
 {
-    use ApiResponseTrait;
-    public function __construct()
+    /**
+     * Service to handle membershipApplication-related logic 
+     * and separating it from the controller
+     * 
+     * @var MembershipApplicationService
+     */
+    protected $membershipApplicationService;
+
+    /**
+     * MembershipApplicationController constructor
+     *
+     * @param MembershipApplicationService $membershipApplicationService
+     */
+    public function __construct(MembershipApplicationService $membershipApplicationService)
     {
         $this->middleware('auth:sanctum');
+        $this->middleware('check.application')->only('store');
+
+        // Inject the PermissionService to handle membershipApplication-related logic
+        $this->membershipApplicationService = $membershipApplicationService;
     }
 
     /**
@@ -26,96 +43,93 @@ class MembershipApplicationController extends Controller
     public function index()
     {
         //Retrieve membership requests for the current user
-        $id = auth()->user()->id;
-        $user = User::FindOrFail($id);
-        $applications = MembershipApplication::where('user_id', $user->id)->get();
 
-        return $this->successResponse('Membership request has been successfully retrieved.' , MembershipApplicationResource::collection($applications));
+        $applications = $this->membershipApplicationService
+            ->getUserMembershipApplicationApi();
+        if ($applications)
+            return $this->successResponse(
+                'Membership request has been successfully retrieved.',
+                MembershipApplicationResource::collection($applications)
+            );
+
+        return $this->errorResponse('Faild');
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created membership application
+     *
+     * @param MembershipApplicationRequest $request
+     * @return JsonResponse
      */
     public function store(MemberShipApplicationRequest $request)
     {
+        $validated = $request->validated();
 
-        // Upload files
-        $imagePath = null;
-        $pdfPath  = null;
+        $application = $this->membershipApplicationService->createApi($validated);
 
-        if ($request->hasFile('image')) {
-            $file = $request->file('image');
-
-            $imagePath = uploadFile($file, "images/MembershipApplications"); // public disk by default
+        // Successful response
+        if ($application) {
+            return $this->successResponse(
+                'Your membership application has been submitted successfully.',
+                new MembershipApplicationResource($application),
+                201
+            );
         }
 
-        if ($request->hasFile('pdf')) {
-            $file = $request->file('pdf');
-
-            $pdfPath = uploadFile($file, "MembershipApplications_CV"); // public disk by default
-        }
-
-
-        $user = auth()->user();
-
-        // Create record in database
-        $application = MembershipApplication::create([
-            'user_id' => $user->id,
-            'image_path' => $imagePath,
-            'pdf_path' => $pdfPath,
-            'status' => 'pending',
-        ]);
-
-        //Successful response
-        return $this->successResponse('Your membership application has been submitted successfully.' , new MembershipApplicationResource($application), 201);
+        return $this->errorResponse('Failed to submit the membership application.');
     }
 
+
     /**
-     * Display the specified resource.
+     * Display the specified membership application
+     *
+     * @param MembershipApplication $membershipApplication
+     * @return JsonResponse
      */
-    public function show(MembershipApplication $membership_application)
+    public function show(MembershipApplication $membershipApplication)
     {
-        return $this->successResponse('The specified membership request has been successfully retrieved.' , new MembershipApplicationResource($membership_application));
+        return $this->successResponse(
+            'The specified membership request has been successfully retrieved.',
+            new MembershipApplicationResource($membershipApplication)
+        );
     }
 
+
     /**
-     * Update the specified resource in storage.
+     * Update the specified membership application in storage
+     *
+     * @param MembershipApplicationRequest $request
+     * @param string $id
+     * @return JsonResponse
      */
-    public function update(MembershipApplicationRequest $request, MembershipApplication $membership_application)
+    public function update(MembershipApplicationRequest $request, string $id)
     {
-        // Upload files
-        $imagePath = $membership_application->image_path;
-        $pdfPath  = $membership_application->pdf_path;
-        
-        if ($request->hasFile('image')) {
-            $file = $request->file('image');
+        $validated = $request->validated();
 
-            $imagePath = uploadFile($file, "images/MembershipApplications"); // public disk by default
-        }
-
-        if ($request->hasFile('pdf')) {
-            $file = $request->file('pdf');
-
-            $pdfPath = uploadFile($file, "MembershipApplications_CV"); // public disk by default
-        }
-
-
-        // Update the application record
-        $membership_application->update([
-            'image' => $imagePath,
-            'pdf' => $pdfPath,
-        ]);
+        $membershipApplication = $this->membershipApplicationService->updateApi($validated, $id);
 
         // Return success response
-        return $this->successResponse('Your membership application has been updated successfully.' ,new MembershipApplicationResource($membership_application));
+        if ($membershipApplication) {
+            return $this->successResponse(
+                'Your membership application has been updated successfully.',
+                new MembershipApplicationResource($membershipApplication)
+            );
+        }
+
+        return $this->errorResponse('Failed to update the membership application.');
     }
+
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(MembershipApplication $membership_application)
+    public function destroy(string $id)
     {
-        $membership_application->delete();
-        return $this->successResponse('The membership application has been deleted successfully.');
+        $membershipApplication = $this->membershipApplicationService->deleteApi($id);
+
+        if ($membershipApplication)
+            return $this->successResponse('The membership application has been deleted successfully.');
+
+        return $this->errorResponse('Faild');
     }
 }
