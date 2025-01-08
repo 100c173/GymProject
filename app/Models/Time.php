@@ -18,15 +18,15 @@ class Time extends Model
     /**
      * Define the query to determine which records should be pruned
      * 
-     * This method specifies that records with a 'day' field earlier than the current date
-     * should be pruned
+     * This method specifies that records with a 'day' field earlier 30 days
+     * than the current date should be pruned
      * The Carbon library is used to get the current date in 'Y-m-d' format
      * 
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return Builder
      */
     protected function prunable()
     {
-        return $this->whereDate('day', '<', Carbon::now()->format('Y-m-d'));
+        return $this->whereDate('day', '<', Carbon::now()->subDays(30)->format('Y-m-d'));
     }
 
     /**
@@ -45,9 +45,33 @@ class Time extends Model
      *
      * @return string
      */
-    public function getStartAndEndtime()
+    public function getStartAndEndTime12Hours()
     {
         return TimeWith12HoursFormat($this->start_time) . " - " . TimeWith12HoursFormat($this->end_time);
+    }
+
+    /**
+     * Get the formatted start time
+     *
+     * This method returns the start time formatted in 12-hour format
+     *
+     * @return string
+     */
+    public function getStartTime12Hours()
+    {
+        return TimeWith12HoursFormat($this->start_time);
+    }
+
+    /**
+     * Get the formatted End time
+     *
+     * This method returns the End time formatted in 12-hour format
+     *
+     * @return string
+     */
+    public function getEndTime12Hours()
+    {
+        return TimeWith12HoursFormat($this->end_time);
     }
 
     /**
