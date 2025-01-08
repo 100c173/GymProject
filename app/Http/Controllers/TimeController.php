@@ -43,7 +43,6 @@ class TimeController extends Controller
     {
         $validated = $request->validated();
         $times =  $this->timeService->getAllTimesAfterFiltering($validated);
-        $times = getAllTimesWith12HoursFormat($times);
 
         return view('new-dashboard.time.list_times', [
             'times' => $times,
