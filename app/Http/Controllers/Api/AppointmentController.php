@@ -72,7 +72,9 @@ class AppointmentController extends Controller
      */
     public function update( AppointmentRequest $request , Appointment $appointment)
     {
-      
+        $session = $appointment->session;
+        $session->increment('max_members', 1); //Add 1 from max_members
+        
         $appointment->update($request->validated());
 
         $session = Session::find($request->session_id);
@@ -93,6 +95,8 @@ class AppointmentController extends Controller
      */
     public function destroy(Appointment $appointment)
     {
+        $session = $appointment->session;
+        $session->increment('max_members', 1); //Add 1 from max_members
         $appointment->delete();
         return $this->successResponse('Appointment deleted successfully.');
     }
