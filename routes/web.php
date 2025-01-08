@@ -1,47 +1,29 @@
 <?php
 
-use App\Models\Appointment;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\DashboardController;
 
-use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PlanController;
 use App\Http\Controllers\TimeController;
 use App\Http\Controllers\UserController;
-use Illuminate\Database\Capsule\Manager;
-
-
-
-use Illuminate\Contracts\Session\Session;
 
 use App\Http\Controllers\RatingController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\MembershipApplicationController;
 use App\Http\Controllers\PermissionController;
-use Illuminate\Database\Capsule\Manager;
-use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
 
 
 use App\Http\Controllers\SessionController;
 use App\Http\Controllers\PlanTypeController;
 
-use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\SubscriptionController;
-use App\Http\Controllers\SportEquipmentController;
-use App\Http\Controllers\MembershipApplicationController;
-use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
-use App\Http\Controllers\RatingController;
 use App\Http\Controllers\RoleController;
-use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\SportEquipmentController;
-use App\Http\Controllers\TimeController;
-use App\Http\Controllers\UserController;
-use Illuminate\Support\Facades\Auth;
 
 
 /*
