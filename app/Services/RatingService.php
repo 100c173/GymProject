@@ -27,7 +27,7 @@ class RatingService
     }
 
     /**
-     * To Edit an rating
+     * To Edit a rating
      * 
      * @param array $data The update data
      * @param string $id The rating id to update
@@ -41,7 +41,11 @@ class RatingService
         return $rating;
     }
 
-
+    /**
+     * To show a rating for API
+     * 
+     * @param string $id to find the rating
+     */
     public function show(string $id)
     {
         $rating = Rating::findOrFail($id);
@@ -49,6 +53,11 @@ class RatingService
         return $rating;
     }
 
+    /**
+     * To delete a rating for API
+     * 
+     * @param string $id to find the rating
+     */
     public function delete(string $id)
     {
         $rating = Rating::findOrFail($id);
@@ -83,7 +92,7 @@ class RatingService
             })->when(isset($data['rateable_name']), function ($query) use ($data) {
 
                 return $query->ofRateableName($data['rateable_name']);
-            })->paginate($entries_number);
+            })->paginate($entries_number)->appends(request()->except('page'));
 
         return $ratings;
     }
