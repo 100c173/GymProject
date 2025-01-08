@@ -174,7 +174,7 @@
                     <div class="dropdown-menu">
                       <a class="dropdown-item" href="{{route('sessions.show',$session)}}"><i class="bx bx-show me-1"></i>Show</a>
                       <a class="dropdown-item" href="{{route('sessions.edit',$session)}}"><i class="bx bx-edit-alt me-1"></i>Edit</a>
-                        <a class="dropdown-item" href="javascript:{}" onclick="document.getElementById('Delete_{{$session->id}}').submit();"><i class="bx bx-trash me-1"></i>
+                      <a class="dropdown-item" href="javascript:{}" onclick="document.getElementById('Delete_{{$session->id}}').submit();"><i class="bx bx-trash me-1"></i>
                           <form id="Delete_{{$session->id}}" action="{{ route('sessions.destroy', $session) }}" method="POST" style="display: none;">
                               @csrf 
                               @method('DELETE')

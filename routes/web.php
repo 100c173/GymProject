@@ -43,8 +43,8 @@ Route::get('/', function () {
 
 
 Route::get('/appointments', [AppointmentController::class, 'index'])->name('appointments.index');
-Route::get('/appointments/update_status/{id}/{type}', [AppointmentController::class, 'updateStatus']);
 Route::get('/appointments/search', [AppointmentController::class, 'search'])->name('appointment.search');
+Route::delete('/appointments/delete/{id}', [AppointmentController::class, 'destroy'])->name('appointment.destroy');
 
 Route::put('sessions/update_status/{session}', [SessionController::class, 'updateStatus'])->name('sessions.updateStatus');
 Route::resource('sessions', SessionController::class);
