@@ -29,7 +29,7 @@
   <div class="d-flex p-4">
     <div class="card mb-6 w-100">
       <h4 class="card-header">Filter</h4>
-      <form id="FilterForm" action="" method="GET">
+      <form id="FilterForm" action="{{route('membership_applications')}}" method="GET">
         <div class="card-body">
           <div class="row mb-3 d-flex align-items-center">
             <!-- Search -->
@@ -62,6 +62,7 @@
           <!-- Apply Button -->
           <div class="row">
             <div class="col-sm-12 d-flex justify-content-end">
+              <button class="btn btn-light me-1" onclick="resetFilters()">Reset</button>
               <button class="btn btn-primary me-1">APPLY</button>
             </div>
           </div>
@@ -144,32 +145,32 @@
              .. Don't forget to use paginate on your controller first! -->
 
 
-        {{-- <nav aria-label="Page navigation">
+        <nav aria-label="Page navigation">
             <ul class="pagination justify-content-center">
               <!-- Previous Page Link -->
-              <li class="page-item {{ $sessions->onFirstPage() ? 'disabled' : '' }}">
-                <a class="page-link" href="{{ $sessions->appends(['entries_number' => request('entries_number'), 'session_name' => request('session_name'), 'max_members' => request('max_members')])->previousPageUrl() }}">
+              <li class="page-item {{ $memberships->onFirstPage() ? 'disabled' : '' }}">
+                <a class="page-link" href="{{ $memberships->previousPageUrl() }}">
                   <i class="tf-icon bx bx-chevrons-left bx-sm"></i>
                 </a>
               </li>
           
               <!-- Pagination Links -->
-              @for ($i = 1; $i <= $sessions->lastPage(); $i++)
-                <li class="page-item {{ $sessions->currentPage() == $i ? 'active' : '' }}">
-                  <a class="page-link" href="{{ $sessions->appends(['entries_number' => request('entries_number'), 'session_name' => request('session_name'), 'max_members' => request('max_members')])->url($i) }}">
+              @for ($i = 1; $i <= $memberships->lastPage(); $i++)
+                <li class="page-item {{ $memberships->currentPage() == $i ? 'active' : '' }}">
+                  <a class="page-link" href="{{ $memberships->url($i) }}">
                     {{ $i }}
                   </a>
                 </li>
               @endfor
           
               <!-- Next Page Link -->
-              <li class="page-item {{ $sessions->hasMorePages() ? '' : 'disabled' }}">
-                <a class="page-link" href="{{ $sessions->appends(['entries_number' => request('entries_number'), 'session_name' => request('session_name'), 'max_members' => request('max_members')])->nextPageUrl() }}">
+              <li class="page-item {{ $memberships->hasMorePages() ? '' : 'disabled' }}">
+                <a class="page-link" href="{{ $memberships->nextPageUrl() }}">
                   <i class="tf-icon bx bx-chevrons-right bx-sm"></i>
                 </a>
               </li>
             </ul>
-          </nav> --}}
+          </nav>
         
       </div>
 </div>
@@ -185,5 +186,21 @@
       document.getElementById('status-form').submit();
   }
 
+  function resetFilters() {
+
+// Get the filter form
+var form = document.getElementById('FilterForm');
+
+// Clear all input fields
+  var inputs = form.getElementsByTagName('input');
+
+  for (var i = 0; i < inputs.length; i++)
+  {
+      inputs[i].value = ''; 
+  }
+
+  // Reload the page without any query parameters
+  window.location.href = form.action;
+}
 </script>
 @endsection
