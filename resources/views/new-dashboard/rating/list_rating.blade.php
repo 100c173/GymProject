@@ -204,7 +204,7 @@
                 <ul class="pagination justify-content-center">
                     <!-- Previous Page Link -->
                     <li class="page-item {{ $ratings->onFirstPage() ? 'disabled' : '' }}">
-                        <a class="page-link" href="{{ $ratings->appends(request()->except('page'))->previousPageUrl() }}">
+                        <a class="page-link" href="{{ $ratings->previousPageUrl() }}">
                             <i class="tf-icon bx bx-chevrons-left bx-sm"></i>
                         </a>
                     </li>
@@ -212,7 +212,7 @@
                     <!-- Pagination Links -->
                     @for ($i = 1; $i <= $ratings->lastPage(); $i++)
                         <li class="page-item {{ $ratings->currentPage() == $i ? 'active' : '' }}">
-                            <a class="page-link" href="{{ $ratings->appends(request()->except('page'))->url($i) }}">
+                            <a class="page-link" href="{{ $ratings->url($i) }}">
                                 {{ $i }}
                             </a>
                         </li>
@@ -220,7 +220,7 @@
             
                     <!-- Next Page Link -->
                     <li class="page-item {{ $ratings->hasMorePages() ? '' : 'disabled' }}">
-                        <a class="page-link" href="{{ $ratings->appends(request()->except('page'))->nextPageUrl() }}">
+                        <a class="page-link" href="{{ $ratings->nextPageUrl() }}">
                             <i class="tf-icon bx bx-chevrons-right bx-sm"></i>
                         </a>
                     </li>
