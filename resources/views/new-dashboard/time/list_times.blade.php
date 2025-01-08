@@ -130,7 +130,6 @@
                 </td>
                 <td><span class="badge bg-label-dark me-1">{{$time->day}}</span></td>
                 <td>
-                    <!-- Please use success for accepted and danger for declined -->
                     <span class="badge bg-label-success me-1">{{$time->start_time}}</span>
                   </ul>
                 </td>

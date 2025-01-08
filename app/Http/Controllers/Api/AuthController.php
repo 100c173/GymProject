@@ -14,8 +14,6 @@ use function PHPUnit\Framework\returnSelf;
 
 class AuthController extends Controller
 {
-    // Use ApiResponseTrait to standardize API responses
-    use ApiResponseTrait;
 
     /**
      * Service to handle auth-related logic 

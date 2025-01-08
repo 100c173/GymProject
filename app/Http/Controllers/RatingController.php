@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\RatingFilterRequest;
 use App\Models\Rating;
 use App\Services\RatingService;
 use Illuminate\Http\Request;
@@ -33,11 +34,14 @@ class RatingController extends Controller
 
     /**
      * Display a listing of the resource.
+     * 
+     * @param RatingFilterRequest $request The request object containing filter data 
      */
-    public function index(Request $request)
+    public function index(RatingFilterRequest $request)
     {
-        //
-       $ratings = $this->ratingService->getAllRatingsAfterFilttering($request);
+        $validated = $request->validated();
+        $ratings = $this->ratingService->getAllRatingsAfterFiltering($validated);
+
         return view('new-dashboard.rating.list_rating', [
             'ratings' => $ratings
         ]);
@@ -62,9 +66,12 @@ class RatingController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Rating $rating)
     {
         //
+        return view('new-dashboard.rating.show_rating', [
+            'rating' => $rating,
+        ]);
     }
 
     /**
@@ -86,8 +93,13 @@ class RatingController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Rating $rating)
     {
-        //
+        $rating = $rating->delete();
+
+        // using the method from FlashMessageHelper to alert the user about success or faild
+        flashMessage($rating, 'Rating Deleted successfully.', 'Failed to Delete rating.');
+
+        return redirect()->route('ratings.index');
     }
 }

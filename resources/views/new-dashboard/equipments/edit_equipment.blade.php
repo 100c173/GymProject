@@ -12,7 +12,7 @@
             {{-- <small class="text-muted float-end">Merged input group</small> --}}
           </div>
           <div class="card-body">
-            <form action="" method="POST" id="create_session" enctype="multipart/form-data">
+            <form action="{{route('equipments.update', $equipment)}}" method="POST" id="create_session" enctype="multipart/form-data">
               @csrf
                 @method('PUT')
 
@@ -21,7 +21,7 @@
                 <div class="col-sm-10">
                   <div class="input-group input-group-merge">
                     <span id="basic-icon-default-fullname2" class="input-group-text"><i class="bx bx-dumbbell"></i></span>
-                    <input name="name" type="text" class="form-control" id="basic-icon-default-fullname" placeholder="John" aria-label="John Doe" aria-describedby="basic-icon-default-fullname2">
+                    <input name="name" value="{{$equipment->name}}" type="text" class="form-control" id="basic-icon-default-fullname" placeholder="John" aria-label="John Doe" aria-describedby="basic-icon-default-fullname2">
                   </div>
                 </div>
               </div>
@@ -31,7 +31,7 @@
                 <div class="col-sm-10">
                   <div class="input-group input-group-merge">
                     <span id="basic-icon-default-fullname2" class="input-group-text"><i class='bx bxl-sketch'></i></span>
-                    <input name="brand" type="text" class="form-control" id="basic-icon-default-fullname" placeholder="John" aria-label="John Doe" aria-describedby="basic-icon-default-fullname2">
+                    <input name="brand" value="{{$equipment->brand}}" type="text" class="form-control" id="basic-icon-default-fullname" placeholder="John" aria-label="John Doe" aria-describedby="basic-icon-default-fullname2">
                   </div>
                 </div>
               </div>
@@ -41,7 +41,7 @@
                 <div class="col-sm-10">
                   <div class="input-group input-group-merge">
                     <span id="basic-icon-default-fullname2" class="input-group-text"><i class="bx bx-detail"></i></span>
-                    <textarea name="description" class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="Type More Information Here ..."></textarea>
+                    <textarea name="description" class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="Type More Information Here ...">{{$equipment->description}}</textarea>
                   </div>
                 </div>
               </div>
@@ -50,10 +50,9 @@
                 <label for="exampleFormControlSelect1" class="col-sm-2 col-form-label">Status</label>
                 <div class="col-sm-10">
                     <select name="equipment_status" class="form-select" id="exampleFormControlSelect1" aria-label="Default select example">
-                        <option selected>Open To Select A Status</option>
-                        <option value="available">available</option>
-                        <option value="damaged">damaged</option>
-                        <option value="under maintenance">under maintenance</option>
+                        <option {{$equipment->equipment_status == 'available'? 'selected' : ''}} value="available">available</option>
+                        <option {{$equipment->equipment_status == 'damaged'? 'selected' : ''}} value="damaged">damaged</option>
+                        <option {{$equipment->equipment_status == 'under maintenance'? 'selected' : ''}} value="under maintenance">under maintenance</option>
                     </select>
                 </div>
               </div>
@@ -64,8 +63,10 @@
                     <input name="image_path" class="form-control" type="file" id="formFile">
                 </div>
               </div>
-      
+
+              <input type="hidden" name="current_image_path" value="{{ $equipment->image_path }}">
                 <input type="hidden" name="redirect_to" id="redirect_to" value="">
+
               <div class="row justify-content-end">
                 <div class="col-sm-10">
                   <button type="submit" id = "submit_redirect_index" class="btn btn-primary">Edit</button>

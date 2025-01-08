@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\SessionRequest;
+use App\Models\Plan;
 use App\Models\Session;
 use App\Models\Time;
 use App\Models\User;
@@ -10,6 +11,13 @@ use Illuminate\Http\Request;
 
 class SessionController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('checkSessionExists')->only('create');
+        $this->middleware('check.plan.trainer')->only('store','update');
+
+    }
+    
     /**
      * Display a listing of the resource.
      */
@@ -27,10 +35,10 @@ class SessionController extends Controller
         if ($maxMembers) {
             $sessions->where('max_members', '<=', $maxMembers);
         }
-        
+
         $sessions = $sessions->paginate($request->entries_number);
 
-        return view('new-dashboard.sessions.llist_sessions',compact('sessions')) ; 
+        return view('new-dashboard.sessions.llist_sessions', compact('sessions'));
     }
 
     /**
@@ -40,7 +48,8 @@ class SessionController extends Controller
     {
         $trainers = User::role('trainer')->get();
         $times = Time::all();
-       return view('new-dashboard.sessions.create_session',compact('trainers','times'));
+        $plans = Plan::all();
+        return view('new-dashboard.sessions.create_session', compact('trainers', 'times', 'plans'));
     }
 
     /**
@@ -53,11 +62,20 @@ class SessionController extends Controller
         $session->name = $request->name;
         $session->description = $request->description;
         $session->max_members = $request->members_number;
-        $session->user_id = $request->trainer_id;  
-        $session->time_id = $request->time_id;  
-        $session->save();  
-        
-        return redirect()->route('sessions.index')->with('success', 'Session created successfully');
+        if ($request->trainer_id) $session->user_id = $request->trainer_id;
+        $session->time_id = $request->time_id;
+
+
+        // Save session
+        if ($session->save()) {
+            // Attach plans (supports array of single ID)
+            $session->plans()->attach($request->plan_id);
+
+            return redirect()->route('sessions.index')->with('success', 'Session created successfully');
+        }
+
+        // Handle save failure
+        return back()->with('error', 'Failed to create session. Please try again.');
     }
 
     /**
@@ -66,7 +84,7 @@ class SessionController extends Controller
     public function show(Session $session)
     {
 
-        return view('new-dashboard.sessions.show_session',compact('session'));
+        return view('new-dashboard.sessions.show_session', compact('session'));
     }
 
     /**
@@ -76,7 +94,9 @@ class SessionController extends Controller
     {
         $trainers = User::role('trainer')->get();
         $times = Time::all();
-        return view('new-dashboard.sessions.edit_session',compact('session','trainers','times'));
+        $plans = Plan::all();
+        $cur_plan = $session->plans;
+        return view('new-dashboard.sessions.edit_session', compact('session', 'trainers', 'times' ,'plans' , 'cur_plan'));
     }
 
     /**
@@ -84,16 +104,20 @@ class SessionController extends Controller
      */
     public function update(SessionRequest $request, Session $session)
     {
-        
-        $session->update([
+        $data=[
             'name' => $request->name,
             'description' => $request->description,
             'max_number' => $request->members_number,
-            'user_id' => $request->trainer_id,
             'time_id' => $request->time_id,
             'status' => $request->status,
-        ]);
-        
+        ];
+
+        if($request->trainer_id){
+            $data['user_id'] =  $request->trainer_id; 
+        }
+        $session->update($data);
+        $session->plans()->sync($request->plan_id);
+
         return redirect()->route('sessions.index')->with('success', 'Session updated successfully');
     }
 
@@ -108,12 +132,11 @@ class SessionController extends Controller
 
     public function updateStatus(Request $request, Session $session)
     {
-        
+
         $session->update([
             'status' => $request->status,
         ]);
-        
+
         return redirect()->route('sessions.index')->with('success', 'Session updated successfully');
     }
-    
 }

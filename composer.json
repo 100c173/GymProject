@@ -34,7 +34,8 @@
         },
         "files": [
             "app/Helpers/FlashMessageHelper.php",
-            "app/Helpers/FileHelper.php" 
+            "app/Helpers/FileHelper.php",
+            "app/Helpers/TimeWith12HoursFormatHelper.php"
         ]
     },
     "autoload-dev": {

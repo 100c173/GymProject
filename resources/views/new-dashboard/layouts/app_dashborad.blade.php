@@ -783,33 +783,34 @@
           <ul class="menu-inner py-1 overflow-auto">
             <!-- Dashboards -->
             {{-- don't forget to put theis conditon {{Route::current()->uri() == "dashboard" ? "active" : ''}} --}}
-            <li class="menu-item  ">
+            @role('admin')
+            <li class="menu-item   {{ in_array(Route::current()->uri(), ['dashboards',]) ? 'active open' : '' }}">
               <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-home-smile"></i>
                 <div class="text-truncate" data-i18n="Dashboards">Dashboards</div>
               </a>
               <ul class="menu-sub">
-                <li class="menu-item ">
-                  <a href="index.html" class="menu-link">
+                <li class="menu-item {{Route::current()->uri() == "dashboards" ? "active" : ''}}">
+                  <a href="{{route('home')}}" class="menu-link">
                     <div class="text-truncate" data-i18n="Analytics">Analytics</div>
                   </a>
                 </li>
               </ul>
             </li>
-
+            @endrole
 
             <!-- Tables -->
 
             <li class="menu-header small text-uppercase">
               <span class="menu-header-text">Tables</span>
             </li>
-            {{-- don't forget to put theis conditon {{Route::current()->uri() == "dashboard" ? "active" : ''}} --}}
-            <li class="menu-item {{ in_array(Route::current()->uri(), ['users', 'times','sessions','appointments','attendance','plans','plan_types','services']) ? 'active open' : '' }}"> 
+            <li class="menu-item {{ in_array(Route::current()->uri(), ['users', 'times','sessions','appointments','attendance','plans','plan_types','services', 'equipments', 'ratings']) ? 'active open' : '' }}"> 
                 <a href="javascript:void(0);" class="menu-link menu-toggle">
                     <i class="menu-icon tf-icons bx bx-table"></i>
                   <div class="text-truncate" data-i18n="Dashboards">Tables</div>
                 </a>
                 <ul class="menu-sub">
+                  @role('admin')
                   <li class="menu-item {{Route::current()->uri() == "users" ? "active" : ''}}">
                     <a href="{{route('users.index')}}" class="menu-link">
                       <div class="text-truncate" data-i18n="Analytics">Users</div>
@@ -820,28 +821,13 @@
                       <div class="text-truncate" data-i18n="Analytics">Times</div>
                     </a>
                   </li>
-                  <li class="menu-item {{Route::current()->uri() == "sessions" ? "active" : ''}}">
-                    <a href="{{route('sessions.index')}}" class="menu-link">
-                      <div class="text-truncate" data-i18n="Analytics">Sessions</div>
-                    </a>
-                  </li>
-                  <li class="menu-item {{Route::current()->uri() == "appointments" ? "active" : ''}}">
-                    <a href="{{route('appointments.index')}}" class="menu-link">
-                      <div class="text-truncate" data-i18n="Analytics">Appointments</div>
-                    </a>
-                  </li>
-                  <li class="menu-item {{Route::current()->uri() == "attendance" ? "active" : ''}}">
-                    <a href="{{route('attendance.index')}}" class="menu-link">
-                      <div class="text-truncate" data-i18n="Analytics">Attendance</div>
-                    </a>
-                  </li>
                   <li class="menu-item">
                     <a href="index.html" class="menu-link">
                       <div class="text-truncate" data-i18n="Analytics">Membership Applicatoins</div>
                     </a>
                   </li>
-                  <li class="menu-item ">
-                    <a href="index.html" class="menu-link">
+                  <li class="menu-item {{Route::current()->uri() == "equipments" ? "active" : ''}}">
+                    <a href="{{route('equipments.index')}}" class="menu-link ">
                       <div class="text-truncate" data-i18n="Analytics">Equipments</div>
                     </a>
                   </li>
@@ -870,6 +856,42 @@
                       <div class="text-truncate" data-i18n="Analytics">Ratings</div>
                     </a>
                   </li>
+                  @endrole
+                  <li class="menu-item {{Route::current()->uri() == "sessions" ? "active" : ''}}">
+                    <a href="{{route('sessions.index')}}" class="menu-link">
+                      <div class="text-truncate" data-i18n="Analytics">Sessions</div>
+                    </a>
+                  </li>
+                  <li class="menu-item {{Route::current()->uri() == "appointments" ? "active" : ''}}">
+                    <a href="{{route('appointments.index')}}" class="menu-link">
+                      <div class="text-truncate" data-i18n="Analytics">Appointments</div>
+                    </a>
+                  </li>
+                  <li class="menu-item {{Route::current()->uri() == "attendance" ? "active" : ''}}">
+                    <a href="{{route('attendance.index')}}" class="menu-link">
+                      <div class="text-truncate" data-i18n="Analytics">Attendance</div>
+                    </a>
+                  </li>
+                  
+                </ul>
+              </li>
+              @role('admin')
+              <li class="menu-item {{ in_array(Route::current()->uri(), ['permissions', 'roles']) ? 'active open' : '' }}"> 
+                <a href="javascript:void(0);" class="menu-link menu-toggle">
+                  <i class="menu-icon tf-icons bx bx-wrench"></i>
+                  <div class="text-truncate" data-i18n="Dashboards">Permisions & Roles</div>
+                </a>
+                <ul class="menu-sub">
+                  <li class="menu-item {{Route::current()->uri() == "permissions" ? "active" : ''}}">
+                    <a href="{{route('permissions.index')}}" class="menu-link">
+                      <div class="text-truncate" data-i18n="Analytics">Permissions</div>
+                    </a>
+                  </li>
+                  <li class="menu-item {{Route::current()->uri() == "roles" ? "active" : ''}}">
+                    <a href="{{route('roles.index')}}" class="menu-link">
+                      <div class="text-truncate" data-i18n="Analytics">Roles</div>
+                    </a>
+                  </li>
                 </ul>
               </li>
               <li class="menu-item {{ in_array(Route::current()->uri(), ['users/trash',]) ? 'active open' : '' }}"> 
@@ -890,19 +912,20 @@
                   </li>
                 </ul>
               </li>
-              
+              @endrole
               <!-- / Tables -->
 
               <!-- Forms -->
               <li class="menu-header small text-uppercase">
                 <span class="menu-header-text">Forms</span>
               </li>
-              <li class="menu-item {{ in_array(Route::current()->uri(), ['users/create', 'times/create','sessions/create','plans/create','plan_types/create','services/create']) ? 'active open' : '' }}"> 
+              <li class="menu-item {{ in_array(Route::current()->uri(), ['users/create', 'times/create','sessions/create','plans/create','plan_types/create','services/create', 'equipments/create']) ? 'active open' : '' }}"> 
                 <a href="javascript:void(0);" class="menu-link menu-toggle">
-                    <i class="menu-icon tf-icons bx bx-detail"></i>
+                  <i class="menu-icon tf-icons bx bx-detail"></i>
                   <div class="text-truncate" data-i18n="Dashboards">Forms</div>
                 </a>
                 <ul class="menu-sub">
+                  @role('admin')
                   <li class="menu-item {{Route::current()->uri() == "users/create" ? "active" : ''}}">
                     <a href="{{route('users.create')}}" class="menu-link">
                       <div class="text-truncate" data-i18n="Analytics">Users</div>
@@ -913,18 +936,13 @@
                       <div class="text-truncate" data-i18n="Analytics">Times</div>
                     </a>
                   </li>
-                  <li class="menu-item {{Route::current()->uri() == "sessions/create" ? "active" : ''}}">
-                    <a href="{{route('sessions.create')}}" class="menu-link">
-                      <div class="text-truncate" data-i18n="Analytics">Sessions</div>
-                    </a>
-                  </li>
                   <li class="menu-item ">
                     <a href="index.html" class="menu-link">
                       <div class="text-truncate" data-i18n="Analytics">Membership Applicatoins</div>
                     </a>
                   </li>
-                  <li class="menu-item ">
-                    <a href="index.html" class="menu-link">
+                  <li class="menu-item {{Route::current()->uri() == "equipments/create" ? "active" : ''}}">
+                    <a href="{{route('equipments.create')}}" class="menu-link ">
                       <div class="text-truncate" data-i18n="Analytics">Equipments</div>
                     </a>
                   </li>
@@ -941,6 +959,12 @@
                   <li class="menu-item {{Route::current()->uri() == "services/create" ? "active" : ''}}">
                     <a href="{{route('services.create')}}" class="menu-link">
                       <div class="text-truncate" data-i18n="Analytics">Service</div>
+                    </a>
+                  </li>
+                  @endrole
+                  <li class="menu-item {{Route::current()->uri() == "sessions/create" ? "active" : ''}}">
+                    <a href="{{route('sessions.create')}}" class="menu-link">
+                      <div class="text-truncate" data-i18n="Analytics">Sessions</div>
                     </a>
                   </li>
                 </ul>
@@ -1026,9 +1050,16 @@
                       <div class="dropdown-divider my-1"></div>
                     </li>
                     <li>
-                      <a class="dropdown-item" href="javascript:void(0);">
+
+                      <a class="dropdown-item" href="javascript:void(0);" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                         <i class="bx bx-power-off bx-md me-3"></i><span>Log Out</span>
-                      </a>
+                    </a>
+                    
+
+                      <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                        @csrf
+                    </form>
+                    
                     </li>
                   </ul>
                 </li>
