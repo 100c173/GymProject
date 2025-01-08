@@ -2,63 +2,75 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
+use App\Models\Subscription;
 use Illuminate\Http\Request;
+use App\Services\SubscriptionService;
 
 class SubscriptionController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        //
-    }
+      /**
+     * Service to handle rating-related logic 
+     * and separating it from the controller
+     * 
+     * @var SubscriptionService
+     */
+    protected $subscriptionService;
 
     /**
-     * Show the form for creating a new resource.
+     * RatingController constructor
+     *
+     * @param SubscriptionService $subscriptionService
      */
-    public function create()
+    public function __construct(SubscriptionService $subscriptionService)
     {
-        //
+        // Apply the auth middleware to ensure the user is authenticated
+        $this->middleware(['auth']);
+
+        // Inject the RatingService to handle rating-related logic
+        $this->subscriptionService= $subscriptionService;
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+    public function index(Request $request)
+    {  $subscriptions = $this->subscriptionService->search($request);
+        $user = User::whereHas('subscriptions')->get();
+        return view('new-dashboard.subscriptions.list_subscription', [
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
+            'subscriptions' => $subscriptions,
+            'user' => $user
+        ]);
+      }
+      public function AllMoveToTrash(Request $request)
+      {
+          $this->subscriptionService->moveFinishedSubscriptionsToTrash();
+  
+          return redirect()->route('subscription.index')->with('success', 'Finished subscriptions moved to trash.');
+      }
+      public function trashed(Request $request)
+      {
+        $entries_number = $request->input('entries_number', 10);
+      
+          $subscriptions = $this->subscriptionService->getTrashedSubscriptions($entries_number);
+  
+          return view('new-dashboard.subscriptions.trashed_subscription', compact('subscriptions'));
+      }
+    public function destroy(Subscription $subscription)
+{
+    $this->subscriptionService->delete($subscription);
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
+    return redirect()->back()->with('success', 'Subscription moved to trash.');
+}
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function forceDelete($id)
     {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        try {
+            $this->subscriptionService->forceDeleteSubscription($id);
+            return redirect()->back()->with('success', 'Subscription delete success');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('success', ' deleted failed');
+        }
     }
 }
