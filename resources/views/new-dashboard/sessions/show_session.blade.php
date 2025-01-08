@@ -80,7 +80,11 @@
                   <p class="mb-0">Time</p>
                 </div>
                 <div class="col-sm-9">
-                  <p class="text-muted mb-0">{{$session->time->getStartAndEndtime()}}</p>
+                  <p class="text-muted mb-0">
+                    <span class="badge bg-label-success me-1">{{$session->time->getStartTime12Hours()}}</span>
+                    {{" - "}}
+                    <span class="badge bg-label-danger ms-1">{{$session->time->getEndTime12Hours()}}</span>
+                  </p>
                 </div>
               </div>
             </div>
