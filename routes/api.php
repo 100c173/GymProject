@@ -26,7 +26,6 @@ Route::controller(LoginRegisterController::class)->group(function() {
     Route::post('/register', 'register');
     Route::post('/login', 'login');
 });
-
 // Protected routes 
 Route::middleware('auth:sanctum')->group( function () {
     Route::post('/logout', [LoginRegisterController::class, 'logout']);
@@ -36,7 +35,6 @@ Route::post('/subscriptions', [SubscriptionController::class, 'subscribe']);
 Route::delete('/subscriptions/{id}', [SubscriptionController::class, 'cancelSubscription']);
 //عرض اشتراكات المستخدم
 Route::get('/users/{id}/subscriptions', [SubscriptionController::class, 'getUserSubscriptions']);
-
 //services route 
 Route::apiResource('services',services::class);
 });

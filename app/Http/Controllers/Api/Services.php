@@ -4,15 +4,27 @@ namespace App\Http\Controllers\Api;
 
 use App\Models\Service;
 use Illuminate\Http\Request;
+use App\Traits\ApiResponseTrait;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ServiceRequest;
-use Validator;
+use App\Http\Resources\ServicesResource;
+use Illuminate\Support\Facades\Validator;
+
 class services extends Controller
 {
+
+    use ApiResponseTrait;
+    public function __construct()
+    {
+        $this->middleware('auth:sanctum');
+    }
+
     public function index(){
 
         $services=Service::all();
-     return response($services,200,['response returned succsesfully']);
+
+        return $this->successResponse('service has been successfully retrieved.' ,ServicesResource::collection($services));
+
     }
 
     public function store(ServiceRequest $request)
@@ -23,18 +35,16 @@ class services extends Controller
         ]);
 
         if($validate->fails()){
-            return response()->json([
-                'status' => 'failed',
-                'message' => 'Validation Error!',
-                'data' => $validate->errors(),
-            ], 403);
+
+            return $this->errorResponse('Validation Error!' ,$validate->errors(),403);
+
         }
         $services = Service::create([
             'name' => $request->name,
             'description' => $request->description,
            
         ]);
-        return response($services,201,['created succsesfully']);
+        return $this->successResponse('service has been successfully added.' , new ServicesResource($services),201);
     }
 
     public function show(string $id)
@@ -42,32 +52,30 @@ class services extends Controller
      
         $service=Service::findorfail($id);
 
-        return response($service,200,['element returned succsesfully']);
+        return $this->successResponse('service has been successfully returned.' , new ServicesResource($service));
+
     }
 
     public function update(ServiceRequest $request,string $id)
     {
      
         $service=Service::findorfail($id);
-        
+
         $validate = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'description' => 'required|string',
         ]);
 
         if($validate->fails()){
-            return response()->json([
-                'status' => 'failed',
-                'message' => 'Validation Error!',
-                'data' => $validate->errors(),
-            ], 403);
+            return $this->errorResponse('Validation Error!' ,$validate->errors(),403);
+
         }
         $service->update([
             'name' => $request->name,
             'description' => $request->description,
            
         ]);
-        return response($service,200,['updated succsesfully']);
+        return $this->successResponse('service has been successfully updated.' , new ServicesResource($service));
     }
 
 
@@ -76,7 +84,8 @@ class services extends Controller
      
         $service=Service::findorfail($id);
         $service->delete();
-        return response(200,['element deleted succsesfully']);
+        return $this->successResponse('service has been successfully deleted.');
+
     }
 
 }
