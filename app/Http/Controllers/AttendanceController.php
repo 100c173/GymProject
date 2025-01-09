@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AttendanceRequest;
 use Illuminate\Http\Request;
 use App\Models\Appointment;
 use App\Models\Attendance;
@@ -14,36 +15,6 @@ class AttendanceController extends Controller
         $attendances = Attendance::with('appointment')->paginate(10);
 
         return view('new-dashboard.attendance.list_attendances', compact('attendances'));
-    }
-
-    public function store(Request $request)
-    {
-        $request->validate([
-            'attendance_status' => 'required|array',
-            'attendance_status.*' => 'in:present,absent,late',
-        ]);
-
-        $message = '';
-
-        foreach ($request->attendance_status as $appointmentId => $status) {
-            $appointment = Appointment::find($appointmentId);
-
-            if ($appointment) {
-                $attendance = $appointment->attendances->first();
-
-                if (!$attendance) {
-                    Attendance::create([
-                        'status' => $status,
-                        'appointment_id' => $appointmentId,
-                    ]);
-                    $message = 'Attendance recorded successfully.';
-                } else {
-                    $message = 'Attendance already recorded.';
-                }
-            }
-        }
-
-        return redirect()->route('attendance.index')->with('success', $message);
     }
 
     public function update($id , $type)
