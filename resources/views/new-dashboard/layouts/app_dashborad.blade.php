@@ -862,17 +862,7 @@
                       <div class="text-truncate" data-i18n="Analytics">Sessions</div>
                     </a>
                   </li>
-                  <li class="menu-item {{Route::current()->uri() == "appointments" ? "active" : ''}}">
-                    <a href="{{route('appointments.index')}}" class="menu-link">
-                      <div class="text-truncate" data-i18n="Analytics">Appointments</div>
-                    </a>
-                  </li>
-                  <li class="menu-item {{Route::current()->uri() == "attendance" ? "active" : ''}}">
-                    <a href="{{route('attendance.index')}}" class="menu-link">
-                      <div class="text-truncate" data-i18n="Analytics">Attendance</div>
-                    </a>
-                  </li>
-                  
+
                 </ul>
               </li>
               @role('admin')

@@ -42,7 +42,7 @@ Route::get('/', function () {
 });
 
 
-Route::get('/appointments', [AppointmentController::class, 'index'])->name('appointments.index');
+Route::get('/appointments/{id}', [AppointmentController::class, 'index'])->name('appointments.index');
 Route::get('/appointments/search', [AppointmentController::class, 'search'])->name('appointment.search');
 Route::delete('/appointments/delete/{id}', [AppointmentController::class, 'destroy'])->name('appointment.destroy');
 Route::get('/appointments/update_status/{id}/{type}', [AppointmentController::class, 'updateStatus']);
@@ -105,7 +105,7 @@ Route::delete('/membership_applications/{id}/destroy', [MembershipApplicationCon
 Route::get('/membership_applications/{id}/show', [MembershipApplicationController::class, 'show'])->name('membership_applications.show');
 
 // Attendance routes
-Route::get('/attendance', [AttendanceController::class, 'index'])->name('attendance.index');
+Route::get('/attendance/{id}', [AttendanceController::class, 'index'])->name('attendance.index');
 Route::post('/attendance/store', [AttendanceController::class, 'store'])->name('attendance.store');
 Route::get('/attendance/{id}/{type}', [AttendanceController::class, 'update'])->name('attendance.update');
 Route::delete('/attendance/{id}', [AttendanceController::class, 'destroy'])->name('attendance.destroy');

@@ -6,12 +6,14 @@ use App\Http\Requests\AttendanceRequest;
 use Illuminate\Http\Request;
 use App\Models\Appointment;
 use App\Models\Attendance;
+use App\Models\Session;
 
 class AttendanceController extends Controller
 {
 
-    public function index(Request $request)
+    public function index($id)
     {
+        $session = Session::all()->where('id',$id) ;
         $attendances = Attendance::with('appointment')->paginate(10);
 
         return view('new-dashboard.attendance.list_attendances', compact('attendances'));
