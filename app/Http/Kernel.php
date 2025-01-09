@@ -71,12 +71,13 @@ class Kernel extends HttpKernel
         'preventDoubleBooking' => \App\Http\Middleware\PreventDoubleBooking::class,
         'PreventDuplicateUser' => \App\Http\Middleware\PreventDuplicateUser::class,
         'check.capacity' => \App\Http\Middleware\CheckSessionCapacity::class,
-        'check.owner' => \App\Http\Middleware\CheckAppointmentOwner::class,
+        'check.owner' => \App\Http\Middleware\CheckAppointmentOwner::class, 
         'redirect' => \App\Http\Middleware\RedirectToAfterLogin::class,
         'check.plan.trainer' => \App\Http\Middleware\CheckPlanTrainer::class,
 
         'role' => \Spatie\Permission\Middleware\RoleMiddleware::class,
         'permission' => \Spatie\Permission\Middleware\PermissionMiddleware::class,
         'check.application' => \App\Http\Middleware\CheckExistingApplication::class,
+        'check.ownership' => \App\Http\Middleware\CheckOwnership::class,
     ];
 }
