@@ -11,28 +11,11 @@ class AttendanceController extends Controller
 
     public function index(Request $request)
     {
-        $appointments = $this->filterAppointment($request)->paginate(10);
+        $attendances = Attendance::with('appointment')->paginate(10);
 
-        return view('new-dashboard.attendance.list_attendances', compact('appointments'));
+        return view('new-dashboard.attendance.list_attendances', compact('attendances'));
     }
 
-
-    private function filterAppointment(Request $request)
-    {
-        $query = Appointment::with(['user', 'session', 'attendances']);
-        if ($request->filled('member_name')) {
-            $query->whereHas('user', function ($q) use ($request) {
-                $q->where('name', 'like', '%' . $request->input('member_name') . '%');
-            });
-        }
-        if ($request->filled('session_name')) {
-            $query->whereHas('session', function ($q) use ($request) {
-                $q->where('name', 'like', '%' . $request->input('session_name') . '%');
-            });
-        }
-
-        return $query;
-    }
     public function store(Request $request)
     {
         $request->validate([
