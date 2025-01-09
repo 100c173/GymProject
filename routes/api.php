@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\services;
 use App\Http\Controllers\Api\PlanController;
 use App\Http\Controllers\Api\SubscriptionController;
+use App\Http\Controllers\Api\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -42,6 +43,7 @@ Route::get('/plans/{id}', [PlanController::class, 'show']);
 
 Route::apiResource('membership-applications', MembershipApplicationController::class);
 Route::apiResource('appointments', AppointmentController::class);
+Route::apiResource('users', UserController::class);
 
 //services route 
 Route::get('/service', [Services::class, 'index']);
@@ -60,5 +62,7 @@ Route::apiResource('membership-applications', MembershipApplicationController::c
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('ratings', RatingController::class);
+    Route::get('ratings/service/{id}', [RatingController::class, 'showServiceRatings']);
+    Route::get('ratings/user/{id}', [RatingController::class, 'showTrainerRatings']);
     Route::post('user/logout', [AuthController::class, 'logout']);
 });
