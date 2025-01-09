@@ -1,4 +1,4 @@
-<?php
+ <?php
 
 namespace App\Http\Controllers;
 
@@ -11,86 +11,18 @@ class HomeController extends Controller
      *
      * @return void
      */
-        protected function apiResponse($success, $message, $data = null, $statusCode = 200)
+    public function __construct()
     {
-        return response()->json([
-            'success' => $success,
-            'message' => $message,
-            'data' => $data,
-        ], $statusCode);
+        $this->middleware('auth');
     }
 
     /**
-     * Generate a success response
+     * Show the application dashboard.
      *
-     * @param string $message The success message
-     * @param $data The data to include in the response (optional)
-     * @param int $statusCode The HTTP status code (default is 200)
-     * @return JsonResponse The JSON success response
+     * @return \Illuminate\Contracts\Support\Renderable
      */
-    protected function successResponse($message, $data = null, $statusCode = 200)
+    public function index()
     {
-        return $this->apiResponse(true, $message, $data, $statusCode);
-    }
-
-    /**
-     * Generate an error response
-     *
-     * @param string $message The error message
-     * @param $data The data to include in the response (optional)
-     * @param int $statusCode The HTTP status code (default is 400)
-     * @return JsonResponse The JSON error response
-     */
-    protected function errorResponse($message, $data = null, $statusCode = 400)
-    {
-        return $this->apiResponse(false, $message, $data, $statusCode);
-    }
-
-    //-------------------------------- AUTH --------------------------------//
-
-    /**
-     * Generate a login response
-     *
-     * @param $data The user data to include in the response
-     * @param string $token The authentication token
-     * @return JsonResponse The JSON login response
-     */
-    protected function loginResponse($data, $token)
-    {
-        return response()->json([
-            'status' => true,
-            'message' => 'Login Successfully',
-            'data' => $data,
-            'token' => $token,
-            'code' => 200,
-        ]);
-    }
-
-    /**
-     * Generate a registration response
-     *
-     * @param $data The user data to include in the response
-     * @return JsonResponse The JSON registration response
-     */
-    protected function registerResponse($data)
-    {
-        return response()->json([
-            'status' => true,
-            'message' => 'register Successfully',
-            'data' => $data,
-            'code' => 201,
-        ]);
-    }
-
-    /**
-     * Generate a logout response
-     *
-     * @return \Illuminate\Http\JsonResponse The logout success message with a 204 No Content status.
-     */
-    protected function logoutResponse()
-    {
-        return response()->json([
-            'message' => "Logged out successfully"
-        ], 204);
+        return view('home');
     }
 }

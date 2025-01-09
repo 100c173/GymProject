@@ -6,8 +6,8 @@ use App\Models\Service;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ServiceRequest;
-
-class Services extends Controller
+use Validator;
+class services extends Controller
 {
     public function index(){
 
@@ -17,6 +17,18 @@ class Services extends Controller
 
     public function store(ServiceRequest $request)
     {
+        $validate = Validator::make($request->all(), [
+            'name' => 'required|string|max:255',
+            'description' => 'required|string',
+        ]);
+
+        if($validate->fails()){
+            return response()->json([
+                'status' => 'failed',
+                'message' => 'Validation Error!',
+                'data' => $validate->errors(),
+            ], 403);
+        }
         $services = Service::create([
             'name' => $request->name,
             'description' => $request->description,
@@ -37,7 +49,19 @@ class Services extends Controller
     {
      
         $service=Service::findorfail($id);
+        
+        $validate = Validator::make($request->all(), [
+            'name' => 'required|string|max:255',
+            'description' => 'required|string',
+        ]);
 
+        if($validate->fails()){
+            return response()->json([
+                'status' => 'failed',
+                'message' => 'Validation Error!',
+                'data' => $validate->errors(),
+            ], 403);
+        }
         $service->update([
             'name' => $request->name,
             'description' => $request->description,
