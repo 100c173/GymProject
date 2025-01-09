@@ -1,7 +1,8 @@
 @extends('new-dashboard.layouts.app_dashborad')
-@section('title', 'Show Membership application')
+@section('title')
+{{$membership->user->getFullName() . ' Membership Application'}}
+@endsection
 @section('content')
-@include('components.alert')
 
 <section >
     <div class="container py-3">
@@ -10,12 +11,12 @@
           <nav aria-label="breadcrumb" class="bg-body-tertiary rounded-3 p-3">
             <ol class="breadcrumb breadcrumb-style1">
               <li class="breadcrumb-item">
-                <a href="#">Home</a>
+                <a href="{{route('dashboard.index')}}">Dashboard</a>
               </li>
               <li class="breadcrumb-item">
-                <a href="#">Library</a>
+                <a href="{{route('membership_applications')}}">Membership Applications</a>
               </li>
-              <li class="breadcrumb-item active">Data</li>
+              <li class="breadcrumb-item active">{{$membership->user->getFullName()}}</li>
             </ol>
           </nav>
         </div>
@@ -31,28 +32,14 @@
               {{-- <p class="text-muted mb-1">Full Stack Developer</p> --}}
               {{-- <p class="text-muted mb-4">Bay Area, San Francisco, CA</p> --}}
               <div class="d-flex justify-content-center mb-2">
-
-                <a href="" data-mdb-button-init data-mdb-ripple-init class="btn btn-outline-warning">
-                    <i class="fas fa-pencil-alt"></i>
-                    Edit
+                <a class="btn btn-danger btn-sm" href="javascript:{}" onclick="document.getElementById('remove_to_trush_user_').submit();">
+                    <form id="remove_to_trush_user_" action="{{route('membership_applications.destroy',$membership->id)}}" method="POST" style="display: none;">
+                        @csrf 
+                        @method('DELETE')
+                    </form>
+                    Delete
                 </a>
-
-                <div class="btn-group ms-1">
-                    <button type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-danger btn-sm dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="fas fa-trash-alt"></i> Delete
-                    </button>
-                    <ul class="dropdown-menu">
-                        <li>
-                            <a class="dropdown-item" href="javascript:{}" onclick="document.getElementById('remove_to_trush_user_').submit();">
-                                <form id="remove_to_trush_user_" action="" method="POST" style="display: none;">
-                                    @csrf 
-                                    @method('DELETE')
-                                </form>
-                                Remove to trash
-                            </a>
-                        </li>
-                    </ul>
-                </div>
+           
                 
               </div>
             </div>
@@ -67,7 +54,7 @@
                   <p class="mb-0">First Name</p>
                 </div>
                 <div class="col-sm-9">
-                  <p class="text-muted mb-0">Bsher</p>
+                  <p class="text-muted mb-0">{{$membership->user->first_name}}</p>
                 </div>
               </div>
               <hr>
@@ -76,7 +63,7 @@
                   <p class="mb-0">Last Name</p>
                 </div>
                 <div class="col-sm-9">
-                  <p class="text-muted mb-0">Al-Mahayni</p>
+                  <p class="text-muted mb-0">{{$membership->user->last_name}}</p>
                 </div>
               </div>
               <hr>
@@ -85,7 +72,7 @@
                   <p class="mb-0">Email</p>
                 </div>
                 <div class="col-sm-9">
-                  <p class="text-muted mb-0">bsher@gmail.com</p>
+                  <p class="text-muted mb-0">{{$membership->user->email}}</p>
                 </div>
               </div>
               <hr>
@@ -94,32 +81,33 @@
                   <p class="mb-0">Role</p>
                 </div>
                 <div class="col-sm-9">
-                  <p class="text-muted mb-0">Member</p>
+                  <p class="text-muted mb-0">{{$membership->user->roles->first()->name}}</p>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <a href=""></a>
+
+
+        <div class="container">
+            <h1>CV</h1>
+            <div class="pdf-viewer">
+                <object data="{{ asset('storage/' . $membership->pdf_path) }}" type="application/pdf" width="100%" height="600">
+                    <p>Your browser does not support PDFs. <a href="{{ asset('storage/' . $membership->pdf_path) }}">Download the PDF</a>.</p>
+                </object>
+            </div>
+        </div>
+        
+
+        
+
+      
       </div>
     </div>
   </section>
 
-  <style>
-    .rating label {
-    cursor: pointer;
-    width: 40px;
-    height: 40px;
-    margin: 0 5px;
-    }
-    .rating label:before {
-    content: '\2605';
-    font-size: 2rem;
-    color: #ccc;
-    transition: color 0.3s;
-    }
-    .rating input:checked ~ label:before {
-  color: #ffc107;
-}
-    </style>
+ 
+
+
+
 @endsection

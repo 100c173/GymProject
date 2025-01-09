@@ -46,15 +46,30 @@ class Session extends Model
         return $this->hasMany(Appointment::class);
     }
 
+       
+       protected static function booted()
+       {
+           static::deleting(function ($session) {
+               // Delete associated appointments
+               $session->appointments()->delete();
+   
+               // Delete relationships with `plans`
+               $session->plans()->detach();
+           });
+       }
 
-    protected static function booted()
-    {
-        static::deleting(function ($session) {
-            // Delete associated appointments
-            $session->appointments()->delete();
-
-            // Delete relationships with `plans`
-            $session->plans()->detach();
-        });
-    }
+        /**
+         * Scope for Search By Name
+         */
+       public function scopeSearchByName($query, $name)
+       {
+           return $query->where('name', 'like', '%' . $name . '%');
+       }
+            /**
+         * Scope for Search By Max Members
+         */
+       public function scopeMaxMembers($query, $maxMembers)
+       {
+           return $query->where('max_members', '<=', $maxMembers);
+       }
 }

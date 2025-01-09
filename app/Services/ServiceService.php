@@ -64,10 +64,13 @@ class ServiceService
     {
         $entries_number = $data['entries_number'] ?? 10;
 
-        $services = Service::query()->when(isset($data['name']), function ($query) use ($data) {
-
-            return $query->SearchName($data['name']);
-        })->paginate($entries_number);
+        $services = Service::query()
+            ->when(
+                isset($data['name']),
+                function ($query) use ($data) {
+                    return $query->SearchName($data['name']);
+                }
+            )->paginate($entries_number)->appends(request()->except('page'));
 
         return $services;
     }

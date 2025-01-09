@@ -45,6 +45,8 @@ Route::get('/', function () {
 Route::get('/appointments', [AppointmentController::class, 'index'])->name('appointments.index');
 Route::get('/appointments/search', [AppointmentController::class, 'search'])->name('appointment.search');
 Route::delete('/appointments/delete/{id}', [AppointmentController::class, 'destroy'])->name('appointment.destroy');
+Route::get('/appointments/update_status/{id}/{type}', [AppointmentController::class, 'updateStatus']);
+Route::get('/appointments/search', [AppointmentController::class, 'search'])->name('appointment.search');
 
 Route::put('sessions/update_status/{session}', [SessionController::class, 'updateStatus'])->name('sessions.updateStatus');
 Route::resource('sessions', SessionController::class);
@@ -70,10 +72,10 @@ Route::group(['middleware' => 'admin'], function () {
     Route::get('users/trash', [UserController::class, 'trashedUsers'])->name('users.trashed');
     Route::delete('users/{id}/forceDelete', [UserController::class, 'forceDelete'])->name('users.forceDelete');
     Route::post('users/{id}/restore', [UserController::class, 'restore'])->name('users.restore');
-    Route::resource('users', UserController::class)->middleware('PreventDuplicateUser');
+    Route::resource('users', UserController::class);
 
     Route::resource('plans', PlanController::class);
-    Route::resource('plan_types', PlanTypeController::class)->middleware('unique.plantype');
+    Route::resource('plan_types', PlanTypeController::class);
     Route::get('/search', [PlanController::class, 'search'])->name('plans.search');
 });
 Route::get('dashboard', function () {
@@ -100,6 +102,7 @@ Route::resource('ratings', RatingController::class);
 Route::get('/membership_applications', [MembershipApplicationController::class, 'index'])->name('membership_applications');
 Route::post('/membership_applications/{id}/update_status', [MembershipApplicationController::class, 'updateStatus'])->name('membership_applications.update_status');
 Route::delete('/membership_applications/{id}/destroy', [MembershipApplicationController::class, 'destroy'])->name('membership_applications.destroy');
+Route::get('/membership_applications/{id}/show', [MembershipApplicationController::class, 'show'])->name('membership_applications.show');
 
 // Attendance routes
 Route::get('/attendance', [AttendanceController::class, 'index'])->name('attendance.index');

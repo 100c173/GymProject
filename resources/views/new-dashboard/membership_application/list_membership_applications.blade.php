@@ -9,7 +9,7 @@
       <nav aria-label="breadcrumb">
         <ol class="breadcrumb breadcrumb-style1">
           <li class="breadcrumb-item">
-            <a href="#">Dashboard</a>
+            <a href="{{route('dashboard.index')}}">Dashboard</a>
           </li>
           <li class="breadcrumb-item active">Membership Applications</li>
         </ol>
@@ -29,7 +29,7 @@
   <div class="d-flex p-4">
     <div class="card mb-6 w-100">
       <h4 class="card-header">Filter</h4>
-      <form id="FilterForm" action="" method="GET">
+      <form id="FilterForm" action="{{route('membership_applications')}}" method="GET">
         <div class="card-body">
           <div class="row mb-3 d-flex align-items-center">
             <!-- Search -->
@@ -62,6 +62,7 @@
           <!-- Apply Button -->
           <div class="row">
             <div class="col-sm-12 d-flex justify-content-end">
+              <button class="btn btn-light me-1" onclick="resetFilters()">Reset</button>
               <button class="btn btn-primary me-1">APPLY</button>
             </div>
           </div>
@@ -86,38 +87,46 @@
             </tr>
           </thead>
           <tbody>
+            @foreach ($memberships as $membership)
+              
             
               <tr>
                 <td><i class="fab fa-angular fa-xl text-danger me-4"></i>
                      <span>
-                        1
+                        {{$membership->id}}
                     </span>
                 </td>
-                <td>User Name</td>
+                <td>{{$membership->user->getFullName()}}</td>
                 <td>
                     <!-- Please use success for accepted and danger for declined -->
-                    <span class="badge bg-label-info me-1">pending</span>
+                    <span class="badge bg-label-info me-1">{{$membership->status}}</span>
                   </ul>
                 </td>
                 <td>
-                   2024/10/5
+                   {{$membership->created_at}}
                 </td>
                 <td>
-                    <a class="btn btn-success btn-sm me-1" href="">Accept</a>
-                    <a class="btn btn-danger btn-sm" href="">Decline</a>
+                  @if ($membership->status == 'pending')
+                  <form id="status-form" action="{{ route('membership_applications.update_status', $membership->id) }}" method="POST" style="display: none;">
+                    @csrf
+                    <input type="hidden" id="status-input" name="status" value="">
+                  </form>
+                  <a class="btn btn-success btn-sm me-1" href="javascript:void(0);" onclick="submitStatus('accept')">Accept</a>
+                  <a class="btn btn-danger btn-sm" href="javascript:void(0);" onclick="submitStatus('decline')">Decline</a>                  
+                  @else
+                  <span class="badge bg-label-success me-1">Completed</span>
                 </td>
+                @endif
                 <td>
                     
                   <div class="dropdown">
                     <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="bx bx-dots-vertical-rounded"></i></button>
                     <div class="dropdown-menu">
 
-                      <a class="dropdown-item" href=""><i class="bx bx-show me-1"></i>Show</a>
-                      <a class="dropdown-item" href=""><i class="bx bx-edit-alt me-1"></i>Edit</a>
+                      <a class="dropdown-item" href="{{route('membership_applications.show', $membership->id)}}"><i class="bx bx-show me-1"></i>Show</a>
                         
-                      {{-- Please don't forget to replace the $membership->id with real one in the form id and js like it should be remove_equipment_{{$membership->id}}  --}}
-                      <a class="dropdown-item" href="javascript:{}" onclick="document.getElementById('remove_membership_$membership->id').submit();"><i class="bx bx-trash me-1"></i>
-                          <form id="remove_membership_$membership->id" action="" method="POST" style="display: none;">
+                      <a class="dropdown-item" href="javascript:{}" onclick="document.getElementById('remove_membership_{{$membership->id}}').submit();"><i class="bx bx-trash me-1"></i>
+                          <form id="remove_membership_{{$membership->id}}" action="{{route('membership_applications.destroy',$membership->id)}}" method="POST" style="display: none;">
                               @csrf 
                               @method('DELETE')
                           </form>
@@ -128,7 +137,7 @@
                   </div>
                 </td>
               </tr>
-            
+              @endforeach
           </tbody>
         </table>
 
@@ -136,38 +145,62 @@
              .. Don't forget to use paginate on your controller first! -->
 
 
-        {{-- <nav aria-label="Page navigation">
+        <nav aria-label="Page navigation">
             <ul class="pagination justify-content-center">
               <!-- Previous Page Link -->
-              <li class="page-item {{ $sessions->onFirstPage() ? 'disabled' : '' }}">
-                <a class="page-link" href="{{ $sessions->appends(['entries_number' => request('entries_number'), 'session_name' => request('session_name'), 'max_members' => request('max_members')])->previousPageUrl() }}">
+              <li class="page-item {{ $memberships->onFirstPage() ? 'disabled' : '' }}">
+                <a class="page-link" href="{{ $memberships->previousPageUrl() }}">
                   <i class="tf-icon bx bx-chevrons-left bx-sm"></i>
                 </a>
               </li>
           
               <!-- Pagination Links -->
-              @for ($i = 1; $i <= $sessions->lastPage(); $i++)
-                <li class="page-item {{ $sessions->currentPage() == $i ? 'active' : '' }}">
-                  <a class="page-link" href="{{ $sessions->appends(['entries_number' => request('entries_number'), 'session_name' => request('session_name'), 'max_members' => request('max_members')])->url($i) }}">
+              @for ($i = 1; $i <= $memberships->lastPage(); $i++)
+                <li class="page-item {{ $memberships->currentPage() == $i ? 'active' : '' }}">
+                  <a class="page-link" href="{{ $memberships->url($i) }}">
                     {{ $i }}
                   </a>
                 </li>
               @endfor
           
               <!-- Next Page Link -->
-              <li class="page-item {{ $sessions->hasMorePages() ? '' : 'disabled' }}">
-                <a class="page-link" href="{{ $sessions->appends(['entries_number' => request('entries_number'), 'session_name' => request('session_name'), 'max_members' => request('max_members')])->nextPageUrl() }}">
+              <li class="page-item {{ $memberships->hasMorePages() ? '' : 'disabled' }}">
+                <a class="page-link" href="{{ $memberships->nextPageUrl() }}">
                   <i class="tf-icon bx bx-chevrons-right bx-sm"></i>
                 </a>
               </li>
             </ul>
-          </nav> --}}
+          </nav>
         
       </div>
 </div>
 <script>
+
   function selectEntries(value) {
     document.getElementById('entries_number').value = value;
   }
+  function submitStatus(status) {
+
+      document.getElementById('status-input').value = status;
+
+      document.getElementById('status-form').submit();
+  }
+
+  function resetFilters() {
+
+// Get the filter form
+var form = document.getElementById('FilterForm');
+
+// Clear all input fields
+  var inputs = form.getElementsByTagName('input');
+
+  for (var i = 0; i < inputs.length; i++)
+  {
+      inputs[i].value = ''; 
+  }
+
+  // Reload the page without any query parameters
+  window.location.href = form.action;
+}
 </script>
 @endsection

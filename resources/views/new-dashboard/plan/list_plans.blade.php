@@ -38,7 +38,7 @@
                 <div class="row mb-3">
                     <!-- Search -->
                     <div class="col-sm-4 d-flex align-items-center">
-                        <label class="col-form-label me-2" for="basic-icon-default-fullname2">Session Name</label>
+                        <label class="col-form-label me-2" for="basic-icon-default-fullname2">Plan Name</label>
                         <div class="input-group input-group-merge flex-grow-1">
                             <span id="basic-icon-default-fullname2" class="input-group-text"><i class="bx bx-search"></i></span>
                             <input name="name" value="{{ request('name') }}" type="text" class="form-control" placeholder="Type the Plan name" id="basic-icon-default-fullname2" aria-label="John Doe" aria-describedby="basic-icon-default-fullname2">
@@ -125,6 +125,7 @@
                 <!-- Apply Button -->
                 <div class="row mb-3">
                     <div class="col-sm-12 d-flex justify-content-end">
+                        <button class="btn btn-light me-1" onclick="resetFilters()">Reset</button>
                         <button type="submit" class="btn btn-primary">Apply</button>
                     </div>
                 </div>
@@ -194,7 +195,7 @@
             <ul class="pagination justify-content-center">
                 <!-- Previous Page Link -->
                 <li class="page-item {{ $plans->onFirstPage() ? 'disabled' : '' }}">
-                    <a class="page-link" href="{{ $plans->appends(request()->except('page'))->previousPageUrl() }}">
+                    <a class="page-link" href="{{ $plans->previousPageUrl() }}">
                         <i class="tf-icon bx bx-chevrons-left bx-sm"></i>
                     </a>
                 </li>
@@ -202,7 +203,7 @@
                 <!-- Pagination Links -->
                 @for ($i = 1; $i <= $plans->lastPage(); $i++)
                     <li class="page-item {{ $plans->currentPage() == $i ? 'active' : '' }}">
-                        <a class="page-link" href="{{ $plans->appends(request()->except('page'))->url($i) }}">
+                        <a class="page-link" href="{{ $plans->url($i) }}">
                             {{ $i }}
                         </a>
                     </li>
@@ -210,7 +211,7 @@
         
                 <!-- Next Page Link -->
                 <li class="page-item {{ $plans->hasMorePages() ? '' : 'disabled' }}">
-                    <a class="page-link" href="{{ $plans->appends(request()->except('page'))->nextPageUrl() }}">
+                    <a class="page-link" href="{{ $plans->nextPageUrl() }}">
                         <i class="tf-icon bx bx-chevrons-right bx-sm"></i>
                     </a>
                 </li>
@@ -228,5 +229,22 @@
   function selectEntries(value) {
     document.getElementById('entries_number').value = value;
   }
+  
+  function resetFilters() {
+
+    // Get the filter form
+    var form = document.getElementById('FilterForm');
+
+    // Clear all input fields
+    var inputs = form.getElementsByTagName('input');
+
+    for (var i = 0; i < inputs.length; i++)
+    {
+        inputs[i].value = ''; 
+    }
+
+    // Reload the page without any query parameters
+    window.location.href = form.action;
+}
 </script>
 @endsection

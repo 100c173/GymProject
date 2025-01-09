@@ -9,6 +9,16 @@ use Illuminate\Routing\Controller as BaseController;
 class Controller extends BaseController
 {
     use AuthorizesRequests, ValidatesRequests;
+
+    /**
+     * Generate a standard API response
+     *
+     * @param bool $success Indicates if the response is successful
+     * @param string $message The message to include in the response
+     * @param $data The data to include in the response (optional)
+     * @param int $statusCode The HTTP status code (default is 200)
+     * @return JsonResponse The JSON response
+     */
     protected function apiResponse($success, $message, $data = null, $statusCode = 200)
     {
         return response()->json([

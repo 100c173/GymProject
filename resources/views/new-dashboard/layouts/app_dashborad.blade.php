@@ -804,7 +804,7 @@
             <li class="menu-header small text-uppercase">
               <span class="menu-header-text">Tables</span>
             </li>
-            <li class="menu-item {{ in_array(Route::current()->uri(), ['users', 'times','sessions','appointments','attendance','plans','plan_types','services', 'equipments', 'ratings']) ? 'active open' : '' }}"> 
+            <li class="menu-item {{ in_array(Route::current()->uri(), ['users', 'times','sessions','appointments','attendance','plans','plan_types','services', 'equipments', 'ratings', 'membership_applications']) ? 'active open' : '' }}"> 
                 <a href="javascript:void(0);" class="menu-link menu-toggle">
                     <i class="menu-icon tf-icons bx bx-table"></i>
                   <div class="text-truncate" data-i18n="Dashboards">Tables</div>
@@ -821,8 +821,8 @@
                       <div class="text-truncate" data-i18n="Analytics">Times</div>
                     </a>
                   </li>
-                  <li class="menu-item">
-                    <a href="index.html" class="menu-link">
+                  <li class="menu-item {{Route::current()->uri() == "membership_applications" ? "active" : ''}}">
+                    <a href="{{route('membership_applications')}}" class="menu-link">
                       <div class="text-truncate" data-i18n="Analytics">Membership Applicatoins</div>
                     </a>
                   </li>

@@ -31,6 +31,7 @@ class RoleRequest extends FormRequest
             ],
             'permissions' => 'required|array',
             'permissions.*' => 'exists:permissions,name',
+            'redirect_to' => 'in:index,create',
         ];
     }
 

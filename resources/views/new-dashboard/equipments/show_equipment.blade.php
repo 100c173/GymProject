@@ -4,6 +4,21 @@
 @endsection
 @section('content')
 <div class="container-xxl flex-grow-1 container-p-y">
+    <div class="row">
+        <div class="col">
+          <nav aria-label="breadcrumb" class="bg-body-tertiary rounded-3 p-3">
+            <ol class="breadcrumb breadcrumb-style1">
+              <li class="breadcrumb-item">
+                <a href="{{route('dashboard.index')}}">Dashboard</a>
+              </li>
+              <li class="breadcrumb-item">
+                <a href="{{route('equipments.index')}}">Equipments</a>
+              </li>
+              <li class="breadcrumb-item active">{{$equipment->name}}</li>
+            </ol>
+          </nav>
+        </div>
+      </div>
     <div class="card">
         <div class="card-body">
             <div class="dropdown float-end">

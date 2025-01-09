@@ -2,26 +2,47 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\PlanTypeFilterRequest;
 use App\Models\PlanType;
 use Illuminate\Http\Request;
 use App\Http\Requests\PlanTypeRequest;
+use App\Services\PlanTypeService;
 
 class PlanTypeController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Service to handle planType-related logic 
+     * and separating it from the controller
+     * 
+     * @var PlanTypeService
      */
-    public function index(Request $request)
+    protected $planTypeService;
+
+    /**
+     * PlanTypeController constructor
+     *
+     * @param PlanTypeService $planTypeService
+     */
+    public function __construct(PlanTypeService $planTypeService)
     {
-        $q = PlanType::query();
+        // Apply the auth middleware to ensure the user is authenticated
+        $this->middleware(['auth']);
 
-        $entries_number = $request->input('entries_number', 10);
+        // Inject the PlanTypeService to handle planType-related logic
+        $this->planTypeService = $planTypeService;
+    }
 
-        if ($request->filled('name')) {
-            $q->where('name', 'like', '%' . $request->input('name') . '%');
-        }
+    /**
+     * Display a listing of the plan types after applying filters
+     * 
+     * @param PlanTypeFilterRequest $request The request object containing filter data 
+     * @return View The view displaying the list of plan types
+     */
+    public function index(PlanTypeFilterRequest $request)
+    {
+        $validated = $request->validated();
+        $plan_types = $this->planTypeService->getAllPlanTypesAfterFiltering($validated);
 
-        $plan_types = $q->paginate($entries_number)->appends($request->except('page'));
         return view('new-dashboard.plan_type.list_plan_types', compact('plan_types'));
     }
 
@@ -46,17 +67,19 @@ class PlanTypeController extends Controller
 
     /**
      * Store a newly created resource in storage.
+     * 
+     * @param PlanTypeRequest $request To store the plan type according to the conditions used
+     * in this form request
      */
     public function store(PlanTypeRequest $request)
     {
-        $plan_type = PlanType::create([
-            'name' => $request->name,
-        ]);
+        $validated = $request->validated();
+        $plan_type = $this->planTypeService->create($validated);
 
         // using the method from FlashMessageHelper to alert the user about success or faild
         flashMessage($plan_type, 'Plan type created successfully.', 'Failed to Create plan type.');
 
-        return redirect()->route('plan_types.index');
+        return redirect()->route('plan_types.' . $request->redirect_to);
     }
 
     /**
@@ -71,13 +94,14 @@ class PlanTypeController extends Controller
 
     /**
      * Update the specified resource in storage.
+     * 
+     * @param PlanTypeRequest $request To update the plan according to the conditions used
+     * in this form request
      */
-    public function update(Request $request, PlanType $plan_type)
+    public function update(PlanTypeRequest $request, PlanType $plan_type)
     {
-        $plan_type = $plan_type->update([
-
-            'name' => $request->name,
-        ]);
+        $validated = $request->validated();
+        $plan_type = $this->planTypeService->update($validated, $plan_type);
 
         // using the method from FlashMessageHelper to alert the user about success or faild
         flashMessage($plan_type, 'Plan type updated successfully.', 'Failed to update plan type.');
@@ -90,7 +114,7 @@ class PlanTypeController extends Controller
      */
     public function destroy(PlanType $plan_type)
     {
-        $plan_type =  $plan_type->delete();
+        $plan_type =  $this->planTypeService->delete($plan_type);
 
         // using the method from FlashMessageHelper to alert the user about success or faild
         flashMessage($plan_type, 'Plan type Deleted successfully.', 'Failed to Delete plan type.');

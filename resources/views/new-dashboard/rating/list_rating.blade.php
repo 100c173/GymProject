@@ -107,6 +107,7 @@
                 <!-- Apply Button -->
                 <div class="row mb-3">
                     <div class="col-sm-12 d-flex justify-content-end">
+                        <button class="btn btn-light me-1" onclick="resetFilters()">Reset</button>
                         <button type="submit" class="btn btn-primary">Apply</button>
                     </div>
                 </div>
@@ -203,7 +204,7 @@
                 <ul class="pagination justify-content-center">
                     <!-- Previous Page Link -->
                     <li class="page-item {{ $ratings->onFirstPage() ? 'disabled' : '' }}">
-                        <a class="page-link" href="{{ $ratings->appends(request()->except('page'))->previousPageUrl() }}">
+                        <a class="page-link" href="{{ $ratings->previousPageUrl() }}">
                             <i class="tf-icon bx bx-chevrons-left bx-sm"></i>
                         </a>
                     </li>
@@ -211,7 +212,7 @@
                     <!-- Pagination Links -->
                     @for ($i = 1; $i <= $ratings->lastPage(); $i++)
                         <li class="page-item {{ $ratings->currentPage() == $i ? 'active' : '' }}">
-                            <a class="page-link" href="{{ $ratings->appends(request()->except('page'))->url($i) }}">
+                            <a class="page-link" href="{{ $ratings->url($i) }}">
                                 {{ $i }}
                             </a>
                         </li>
@@ -219,7 +220,7 @@
             
                     <!-- Next Page Link -->
                     <li class="page-item {{ $ratings->hasMorePages() ? '' : 'disabled' }}">
-                        <a class="page-link" href="{{ $ratings->appends(request()->except('page'))->nextPageUrl() }}">
+                        <a class="page-link" href="{{ $ratings->nextPageUrl() }}">
                             <i class="tf-icon bx bx-chevrons-right bx-sm"></i>
                         </a>
                     </li>
@@ -259,6 +260,23 @@ function selectRateableType(type) {
 
 function selectRating(rating) {
     document.getElementById('rating').value = rating;
+}
+
+function resetFilters() {
+
+    // Get the filter form
+    var form = document.getElementById('FilterForm');
+
+    // Clear all input fields
+    var inputs = form.getElementsByTagName('input');
+
+    for (var i = 0; i < inputs.length; i++)
+    {
+        inputs[i].value = ''; 
+    }
+
+    // Reload the page without any query parameters
+    window.location.href = form.action;
 }
 </script>
 @endsection

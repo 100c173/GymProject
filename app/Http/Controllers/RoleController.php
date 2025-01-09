@@ -80,7 +80,7 @@ class RoleController extends Controller
         // using the method from FlashMessageHelper to alert the user about success or faild
         flashMessage($role, 'Role created successfully.', 'Failed to Create role.');
 
-        return redirect()->route('roles.index');
+        return redirect()->route('roles.' . $request->redirect_to);
     }
 
     /**

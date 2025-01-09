@@ -70,7 +70,7 @@
               <div class="row justify-content-end">
                 <div class="col-sm-10">
                   <button type="submit" id = "submit_redirect_index" class="btn btn-primary">Edit</button>
-                  <a href="" class="btn btn-light">Cancel</a>
+                  <a href="{{url()->previous()}}" class="btn btn-light">Cancel</a>
                 </div>
               </div>
             </form>

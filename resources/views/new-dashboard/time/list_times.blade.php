@@ -97,6 +97,7 @@
                 <!-- Apply Button -->
                 <div class="row mb-3">
                     <div class="col-sm-12 d-flex justify-content-end">
+                      <button class="btn btn-light me-1" onclick="resetFilters()">Reset</button>
                         <button type="submit" class="btn btn-primary">Apply</button>
                     </div>
                 </div>
@@ -130,11 +131,11 @@
                 </td>
                 <td><span class="badge bg-label-dark me-1">{{$time->day}}</span></td>
                 <td>
-                    <span class="badge bg-label-success me-1">{{$time->start_time}}</span>
+                    <span class="badge bg-label-success me-1">{{$time->getStartTime12Hours()}}</span>
                   </ul>
                 </td>
                 <td>
-                    <span class="badge bg-label-danger me-1">{{$time->end_time}}</span>
+                    <span class="badge bg-label-danger me-1">{{$time->getEndTime12Hours()}}</span>
                 </td>
                 <td>
                     
@@ -166,7 +167,7 @@
                 <ul class="pagination justify-content-center">
                     <!-- Previous Page Link -->
                     <li class="page-item {{ $times->onFirstPage() ? 'disabled' : '' }}">
-                        <a class="page-link" href="{{ $times->appends(request()->except('page'))->previousPageUrl() }}">
+                        <a class="page-link" href="{{ $times->previousPageUrl() }}">
                             <i class="tf-icon bx bx-chevrons-left bx-sm"></i>
                         </a>
                     </li>
@@ -174,7 +175,7 @@
                     <!-- Pagination Links -->
                     @for ($i = 1; $i <= $times->lastPage(); $i++)
                         <li class="page-item {{ $times->currentPage() == $i ? 'active' : '' }}">
-                            <a class="page-link" href="{{ $times->appends(request()->except('page'))->url($i) }}">
+                            <a class="page-link" href="{{ $times->url($i) }}">
                                 {{ $i }}
                             </a>
                         </li>
@@ -182,7 +183,7 @@
             
                     <!-- Next Page Link -->
                     <li class="page-item {{ $times->hasMorePages() ? '' : 'disabled' }}">
-                        <a class="page-link" href="{{ $times->appends(request()->except('page'))->nextPageUrl() }}">
+                        <a class="page-link" href="{{ $times->nextPageUrl() }}">
                             <i class="tf-icon bx bx-chevrons-right bx-sm"></i>
                         </a>
                     </li>
@@ -194,6 +195,23 @@
 <script>
   function selectEntries(value) {
     document.getElementById('entries_number').value = value;
+  }
+
+  function resetFilters() {
+
+    // Get the filter form
+    var form = document.getElementById('FilterForm');
+
+    // Clear all input fields
+      var inputs = form.getElementsByTagName('input');
+
+      for (var i = 0; i < inputs.length; i++)
+      {
+          inputs[i].value = ''; 
+      }
+
+      // Reload the page without any query parameters
+      window.location.href = form.action;
   }
 </script>
 @endsection

@@ -77,7 +77,7 @@ class SportEquipmentController extends Controller
         // using the method from FlashMessageHelper to alert the user about success or faild
         flashMessage($equipment, 'Equipment created successfully.', 'Failed to Create Equipment.');
 
-        return redirect()->route('equipments.index');
+        return redirect()->route('equipments.' . $request->redirect_to);
     }
 
     /**

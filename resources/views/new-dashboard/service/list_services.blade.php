@@ -68,6 +68,7 @@
           <!-- Apply Button -->
           <div class="row">
             <div class="col-sm-12 d-flex justify-content-end">
+              <button class="btn btn-light me-1" onclick="resetFilters()">Reset</button>
               <button class="btn btn-primary me-1">APPLY</button>
             </div>
           </div>
@@ -122,7 +123,7 @@
           <ul class="pagination justify-content-center">
             <!-- Previous Page Link -->
             <li class="page-item {{ $services->onFirstPage() ? 'disabled' : '' }}">
-              <a class="page-link" href="{{ $services->appends(['entries_number' => request('entries_number'), 'name' => request('name'), 'role' => request('role')])->previousPageUrl() }}">
+              <a class="page-link" href="{{ $services->previousPageUrl() }}">
                 <i class="tf-icon bx bx-chevrons-left bx-sm"></i>
               </a>
             </li>
@@ -130,7 +131,7 @@
             <!-- Pagination Links -->
             @for ($i = 1; $i <= $services->lastPage(); $i++)
               <li class="page-item {{ $services->currentPage() == $i ? 'active' : '' }}">
-                <a class="page-link" href="{{ $services->appends(['entries_number' => request('entries_number'), 'name' => request('name'), 'role' => request('role')])->url($i) }}">
+                <a class="page-link" href="{{ $services->url($i) }}">
                   {{ $i }}
                 </a>
               </li>
@@ -138,7 +139,7 @@
         
             <!-- Next Page Link -->
             <li class="page-item {{ $services->hasMorePages() ? '' : 'disabled' }}">
-              <a class="page-link" href="{{ $services->appends(['entries_number' => request('entries_number'), 'name' => request('name'), 'role' => request('role')])->nextPageUrl() }}">
+              <a class="page-link" href="{{ $services->nextPageUrl() }}">
                 <i class="tf-icon bx bx-chevrons-right bx-sm"></i>
               </a>
             </li>
@@ -154,5 +155,22 @@
   function selectEntries(value) {
     document.getElementById('entries_number').value = value;
   }
+
+function resetFilters() {
+
+  // Get the filter form
+  var form = document.getElementById('FilterForm');
+
+  // Clear all input fields
+    var inputs = form.getElementsByTagName('input');
+
+    for (var i = 0; i < inputs.length; i++)
+    {
+        inputs[i].value = ''; 
+    }
+
+    // Reload the page without any query parameters
+    window.location.href = form.action;
+}
 </script>
 @endsection

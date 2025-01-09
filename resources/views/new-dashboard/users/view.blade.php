@@ -10,7 +10,7 @@
           <nav aria-label="breadcrumb" class="bg-body-tertiary rounded-3 p-3">
             <ol class="breadcrumb breadcrumb-style1">
               <li class="breadcrumb-item">
-                <a href="#">Dashboard</a>
+                <a href="{{route('dashboard.index')}}">Dashboard</a>
               </li>
               <li class="breadcrumb-item">
                 <a href="{{route('users.index')}}">Users</a>
@@ -74,7 +74,7 @@
                 </li>
                 @forelse ($subscriptions as $subscription)
                 <li class=" d-flex justify-content-center align-items-center p-3 bg-light">
-                  <p class="mb-0 ">{{$subscription->plan->name}}</p>
+                  <p class="mb-0 ">{{$subscription->plan->name}} Plan</p>
                 </li>
                 <li class="list-group-item d-flex justify-content-between align-items-center p-3">
                   <p class="mb-0">Start: {{$subscription->start}}</p>
@@ -147,15 +147,15 @@
                             <div class="row">
                               <div class="col-md-6 offset-md-3">
                                   <div class="rating d-flex flex-row-reverse justify-content-center">
-                                    <input type="radio" id="star5" class="d-none" name="rating-{{$rating->rateable}}" value="5" readonly {{$rating->rating == 5 ? 'checked' : ''}}> 
+                                    <input type="radio" id="star5" class="d-none" name="rating-{{$rating->id}}" value="5" readonly {{$rating->rating == 5 ? 'checked' : ''}}> 
                                   <label ></label>
-                                  <input type="radio" id="star4" class="d-none" name="rating-{{$rating->rateable}}" value="4" readonly {{$rating->rating == 4 ? 'checked' : ''}}>
+                                  <input type="radio" id="star4" class="d-none" name="rating-{{$rating->id}}" value="4" readonly {{$rating->rating == 4 ? 'checked' : ''}}>
                                   <label ></label>
-                                  <input type="radio" id="star3" class="d-none" name="rating-{{$rating->rateable}}" value="3" readonly {{$rating->rating == 3 ? 'checked' : ''}}>
+                                  <input type="radio" id="star3" class="d-none" name="rating-{{$rating->id}}" value="3" readonly {{$rating->rating == 3 ? 'checked' : ''}}>
                                   <label ></label>
-                                  <input type="radio" id="star2" class="d-none" name="rating-{{$rating->rateable}}" value="2" readonly {{$rating->rating == 2 ? 'checked' : ''}}>
+                                  <input type="radio" id="star2" class="d-none" name="rating-{{$rating->id}}" value="2" readonly {{$rating->rating == 2 ? 'checked' : ''}}>
                                   <label ></label>
-                                  <input type="radio" id="star1" class="d-none" name="rating-{{$rating->rateable}}" value="1"  readonly {{$rating->rating == 1 ? 'checked' : ''}}>
+                                  <input type="radio" id="star1" class="d-none" name="rating-{{$rating->id}}" value="1"  readonly {{$rating->rating == 1 ? 'checked' : ''}}>
                                   <label ></label>
                                 </div>
                               </div>
@@ -188,15 +188,15 @@
                               <div class="row">
                                 <div class="col-md-6 offset-md-3">
                                     <div class="rating d-flex flex-row-reverse justify-content-center">
-                                      <input type="radio" id="star5" class="d-none" name="rating-{{$rating->rateable}}" value="5" readonly {{$rating->rating == 5 ? 'checked' : ''}}> 
+                                      <input type="radio" id="star5" class="d-none" name="rating-{{$rating->id}}" value="5" readonly {{$rating->rating == 5 ? 'checked' : ''}}> 
                                     <label ></label>
-                                    <input type="radio" id="star4" class="d-none" name="rating-{{$rating->rateable}}" value="4" readonly {{$rating->rating == 4 ? 'checked' : ''}}>
+                                    <input type="radio" id="star4" class="d-none" name="rating-{{$rating->id}}" value="4" readonly {{$rating->rating == 4 ? 'checked' : ''}}>
                                     <label ></label>
-                                    <input type="radio" id="star3" class="d-none" name="rating-{{$rating->rateable}}" value="3" readonly {{$rating->rating == 3 ? 'checked' : ''}}>
+                                    <input type="radio" id="star3" class="d-none" name="rating-{{$rating->id}}" value="3" readonly {{$rating->rating == 3 ? 'checked' : ''}}>
                                     <label ></label>
-                                    <input type="radio" id="star2" class="d-none" name="rating-{{$rating->rateable}}" value="2" readonly {{$rating->rating == 2 ? 'checked' : ''}}>
+                                    <input type="radio" id="star2" class="d-none" name="rating-{{$rating->id}}" value="2" readonly {{$rating->rating == 2 ? 'checked' : ''}}>
                                     <label ></label>
-                                    <input type="radio" id="star1" class="d-none" name="rating-{{$rating->rateable}}" value="1"  readonly {{$rating->rating == 1 ? 'checked' : ''}}>
+                                    <input type="radio" id="star1" class="d-none" name="rating-{{$rating->id}}" value="1"  readonly {{$rating->rating == 1 ? 'checked' : ''}}>
                                     <label ></label>
                                   </div>
                                 </div>

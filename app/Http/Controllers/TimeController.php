@@ -43,7 +43,6 @@ class TimeController extends Controller
     {
         $validated = $request->validated();
         $times =  $this->timeService->getAllTimesAfterFiltering($validated);
-        $times = getAllTimesWith12HoursFormat($times);
 
         return view('new-dashboard.time.list_times', [
             'times' => $times,
@@ -74,7 +73,7 @@ class TimeController extends Controller
         // using the method from FlashMessageHelper to alert the user about success or faild
         flashMessage($time, 'Time created successfully.', 'Failed to Create time.');
 
-        return redirect()->route('times.index');
+        return redirect()->route('times.'. $request->redirect_to);
     }
 
     /**

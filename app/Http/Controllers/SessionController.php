@@ -2,43 +2,55 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\SessionFilterRequest;
 use App\Http\Requests\SessionRequest;
 use App\Models\Plan;
 use App\Models\Session;
 use App\Models\Time;
 use App\Models\User;
+use App\Services\SessionService;
 use Illuminate\Http\Request;
 
 class SessionController extends Controller
 {
-    public function __construct()
+
+    /**
+     * Service to handle session-related logic 
+     * and separating it from the controller
+     * 
+     * @var SessionService
+     */
+    protected $sessionService;
+
+    /**
+     * SessionController constructor
+     *
+     * @param SessionService $sessionService
+     */
+    public function __construct(SessionService $sessionService)
     {
         $this->middleware('checkSessionExists')->only('create');
         $this->middleware('check.plan.trainer')->only('store','update');
 
+
+        // Inject the PermissionService to handle session-related logic
+        $this->sessionService = $sessionService;
     }
-    
+
     /**
-     * Display a listing of the resource.
+     * Display a listing of the sessions after applying filters
+     * 
+     * @param SessionFilterRequest $request The request object containing filter data 
+     * @return View The view displaying the list of sessions
      */
-    public function index(Request $request)
+    public function index(SessionFilterRequest $request)
     {
-        $sessionName = $request->get('session_name');
-        $maxMembers = $request->get('max_members');
+        $validated = $request->validated();
+        $sessions = $this->sessionService->getAllSessionsAfterFiltering($validated);
 
-        $sessions = Session::with('appointments');
-
-        if ($sessionName) {
-            $sessions->where('name', 'like', '%' . $sessionName . '%');
-        }
-
-        if ($maxMembers) {
-            $sessions->where('max_members', '<=', $maxMembers);
-        }
-
-        $sessions = $sessions->paginate($request->entries_number);
-
-        return view('new-dashboard.sessions.llist_sessions', compact('sessions'));
+        return view('new-dashboard.sessions.llist_sessions', [
+            'sessions' => $sessions,
+        ]);
     }
 
     /**
@@ -54,28 +66,19 @@ class SessionController extends Controller
 
     /**
      * Store a newly created resource in storage.
+     * 
+     * @param SessionRequest $request To store the session according to the conditions used
+     * in this form request
      */
     public function store(SessionRequest $request)
     {
-        //create new session
-        $session = new Session();
-        $session->name = $request->name;
-        $session->description = $request->description;
-        $session->max_members = $request->members_number;
-        if ($request->trainer_id) $session->user_id = $request->trainer_id;
-        $session->time_id = $request->time_id;
+        $validated = $request->validated();
+        $session = $this->sessionService->create($validated);
 
+        // using the method from FlashMessageHelper to alert the user about success or faild
+        flashMessage($session, 'Session created successfully.', 'Failed to create session.');
 
-        // Save session
-        if ($session->save()) {
-            // Attach plans (supports array of single ID)
-            $session->plans()->attach($request->plan_id);
-
-            return redirect()->route('sessions.index')->with('success', 'Session created successfully');
-        }
-
-        // Handle save failure
-        return back()->with('error', 'Failed to create session. Please try again.');
+        return redirect()->route('sessions.' . $request->redirect_to);
     }
 
     /**
@@ -96,29 +99,24 @@ class SessionController extends Controller
         $times = Time::all();
         $plans = Plan::all();
         $cur_plan = $session->plans;
-        return view('new-dashboard.sessions.edit_session', compact('session', 'trainers', 'times' ,'plans' , 'cur_plan'));
+        return view('new-dashboard.sessions.edit_session', compact('session', 'trainers', 'times', 'plans', 'cur_plan'));
     }
 
     /**
      * Update the specified resource in storage.
+     * 
+     * @param SessionRequest $request To update the session according to the conditions used
+     * in this form request
      */
     public function update(SessionRequest $request, Session $session)
     {
-        $data=[
-            'name' => $request->name,
-            'description' => $request->description,
-            'max_number' => $request->members_number,
-            'time_id' => $request->time_id,
-            'status' => $request->status,
-        ];
+        $validated = $request->validated();
+        $session = $this->sessionService->update($validated, $session);
 
-        if($request->trainer_id){
-            $data['user_id'] =  $request->trainer_id; 
-        }
-        $session->update($data);
-        $session->plans()->sync($request->plan_id);
+        // using the method from FlashMessageHelper to alert the user about success or failure
+        flashMessage($session, 'Session updated successfully.', 'Failed to update session.');
 
-        return redirect()->route('sessions.index')->with('success', 'Session updated successfully');
+        return redirect()->route('sessions.index');
     }
 
     /**
@@ -126,17 +124,27 @@ class SessionController extends Controller
      */
     public function destroy(Session $session)
     {
-        $session->delete();
-        return redirect()->route('sessions.index')->with('success', 'Session deleted successfully');
-    }
+        $deleted = $this->sessionService->delete($session);
 
+        // using the method from FlashMessageHelper to alert the user about success or failure
+        flashMessage($deleted, 'Session deleted successfully.', 'Failed to delete session.');
+
+        return redirect()->route('sessions.index');
+    }
+    
+    /**
+     * Update the status of the specified session
+     * 
+     * @param Request $request
+     * @param Session $session
+     */
     public function updateStatus(Request $request, Session $session)
     {
+        $sessionStatus = $this->sessionService->updateStatus($request->all(), $session);
 
-        $session->update([
-            'status' => $request->status,
-        ]);
+        // using the method from FlashMessageHelper to alert the user about success or failure
+        flashMessage($sessionStatus, 'Session status updated successfully.', 'Failed to update session status.');
 
-        return redirect()->route('sessions.index')->with('success', 'Session updated successfully');
+        return redirect()->route('sessions.index');
     }
 }

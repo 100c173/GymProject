@@ -11,10 +11,10 @@ class MembershipApplication extends Model
     use HasFactory;
 
     protected $fillable = [
-        'status'    ,
-        'pdf_path'  ,
+        'status',
+        'pdf_path',
         'image_path',
-        'user_id'   ,
+        'user_id',
     ];
 
 
@@ -24,5 +24,17 @@ class MembershipApplication extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function scopeUserName($query, $name)
+    {
+        return $query->whereHas('user', function ($query) use ($name) {
+            $query->SearchFullName($name);
+        });
+    }
+
+    public function scopeUserMembershipApplication($query, $userId)
+    {
+        return $query->where('user_id', $userId);
     }
 }

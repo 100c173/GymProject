@@ -25,6 +25,7 @@ class ServiceRequest extends FormRequest
             //
             'name' => 'required|string|max:255',
             'description' => 'required|string',
+            'redirect_to' => 'in:index,create',
         ];
     }
 }

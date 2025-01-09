@@ -40,7 +40,7 @@ class Kernel extends HttpKernel
 
         'api' => [
             \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
-            \Illuminate\Routing\Middleware\ThrottleRequests::class.':api',
+            \Illuminate\Routing\Middleware\ThrottleRequests::class . ':api',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
     ];
@@ -75,5 +75,8 @@ class Kernel extends HttpKernel
         'redirect' => \App\Http\Middleware\RedirectToAfterLogin::class,
         'check.plan.trainer' => \App\Http\Middleware\CheckPlanTrainer::class,
 
+        'role' => \Spatie\Permission\Middleware\RoleMiddleware::class,
+        'permission' => \Spatie\Permission\Middleware\PermissionMiddleware::class,
+        'check.application' => \App\Http\Middleware\CheckExistingApplication::class,
     ];
 }

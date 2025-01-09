@@ -74,6 +74,7 @@
           <!-- Apply Button -->
           <div class="row">
             <div class="col-sm-12 d-flex justify-content-end">
+              <button class="btn btn-light me-1" onclick="resetFilters()">Reset</button>
               <button class="btn btn-primary me-1">APPLY</button>
             </div>
           </div>
@@ -92,8 +93,8 @@
               <th>ID</th>
               <th>Session Name</th>
               <th>Session Date</th>
-              <th>Start Time</th>
-              <th>End Time</th>
+              <th style="text-align: center;">Time</th>
+              <th>Max Members</th>
               <th>Registered Members</th>
               <th>Session Status</th>
               <th>Action</th>
@@ -108,11 +109,13 @@
                   {{$session->time->day}}
                   </ul>
                 </td>
-                <td>
-                    {{$session->time->start_time}}
+                <td >
+                  <span class="badge bg-label-success me-1">{{$session->time->getStartTime12Hours()}}</span>
+                  {{" - "}}
+                  <span class="badge bg-label-danger ms-1">{{$session->time->getEndTime12Hours()}}</span>
                 </td>
                 <td>
-                    {{$session->time->end_time}}
+                    {{$session->max_members}}
                 </td>
                 <td>
                     {{$session->appointments->count()}}
@@ -197,7 +200,7 @@
           <ul class="pagination justify-content-center">
             <!-- Previous Page Link -->
             <li class="page-item {{ $sessions->onFirstPage() ? 'disabled' : '' }}">
-              <a class="page-link" href="{{ $sessions->appends(['entries_number' => request('entries_number'), 'session_name' => request('session_name'), 'max_members' => request('max_members')])->previousPageUrl() }}">
+              <a class="page-link" href="{{ $sessions->previousPageUrl() }}">
                 <i class="tf-icon bx bx-chevrons-left bx-sm"></i>
               </a>
             </li>
@@ -205,7 +208,7 @@
             <!-- Pagination Links -->
             @for ($i = 1; $i <= $sessions->lastPage(); $i++)
               <li class="page-item {{ $sessions->currentPage() == $i ? 'active' : '' }}">
-                <a class="page-link" href="{{ $sessions->appends(['entries_number' => request('entries_number'), 'session_name' => request('session_name'), 'max_members' => request('max_members')])->url($i) }}">
+                <a class="page-link" href="{{ $sessions->url($i) }}">
                   {{ $i }}
                 </a>
               </li>
@@ -213,7 +216,7 @@
         
             <!-- Next Page Link -->
             <li class="page-item {{ $sessions->hasMorePages() ? '' : 'disabled' }}">
-              <a class="page-link" href="{{ $sessions->appends(['entries_number' => request('entries_number'), 'session_name' => request('session_name'), 'max_members' => request('max_members')])->nextPageUrl() }}">
+              <a class="page-link" href="{{ $sessions->nextPageUrl() }}">
                 <i class="tf-icon bx bx-chevrons-right bx-sm"></i>
               </a>
             </li>
@@ -230,5 +233,22 @@
   function selectEntries(value) {
     document.getElementById('entries_number').value = value;
   }
+
+  function resetFilters() {
+
+    // Get the filter form
+    var form = document.getElementById('FilterForm');
+
+    // Clear all input fields
+      var inputs = form.getElementsByTagName('input');
+
+      for (var i = 0; i < inputs.length; i++)
+      {
+          inputs[i].value = ''; 
+      }
+
+      // Reload the page without any query parameters
+      window.location.href = form.action;
+}
 </script>
 @endsection

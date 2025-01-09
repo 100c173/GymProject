@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class PlanTypeRequest extends FormRequest
+class PlanFilterRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,8 +22,12 @@ class PlanTypeRequest extends FormRequest
     public function rules(): array
     {
         return [
-         'name'=>'required|string|max:255',
-         'redirect_to' => 'in:index,create',
+            'name' => 'nullable|string|max:255',
+            'min_price' => 'nullable|numeric|min:0',
+            'max_price' => 'nullable|numeric|min:0',
+            'with_trainer' => 'nullable|boolean',
+            'plan_type' => 'nullable|exists:plan_types,id',
+            'entries_number' => 'nullable|integer|min:5',
         ];
     }
 }
