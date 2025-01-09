@@ -35,10 +35,9 @@ class AttendanceController extends Controller
             else
               $attendance->update(['status' => 'absent']);
 
-            return redirect()->route('attendance.index')->with('success', 'Attendance updated successfully.');
+            return back()->with('success', 'Attendance updated successfully.');
         }
-
-        return redirect()->route('attendance.index')->with('error', 'No attendance record found to update.');
+        return redirect()->route('attendance.index,$id')->with('error', 'No attendance record found to update.');
     }
 
 
