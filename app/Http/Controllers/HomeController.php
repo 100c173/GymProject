@@ -6,6 +6,26 @@ use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
+        /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware(['auth', 'redirect']);
+    }
+
+    /**
+     * Show the application dashboard.
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function index()
+    {
+        return redirect()->route('dashboard.index');
+    }
+    
     /**
      * Generate a standard API response
      *
