@@ -15,9 +15,8 @@ class RateableResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id' => $this->id,
-            'name' => $this->name,
-            'description' => $this->description,
+            'service' => $this->when($this->description,  new ServiceResource($this)),
+            'trainer' => $this->when($this->first_name, new UserResource($this)),
         ];
     }
 }
