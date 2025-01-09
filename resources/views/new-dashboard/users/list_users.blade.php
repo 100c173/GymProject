@@ -9,7 +9,7 @@
       <nav aria-label="breadcrumb">
         <ol class="breadcrumb breadcrumb-style1">
           <li class="breadcrumb-item">
-            <a href="#">Dashboard</a>
+            <a href="{{route('dashboard.index')}}">Dashboard</a>
           </li>
           <li class="breadcrumb-item active">Users</li>
         </ol>
@@ -164,7 +164,7 @@
           <ul class="pagination justify-content-center">
             <!-- Previous Page Link -->
             <li class="page-item {{ $users->onFirstPage() ? 'disabled' : '' }}">
-              <a class="page-link" href="{{ $users->appends(['entries_number' => request('entries_number'), 'searched_name' => request('searched_name'), 'role' => request('role'), 'email' => request('email')])->previousPageUrl() }}">
+              <a class="page-link" href="{{ $users->previousPageUrl() }}">
                 <i class="tf-icon bx bx-chevrons-left bx-sm"></i>
               </a>
             </li>
@@ -172,7 +172,7 @@
             <!-- Pagination Links -->
             @for ($i = 1; $i <= $users->lastPage(); $i++)
               <li class="page-item {{ $users->currentPage() == $i ? 'active' : '' }}">
-                <a class="page-link" href="{{ $users->appends(['entries_number' => request('entries_number'), 'searched_name' => request('searched_name'), 'role' => request('role'), 'email' => request('email')])->url($i) }}">
+                <a class="page-link" href="{{ $users->url($i) }}">
                   {{ $i }}
                 </a>
               </li>
@@ -180,7 +180,7 @@
         
             <!-- Next Page Link -->
             <li class="page-item {{ $users->hasMorePages() ? '' : 'disabled' }}">
-              <a class="page-link" href="{{ $users->appends(['entries_number' => request('entries_number'), 'searched_name' => request('searched_name'), 'role' => request('role'), 'email' => request('email')])->nextPageUrl() }}">
+              <a class="page-link" href="{{ $users->nextPageUrl() }}">
                 <i class="tf-icon bx bx-chevrons-right bx-sm"></i>
               </a>
             </li>

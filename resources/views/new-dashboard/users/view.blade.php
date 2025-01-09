@@ -202,7 +202,7 @@
                                 </div>
                               </div>
                             </div>
-                            
+                            <p class="text-muted mb-0 mt-2">Comment: {{$rating->comment}}</p>
                       </div>
                     </div>
                     <hr>

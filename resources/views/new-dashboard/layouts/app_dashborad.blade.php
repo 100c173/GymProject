@@ -804,7 +804,7 @@
             <li class="menu-header small text-uppercase">
               <span class="menu-header-text">Tables</span>
             </li>
-            <li class="menu-item {{ in_array(Route::current()->uri(), ['users', 'times','sessions','appointments','attendance','plans','plan_types','services', 'equipments', 'ratings', 'membership_applications']) ? 'active open' : '' }}"> 
+            <li class="menu-item {{ in_array(Route::current()->uri(), ['users', 'times','sessions','appointments','attendance','plans','plan_types','services', 'equipments', 'ratings', 'membership_applications', 'subscriptions']) ? 'active open' : '' }}"> 
                 <a href="javascript:void(0);" class="menu-link menu-toggle">
                     <i class="menu-icon tf-icons bx bx-table"></i>
                   <div class="text-truncate" data-i18n="Dashboards">Tables</div>
@@ -894,7 +894,7 @@
                   </li>
                 </ul>
               </li>
-              <li class="menu-item {{ in_array(Route::current()->uri(), ['users/trash',]) ? 'active open' : '' }}"> 
+              <li class="menu-item {{ in_array(Route::current()->uri(), ['users/trash','subscriptions/trashed']) ? 'active open' : '' }}"> 
                 <a href="javascript:void(0);" class="menu-link menu-toggle">
                   <i class="menu-icon tf-icons bx bx-trash"></i>
                   <div class="text-truncate" data-i18n="Dashboards">Recycle Bin</div>
@@ -905,7 +905,7 @@
                       <div class="text-truncate" data-i18n="Analytics">Users</div>
                     </a>
                   </li>
-                  <li class="menu-item {{Route::current()->uri() == "users/trash" ? "active" : ''}}">
+                  <li class="menu-item {{Route::current()->uri() == "subscriptions/trashed" ? "active" : ''}}">
                     <a href="{{route('subscription.trashed')}}" class="menu-link">
                       <div class="text-truncate" data-i18n="Analytics">Subscription</div>
                     </a>
