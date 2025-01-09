@@ -89,10 +89,10 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        // Using methods from UserService class
-        $serviceRatings = $this->userService->getUserRatingServices($user);
-        $userRatings =  $this->userService->getUserRatingTrainers($user);
-        $subscriptions = $this->userService->getUserActiveSubscriptions($user);
+        // Using Accessor from User Model
+        $serviceRatings = $user->getUserRatingServices();
+        $userRatings =  $user->getUserRatingTrainers();
+        $subscriptions = $user->getUserActiveSubscriptions();
 
 
         return view('new-dashboard.users.view', [
