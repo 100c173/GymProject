@@ -81,5 +81,6 @@ class Kernel extends HttpKernel
         'check.ownership' => \App\Http\Middleware\CheckOwnership::class,
         'check.subscription.owner' => \App\Http\Middleware\CheckSubscriptionOwner::class,
 
+        'check.rating' => \App\Http\Middleware\CheckTrainer::class,
     ];
 }

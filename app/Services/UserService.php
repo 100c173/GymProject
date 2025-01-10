@@ -124,6 +124,44 @@ class UserService
         return $q->paginate($entries_number)->appends(request()->except('page'));
     }
 
+    /**
+     * Get paginated Trainers with applied filters
+     *
+     * This function retrieves a paginated list of Trainers from the User model
+     * applying filters based on the request data parameter
+     * The filters include:
+     * - Full Name
+     * - Email
+     *
+     * The function returns the filtered results paginated with 10 items per page
+     *
+     * @param array $data The incoming data containing filter parameters
+     * @return LengthAwarePaginator The paginated list of filtered users
+     */
+    public function getAllTrainersAfterFiltering(array $data)
+    {
+        // To define how many rows per page
+        $entries_number = $data['entries_number'] ?? 10;
+
+        $q = User::whereHas('roles', function ($query) {
+            $query->where('name', 'trainer');
+        });
+
+        $q->when(isset($data['name']), function ($query) use ($data) {
+            $query->SearchFullName($data['name']);
+        });
+
+        $q->when(isset($data['email']), function ($query) use ($data) {
+            $query->SearchEmail($data['email']);
+        });
+
+        $q->when(isset($data['role']) && $data['role'] !== 'All', function ($query) use ($data) {
+            $query->role($data['role']);
+        });
+
+        return $q->paginate($entries_number)->appends(request()->except('page'));
+    }
+
 
     /**
      * For delete a user permenently
@@ -146,6 +184,9 @@ class UserService
         return User::withTrashed()->find($id)->restore();
     }
 
+    /**
+     * Show User
+     */
     public function showApi(string $id)
     {
         return User::findOrFail($id);
