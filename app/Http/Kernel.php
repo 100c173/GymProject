@@ -79,5 +79,6 @@ class Kernel extends HttpKernel
         'permission' => \Spatie\Permission\Middleware\PermissionMiddleware::class,
         'check.application' => \App\Http\Middleware\CheckExistingApplication::class,
         'check.ownership' => \App\Http\Middleware\CheckOwnership::class,
+        'check.rating' => \App\Http\Middleware\CheckTrainer::class,
     ];
 }
