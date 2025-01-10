@@ -31,7 +31,7 @@ class RatingController extends Controller
     public function __construct(RatingService $ratingService)
     {
         // Apply the auth middleware to ensure the user is authenticated
-        $this->middleware(['auth:sanctum']);
+        $this->middleware(['auth:sanctum', 'check.rating']);
 
         // Inject the RatingService to handle rating-related logic
         $this->ratingService = $ratingService;
