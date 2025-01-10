@@ -30,6 +30,7 @@ This project is a **GYM management system** built with **Laravel 10** that provi
 Ensure you have the following installed on your machine:
 - **XAMPP**: For running MySQL and Apache servers locally.
 - **Composer**: For PHP dependency management.
+- **node.js**: For install all the dependencies listed in **package.json** file.
 - **PHP**: Required for running Laravel.
 - **MySQL**: Database for the project
 - **Postman**: Required for testing the requestes.
