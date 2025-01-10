@@ -7,6 +7,7 @@ use App\Http\Requests\SubscriptionRequest;
 use App\Http\Resources\SubscriptionResource;
 use App\Models\Plan;
 use App\Models\Subscription;
+use App\Services\MailService;
 use App\Services\SubscriptionService;
 use Carbon\Carbon;
 
@@ -15,10 +16,12 @@ use Carbon\Carbon;
 class SubscriptionController extends Controller
 {
     protected $subscriptionService;
+    protected $mailService;
 
-    public function __construct(SubscriptionService $subscriptionService)
+    public function __construct(SubscriptionService $subscriptionService, MailService $mailService)
     {
         $this->subscriptionService = $subscriptionService;
+        $this->mailService = $mailService;
         $this->middleware('check.subscription.owner')->only(['update', 'destroy']);
     }
 
@@ -38,6 +41,7 @@ class SubscriptionController extends Controller
     {
         $validated = $request->validated();
         $subscription = $this->subscriptionService->createNewSupscription($validated);
+        $this->mailService->SendActivateSubscriptionEmail($subscription);
         return $this->successResponse(
             'Your Subscription application has been submitted successfully.',
             new SubscriptionResource($subscription),
@@ -62,7 +66,7 @@ class SubscriptionController extends Controller
      */
     public function update(SubscriptionRequest $request, Subscription $subscription)
     {
-        $subscription = $this->subscriptionService->updateMySubscription($request,$subscription);
+        $subscription = $this->subscriptionService->updateMySubscription($request, $subscription);
 
         return $this->successResponse(
             'Your subscription has been updated successfully.',

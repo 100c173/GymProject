@@ -16,15 +16,14 @@ class MailService
     /**
      * To Create a new equipment
      * 
-     * @param User $user The create data
      * @param Subscription $subscription The create data
      */
-    public function SendActivateSubscriptionEmail(User $user, Subscription $subscription)
+    public function SendActivateSubscriptionEmail(Subscription $subscription)
     {
         $mailData = [
             'subscription' => $subscription,
-            'user' => $user
+            'user' => $subscription->user,
         ];
-       return Mail::to(auth()->user()->email)->send(new ActivateEmail($mailData));
+        return Mail::to(auth()->user()->email)->send(new ActivateEmail($mailData));
     }
 }

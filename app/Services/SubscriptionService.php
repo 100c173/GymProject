@@ -92,15 +92,15 @@ class SubscriptionService
     /**
      * Store a newly created resource in storage.
      */
-    public function createNewSupscription(SubscriptionRequest $request)
+    public function createNewSupscription(array $data)
     {
-        $startDate = Carbon::createFromFormat('d-m-Y', $request->start)->format('Y-m-d');
-        $plan = Plan::where('id', $request->plan_id)->first();
+        $startDate = Carbon::createFromFormat('d-m-Y', $data['start'])->format('Y-m-d');
+        $plan = Plan::where('id', $data['plan_id'])->first();
         $end = Carbon::parse($startDate)->addDays($plan->period);
 
         $subscription = Subscription::create([
             'user_id' => auth()->id(),
-            'plan_id' => $request->plan_id,
+            'plan_id' => $data['plan_id'],
             'start'   => $startDate,
             'end' => $end,
         ]);
