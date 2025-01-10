@@ -80,7 +80,7 @@ class Kernel extends HttpKernel
         'check.application' => \App\Http\Middleware\CheckExistingApplication::class,
         'check.ownership' => \App\Http\Middleware\CheckOwnership::class,
         'check.subscription.owner' => \App\Http\Middleware\CheckSubscriptionOwner::class,
-
+        'check.booking.user' => \App\Http\Middleware\CheckBookingUser::class,
         'check.rating' => \App\Http\Middleware\CheckTrainer::class,
     ];
 }
