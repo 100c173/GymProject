@@ -78,5 +78,7 @@ class Kernel extends HttpKernel
         'role' => \Spatie\Permission\Middleware\RoleMiddleware::class,
         'permission' => \Spatie\Permission\Middleware\PermissionMiddleware::class,
         'check.application' => \App\Http\Middleware\CheckExistingApplication::class,
+        'check.booking.user' => \App\Http\Middleware\CheckBookingUser::class,
+
     ];
 }
