@@ -45,7 +45,7 @@ class MembershipApplicationController extends Controller
         if ($applications)
             return $this->successResponse(
                 'Membership request has been successfully retrieved.',
-                MembershipApplicationResource::collection($applications)
+                new MembershipApplicationResource($applications)
             );
 
         return $this->errorResponse('Faild');
