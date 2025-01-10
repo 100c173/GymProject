@@ -108,4 +108,12 @@ class PlanService
 
         return $plans;
     }
+    public function getPlanWithSessions($planId)
+    {
+        return Plan::with('sessions')->findOrFail($planId);
+    }
+    public function getAllPlans()
+    {
+        return Plan::with(['planType', 'sessions'])->get();
+}
 }
