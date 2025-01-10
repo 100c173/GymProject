@@ -12,15 +12,15 @@ class AppointmentController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function index(Request $request , $id)
     {
-
-        $appointments = Appointment::with('session.time', 'user')->paginate(10);
+        $appointments = Appointment::with('session.time' , 'user')->where('session_id',$id)->paginate(10);
         $user = User::whereHas('appointments')->get();
+
         return view('new-dashboard.appointment.list_appointments', [
 
             'appointments' => $appointments,
-            'user' => $user
+            'user' => $user,
         ]);
     }
     public function search(Request $request)

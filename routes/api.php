@@ -2,6 +2,7 @@
 
 
 use App\Http\Controllers\Api\AppointmentController;
+use App\Http\Controllers\Api\AttendanceController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\API\MembershipApplicationController;
 use App\Http\Controllers\Api\RatingController;
@@ -11,6 +12,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\services;
 use App\Http\Controllers\Api\PlanController;
 use App\Http\Controllers\Api\SubscriptionController;
+use App\Http\Controllers\Api\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,7 +25,6 @@ use App\Http\Controllers\Api\SubscriptionController;
 |
 */
 
-
 // Protected routes 
 Route::middleware('auth:sanctum')->group(function () {
 
@@ -34,6 +35,7 @@ Route::middleware('auth:sanctum')->group(function () {
     //View user subscriptions
     Route::get('/users/{id}/subscriptions', [SubscriptionController::class, 'getUserSubscriptions']);
 });
+
 //plans
 //View all plans
 Route::get('/plans', [PlanController::class, 'index']);
@@ -44,6 +46,7 @@ Route::get('/plansWithSession/{id}', [PlanController::class, 'showPlanWithSessio
 
 Route::apiResource('membership-applications', MembershipApplicationController::class);
 Route::apiResource('appointments', AppointmentController::class);
+Route::apiResource('users', UserController::class);
 
 //services route 
 Route::get('/services', [Services::class, 'index']);
@@ -64,5 +67,9 @@ Route::apiResource('membership-applications', MembershipApplicationController::c
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('ratings', RatingController::class);
+    Route::get('ratings/service/{id}', [RatingController::class, 'showServiceRatings']);
+    Route::get('ratings/user/{id}', [RatingController::class, 'showTrainerRatings']);
     Route::post('user/logout', [AuthController::class, 'logout']);
+    Route::get('/attendances/{id}' , [AttendanceController::class , 'update']);
+
 });
