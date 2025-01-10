@@ -2,6 +2,7 @@
 
 
 use App\Http\Controllers\Api\AppointmentController;
+use App\Http\Controllers\Api\AttendanceController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\API\MembershipApplicationController;
 use App\Http\Controllers\Api\RatingController;
@@ -24,7 +25,6 @@ use App\Http\Controllers\Api\UserController;
 |
 */
 
-
 // Protected routes 
 Route::middleware('auth:sanctum')->group(function () {
 
@@ -35,6 +35,7 @@ Route::middleware('auth:sanctum')->group(function () {
     //View user subscriptions
     Route::get('/users/{id}/subscriptions', [SubscriptionController::class, 'getUserSubscriptions']);
 });
+
 //plans
 //View all plans
 Route::get('/plans', [PlanController::class, 'index']);
@@ -65,4 +66,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('ratings/service/{id}', [RatingController::class, 'showServiceRatings']);
     Route::get('ratings/user/{id}', [RatingController::class, 'showTrainerRatings']);
     Route::post('user/logout', [AuthController::class, 'logout']);
+    Route::get('/attendances/{id}' , [AttendanceController::class , 'update']);
+
 });

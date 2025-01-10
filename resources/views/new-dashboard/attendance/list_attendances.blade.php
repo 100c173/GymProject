@@ -87,41 +87,41 @@
             </tr>
           </thead>
           <tbody>
-            @foreach ($appointments as $appointment)
+            @foreach ($attendances as $attendance)
             <tr>
                 <!-- اسم العضو -->
-                <td>{{ $appointment->user->getFullName() }}</td>
+                <td>{{ $attendance->appointment->user->getFullName() }}</td>
 
                 <!-- اسم الجلسة -->
-                <td>{{ $appointment->session->name }}</td>
+                <td>{{ $attendance->appointment->session->name }}</td>
                 <!-- وقت الجلسة -->
                 <td>
-                    @if ($appointment->session->time)
-                    {{ $appointment->session->time->day }}
+                    @if ($attendance->appointment->session->time)
+                    {{ $attendance->appointment->session->time->day }}
                     @else
                     <p>No times available</p>
                     @endif
                 </td>
                 <!-- وقت الجلسة -->
                 <td>
-                    @if ($appointment->session->time)
-                    {{ $appointment->session->time->start_time }} - {{ $appointment->session->time->end_time }}
+                    @if ($attendance->appointment->session->time)
+                    {{ $attendance->appointment->session->time->start_time }} - {{ $attendance->appointment->session->time->end_time }}
                     @else
                     <p>No times available</p>
                     @endif
                 </td>
 
                 <td>
-                    @if($appointment->attendances->first()?->status == 'nnconfirmed' )
-                    <a href="/attendance/{{$appointment->id}}/1"><button class="btn btn-success btn-sm accept">Present</button></a>
-                    <a href="/attendance/{{$appointment->id}}/0"><button class="btn btn-danger btn-sm reject"> Absent</button></a>
+                    @if($attendance?->status == 'nnconfirmed' )
+                    <a href="/attendance/{{$attendance->appointment->id}}/1"><button class="btn btn-success btn-sm accept">Present</button></a>
+                    <a href="/attendance/{{$attendance->appointment->id}}/0"><button class="btn btn-danger btn-sm reject"> Absent</button></a>
                     @endif
 
-                    @if($appointment->attendances->first()?->status == 'present' )
+                    @if($attendance?->status == 'present' )
                     <button class="btn btn-success btn-sm accept">Present</button>
                     @endif
 
-                    @if($appointment->attendances->first()?->status == 'absent' )
+                    @if($attendance?->status == 'absent' )
                     <button class="btn btn-danger btn-sm reject"> Absent</button>
                     @endif
                 </td>
@@ -129,10 +129,10 @@
                   <div class="dropdown">
                     <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="bx bx-dots-vertical-rounded"></i></button>
                     <div class="dropdown-menu">
-                        <a class="dropdown-item" href="/attendance/{{$appointment->id}}/3"><i class="bx bx-show me-1"></i>Reset</a>
+                        <a class="dropdown-item" href="/attendance/{{$attendance->appointment->id}}/3"><i class="bx bx-show me-1"></i>Reset</a>
 
-                        <a class="dropdown-item" href="javascript:{}" onclick="document.getElementById('Delete_Attendance_{{$appointment->id}}').submit();"><i class="bx bx-trash me-1"></i>
-                            <form id="Delete_Attendance_{{$appointment->id}}" action="{{ route('attendance.destroy', $appointment) }}" method="POST" style="display: none;">
+                        <a class="dropdown-item" href="javascript:{}" onclick="document.getElementById('Delete_Attendance_{{$attendance->appointment->id}}').submit();"><i class="bx bx-trash me-1"></i>
+                            <form id="Delete_Attendance_{{$attendance->appointment->id}}" action="{{ route('attendance.destroy', $attendance->appointment) }}" method="POST" style="display: none;">
                                 @csrf
                                 @method('DELETE')
                             </form>
@@ -149,24 +149,24 @@
         <nav aria-label="Page navigation">
           <ul class="pagination justify-content-center">
             <!-- Previous Page Link -->
-            <li class="page-item {{ $appointments->onFirstPage() ? 'disabled' : '' }}">
-              <a class="page-link" href="{{ $appointments->appends(['entries_number' => request('entries_number'), 'searched_name' => request('searched_name'), 'role' => request('role')])->previousPageUrl() }}">
+            <li class="page-item {{ $attendances->onFirstPage() ? 'disabled' : '' }}">
+              <a class="page-link" href="{{ $attendances->appends(['entries_number' => request('entries_number'), 'searched_name' => request('searched_name'), 'role' => request('role')])->previousPageUrl() }}">
                 <i class="tf-icon bx bx-chevrons-left bx-sm"></i>
               </a>
             </li>
         
             <!-- Pagination Links -->
-            @for ($i = 1; $i <= $appointments->lastPage(); $i++)
-              <li class="page-item {{ $appointments->currentPage() == $i ? 'active' : '' }}">
-                <a class="page-link" href="{{ $appointments->appends(['entries_number' => request('entries_number'), 'searched_name' => request('searched_name'), 'role' => request('role')])->url($i) }}">
+            @for ($i = 1; $i <= $attendances->lastPage(); $i++)
+              <li class="page-item {{ $attendances->currentPage() == $i ? 'active' : '' }}">
+                <a class="page-link" href="{{ $attendances->appends(['entries_number' => request('entries_number'), 'searched_name' => request('searched_name'), 'role' => request('role')])->url($i) }}">
                   {{ $i }}
                 </a>
               </li>
             @endfor
         
             <!-- Next Page Link -->
-            <li class="page-item {{ $appointments->hasMorePages() ? '' : 'disabled' }}">
-              <a class="page-link" href="{{ $appointments->appends(['entries_number' => request('entries_number'), 'searched_name' => request('searched_name'), 'role' => request('role')])->nextPageUrl() }}">
+            <li class="page-item {{ $attendances->hasMorePages() ? '' : 'disabled' }}">
+              <a class="page-link" href="{{ $attendances->appends(['entries_number' => request('entries_number'), 'searched_name' => request('searched_name'), 'role' => request('role')])->nextPageUrl() }}">
                 <i class="tf-icon bx bx-chevrons-right bx-sm"></i>
               </a>
             </li>

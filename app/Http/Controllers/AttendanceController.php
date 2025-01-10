@@ -2,65 +2,21 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AttendanceRequest;
 use Illuminate\Http\Request;
 use App\Models\Appointment;
 use App\Models\Attendance;
+use App\Models\Session;
 
 class AttendanceController extends Controller
 {
 
-    public function index(Request $request)
+    public function index($id)
     {
-        $appointments = $this->filterAppointment($request)->paginate(10);
+        $session = Session::all()->where('id',$id) ;
+        $attendances = Attendance::with('appointment')->paginate(10);
 
-        return view('new-dashboard.attendance.list_attendances', compact('appointments'));
-    }
-
-
-    private function filterAppointment(Request $request)
-    {
-        $query = Appointment::with(['user', 'session', 'attendances']);
-        if ($request->filled('member_name')) {
-            $query->whereHas('user', function ($q) use ($request) {
-                $q->where('name', 'like', '%' . $request->input('member_name') . '%');
-            });
-        }
-        if ($request->filled('session_name')) {
-            $query->whereHas('session', function ($q) use ($request) {
-                $q->where('name', 'like', '%' . $request->input('session_name') . '%');
-            });
-        }
-
-        return $query;
-    }
-    public function store(Request $request)
-    {
-        $request->validate([
-            'attendance_status' => 'required|array',
-            'attendance_status.*' => 'in:present,absent,late',
-        ]);
-
-        $message = '';
-
-        foreach ($request->attendance_status as $appointmentId => $status) {
-            $appointment = Appointment::find($appointmentId);
-
-            if ($appointment) {
-                $attendance = $appointment->attendances->first();
-
-                if (!$attendance) {
-                    Attendance::create([
-                        'status' => $status,
-                        'appointment_id' => $appointmentId,
-                    ]);
-                    $message = 'Attendance recorded successfully.';
-                } else {
-                    $message = 'Attendance already recorded.';
-                }
-            }
-        }
-
-        return redirect()->route('attendance.index')->with('success', $message);
+        return view('new-dashboard.attendance.list_attendances', compact('attendances'));
     }
 
     public function update($id , $type)
@@ -79,10 +35,9 @@ class AttendanceController extends Controller
             else
               $attendance->update(['status' => 'absent']);
 
-            return redirect()->route('attendance.index')->with('success', 'Attendance updated successfully.');
+            return back()->with('success', 'Attendance updated successfully.');
         }
-
-        return redirect()->route('attendance.index')->with('error', 'No attendance record found to update.');
+        return redirect()->route('attendance.index,$id')->with('error', 'No attendance record found to update.');
     }
 
 

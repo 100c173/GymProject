@@ -6,11 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\MemberShipApplicationRequest;
 use App\Http\Resources\MembershipApplicationResource;
 use App\Models\MembershipApplication;
-use App\Models\User;
 use App\Services\MembershipApplicationService;
-use App\Traits\ApiResponseTrait;
-use Illuminate\Http\Request;
-use Illuminate\Validation\ValidationException;
+
 
 
 class MembershipApplicationController extends Controller

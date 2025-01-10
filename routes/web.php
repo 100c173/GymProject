@@ -82,7 +82,9 @@ Route::group(['middleware' => 'role:admin'], function () {
 
     Route::resource('permissions', PermissionController::class);
 
+
     Route::resource('roles', RoleController::class);
+
 
     Route::get('/dashboards', [DashboardController::class, 'index'])->name('dashboard.index');
 });

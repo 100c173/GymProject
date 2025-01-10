@@ -6,11 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\RatingRequest;
 use App\Http\Resources\RatingResource;
 use App\Models\Rating;
-use App\Models\Service;
-use App\Models\User;
+
 use App\Services\RatingService;
-use App\Traits\ApiResponseTrait;
-use Illuminate\Http\Request;
+
 
 class RatingController extends Controller
 {
