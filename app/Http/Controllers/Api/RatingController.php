@@ -40,10 +40,14 @@ class RatingController extends Controller
      */
     public function index()
     {
-        $ratings = Rating::all();
+        $serviceRatings = $this->ratingService->getAllRatedServices();
+        $trainerRatings = $this->ratingService->getAllRatedTrainers();
 
-        if ($ratings)
-            return $this->successResponse('Success', RatingResource::collection($ratings));
+        if ($serviceRatings && $trainerRatings)
+            return $this->successResponse('Success', [
+                'service_ratings  ' => RatingResource::collection($serviceRatings),
+                'trainer_ratings  ' => RatingResource::collection($trainerRatings),
+            ]);
 
         return $this->errorResponse('Faild');
     }
@@ -101,6 +105,26 @@ class RatingController extends Controller
 
         if ($rating)
             return $this->successResponse('Success');
+
+        return $this->errorResponse('Faild');
+    }
+
+    public function showServiceRatings(string $id)
+    {
+        $ratings = $this->ratingService->getServiceRatings($id);
+
+        if ($ratings)
+            return $this->successResponse('Success', RatingResource::collection($ratings));
+
+        return $this->errorResponse('Faild');
+    }
+
+    public function showTrainerRatings(string $id)
+    {
+        $ratings = $this->ratingService->getTrainerRatings($id);
+
+        if ($ratings)
+            return $this->successResponse('Success', RatingResource::collection($ratings));
 
         return $this->errorResponse('Faild');
     }

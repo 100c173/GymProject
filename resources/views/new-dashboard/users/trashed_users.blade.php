@@ -9,7 +9,7 @@
       <nav aria-label="breadcrumb">
         <ol class="breadcrumb breadcrumb-style1">
           <li class="breadcrumb-item">
-            <a href="#">Dashboard</a>
+            <a href="{{route('dashboard.index')}}">Dashboard</a>
           </li>
           <li class="breadcrumb-item">
             <a href="{{route('users.index')}}">Users</a>
@@ -39,44 +39,54 @@
       <h4 class="card-header">Filter</h4>
       <form id="FilterForm" action="{{ route('users.trashed') }}" method="GET">
         <div class="card-body">
-          <div class="row mb-3 d-flex align-items-center">
-            <!-- Search -->
-            <div class="col-sm-3 d-flex align-items-center">
-              <label class="col-form-label me-2" for="basic-icon-default-fullname2">Search</label>
+          <div class="row mb-4 d-flex align-items-center">
+            <!-- Search By Name -->
+            <div class="col-sm-4 d-flex align-items-center">
+              <label class="col-form-label me-2" for="basic-icon-default-fullname2">Name</label>
               <div class="input-group input-group-merge flex-grow-1">
                 <span id="basic-icon-default-fullname2" class="input-group-text"><i class="bx bx-search"></i></span>
-                <input name="name" type="text" class="form-control" id="basic-icon-default-fullname2" placeholder="Search Something" aria-label="John Doe" aria-describedby="basic-icon-default-fullname2">
+                <input name="name" value="{{request('name')}}" type="text" class="form-control" id="basic-icon-default-fullname2" placeholder="Search Something" aria-label="John Doe" aria-describedby="basic-icon-default-fullname2">
               </div>
             </div>
 
+            <!-- Search By Email -->
+            <div class="col-sm-4 d-flex align-items-center">
+              <label class="col-form-label me-2" for="basic-icon-default-fullname2">Email</label>
+              <div class="input-group input-group-merge flex-grow-1">
+                <span id="basic-icon-default-fullname2" class="input-group-text"><i class="bx bx-search"></i></span>
+                <input name="email" value="{{request('email')}}" type="email" class="form-control" id="basic-icon-default-fullname2" placeholder="Search Something" aria-label="John Doe" aria-describedby="basic-icon-default-fullname2">
+              </div>
+            </div>
+          </div>
+          <div class="row mt-4 d-flex align-items-center">
             <!-- Entries Number Dropdown -->
             <div class="col-sm-2 d-flex align-items-center">
-              <input type="hidden" name="entries_number" id="entries_number">
+              <input type="hidden" name="entries_number" value="{{request('entries_number')}}" id="entries_number">
               <div class="btn-group me-2">
                 <button class="btn btn-primary dropdown-toggle" type="button" id="entriesDropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   Entries Number
                 </button>
                 <ul class="dropdown-menu" aria-labelledby="entriesDropdown">
-                  <li><a class="dropdown-item" href="javascript:void(0);" onclick="selectEntries('5')">5</a></li>
-                  <li><a class="dropdown-item" href="javascript:void(0);" onclick="selectEntries('10')">10</a></li>
-                  <li><a class="dropdown-item" href="javascript:void(0);" onclick="selectEntries('15')">15</a></li>
-                  <li><a class="dropdown-item" href="javascript:void(0);" onclick="selectEntries('20')">20</a></li>
+                  <li><a class="dropdown-item {{request('entries_number') == 5 ? 'active' : ''}}" href="javascript:void(0);" onclick="selectEntries('5')">5</a></li>
+                  <li><a class="dropdown-item {{request('entries_number') == 10 ? 'active' : ''}}" href="javascript:void(0);" onclick="selectEntries('10')">10</a></li>
+                  <li><a class="dropdown-item {{request('entries_number') == 15 ? 'active' : ''}}" href="javascript:void(0);" onclick="selectEntries('15')">15</a></li>
+                  <li><a class="dropdown-item {{request('entries_number') == 20 ? 'active' : ''}}"  href="javascript:void(0);" onclick="selectEntries('20')">20</a></li>
                 </ul>
               </div>
             </div>
 
             <!-- Role Dropdown -->
             <div class="col-sm-4 d-flex align-items-center">
-              <input type="hidden" name="role" id="role">
+              <input type="hidden" value="{{request('role')}}" name="role" id="role">
               <div class="btn-group me-2">
                 <button class="btn btn-primary dropdown-toggle" type="button" id="roleDropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   Role
                 </button>
                 <ul class="dropdown-menu" aria-labelledby="roleDropdown">
-                  <li><a class="dropdown-item" href="javascript:void(0);" onclick="selectRole('All')">All</a></li>
-                  <li><a class="dropdown-item" href="javascript:void(0);" onclick="selectRole('admin')">Admin</a></li>
-                  <li><a class="dropdown-item" href="javascript:void(0);" onclick="selectRole('trainer')">Trainer</a></li>
-                  <li><a class="dropdown-item" href="javascript:void(0);" onclick="selectRole('member')">Member</a></li>
+                  <li><a class="dropdown-item {{request('role') == 'All' ? 'active' : ''}}" href="javascript:void(0);" onclick="selectRole('All')">All</a></li>
+                  <li><a class="dropdown-item {{request('role') == 'admin' ? 'active' : ''}}" href="javascript:void(0);" onclick="selectRole('admin')">Admin</a></li>
+                  <li><a class="dropdown-item {{request('role') == 'trainer' ? 'active' : ''}}" href="javascript:void(0);" onclick="selectRole('trainer')">Trainer</a></li>
+                  <li><a class="dropdown-item {{request('role') == 'user' ? 'active' : ''}}"  href="javascript:void(0);" onclick="selectRole('user')">User</a></li>
                 </ul>
               </div>
             </div>
@@ -157,7 +167,7 @@
           <ul class="pagination justify-content-center">
             <!-- Previous Page Link -->
             <li class="page-item {{ $users->onFirstPage() ? 'disabled' : '' }}">
-              <a class="page-link" href="{{ $users->appends(['entries_number' => request('entries_number'), 'searched_name' => request('searched_name'), 'role' => request('role')])->previousPageUrl() }}">
+              <a class="page-link" href="{{ $users->previousPageUrl() }}">
                 <i class="tf-icon bx bx-chevrons-left bx-sm"></i>
               </a>
             </li>
@@ -165,7 +175,7 @@
             <!-- Pagination Links -->
             @for ($i = 1; $i <= $users->lastPage(); $i++)
               <li class="page-item {{ $users->currentPage() == $i ? 'active' : '' }}">
-                <a class="page-link" href="{{ $users->appends(['entries_number' => request('entries_number'), 'searched_name' => request('searched_name'), 'role' => request('role')])->url($i) }}">
+                <a class="page-link" href="{{ $users->url($i) }}">
                   {{ $i }}
                 </a>
               </li>
@@ -173,7 +183,7 @@
         
             <!-- Next Page Link -->
             <li class="page-item {{ $users->hasMorePages() ? '' : 'disabled' }}">
-              <a class="page-link" href="{{ $users->appends(['entries_number' => request('entries_number'), 'searched_name' => request('searched_name'), 'role' => request('role')])->nextPageUrl() }}">
+              <a class="page-link" href="{{ $users->nextPageUrl() }}">
                 <i class="tf-icon bx bx-chevrons-right bx-sm"></i>
               </a>
             </li>

@@ -96,4 +96,30 @@ class RatingService
 
         return $ratings;
     }
+
+    public function getAllRatedServices()
+    {
+
+        return Rating::OfType('App\\Models\\Service')->get();
+    }
+    public function getAllRatedTrainers()
+    {
+
+        return Rating::OfType('App\\Models\\User')->get();
+    }
+
+    public function getServiceRatings($id)
+    {
+
+        return Rating::ServiceRatings($id)->get();
+    }
+    public function getTrainerRatings($id)
+    {
+
+        return Rating::TrainerRatings($id)->get();
+    }
+
+
+
+
 }

@@ -66,6 +66,40 @@ class Rating extends Model
         });
     }
 
+    /** Scope a query to only include ratings for services
+     * 
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param int|null $id 
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeServiceRatings($query, $id)
+    {
+        return $query->with('user')->where('rateable_type', 'App\\Models\\Service')
+            ->when(
+                $id,
+                function ($query) use ($id) {
+                    $query->where('rateable_id', $id);
+                }
+            );
+    }
+
+    /** Scope a query to only include ratings for trainers
+     * 
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param int|null $id 
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeTrainerRatings($query, $id)
+    {
+        return $query->with('user')->where('rateable_type', 'App\\Models\\User')
+            ->when(
+                $id,
+                function ($query) use ($id) {
+                    $query->where('rateable_id', $id);
+                }
+            );
+    }
+
     public function scopeOfRateableName($query, $name)
     {
         return $query->SearchRateableName($name);

@@ -34,11 +34,14 @@ class UserService
      * For update a user
      * 
      * @param array $data To Update the user
-     * @param User $user To know which user will be updated
+     * @param mixed $user To know which user will be updated which it may a model object or id
      */
-    public function update(array $data, User $user)
+    public function update(array $data, $user)
     {
-        $user = $user->update($data);
+        if (is_string($user))
+            $user = User::findOrFail($user);
+
+        $user->update($data);
 
         return $user;
     }
@@ -46,11 +49,12 @@ class UserService
     /**
      *  Delete the specified user
      * 
-     *  @param User $user The user to delete
+     *  @param var $user The user to delete which it may a model object or id
      *  @return bool|null True if the user was deleted, false otherwise
      */
-    public function delete(User $user)
+    public function delete($user)
     {
+
         return $user->delete();
     }
 
@@ -88,63 +92,38 @@ class UserService
             $query->role($data['role']);
         });
 
-        return $q->paginate($entries_number);
+        return $q->paginate($entries_number)->appends(request()->except('page'));
     }
 
-
-
-    /**
-     * To get the subscriptions that are active and not expired
-     * 
-     * @param User $user To use it in relationship
-     */
-    public function getUserActiveSubscriptions(User $user)
-    {
-        $today = Carbon::today();
-        return $user->subscriptions()->where('start', '<=', $today)->where('end', '>=', $today)->get();
-    }
-
-    /**
-     * To get all ratings related with services that user rate it
-     * 
-     * @param User $user To use it in relationship
-     */
-    public function getUserRatingServices(User $user)
-    {
-        return $user->ratings()->where('rateable_type', 'App\Models\Service')->get();
-    }
-
-    /**
-     * To get all ratings related with Trainer that user rate it
-     * 
-     * @param User $user To use it in relationship
-     */
-    public function getUserRatingTrainers(User $user)
-    {
-        return $user->ratings()->where('rateable_type', 'App\Models\User')->get();
-    }
 
     /**
      * To get all trashed users with filtering and paginated data
      * 
      * @param Request $request To Apply the filtering if it's found
-     * @param $entries_number to know how many recordes per page
+     * @param int $entries_number To know how many records per page
+     * @return LengthAwarePaginator
      */
     public function getAllTrashedUsersAfterFiltering(Request $request, $entries_number)
     {
         $q = User::onlyTrashed();
 
-        // Search using SearchFullName scope in the User model
-        if ($request->filled('name')) {
-            $q->SearchFullName($request->name);
-        }
+        $q->when(
+            $request->filled('name'),
+            function ($query) use ($request) {
+                $query->SearchFullName($request->name);
+            }
+        );
 
-        if ($request->filled('role') && $request->role !== 'All') {
-            $q->role($request->role);
-        }
+        $q->when(
+            $request->filled('role') && $request->role !== 'All',
+            function ($query) use ($request) {
+                $query->role($request->role);
+            }
+        );
 
-        return $q->paginate($entries_number);
+        return $q->paginate($entries_number)->appends(request()->except('page'));
     }
+
 
     /**
      * For delete a user permenently
@@ -165,5 +144,10 @@ class UserService
     public function restore(string $id)
     {
         return User::withTrashed()->find($id)->restore();
+    }
+
+    public function showApi(string $id)
+    {
+        return User::findOrFail($id);
     }
 }

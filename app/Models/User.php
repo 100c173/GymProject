@@ -3,6 +3,8 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -99,5 +101,41 @@ class User extends Authenticatable
     public function getFullName()
     {
         return "{$this->first_name} {$this->last_name}";
+    }
+
+    /**
+     * Accessor To get all ratings related with services that user rate it
+     */
+    public function getUserRatingServices()
+    {
+        return $this->ratings()->where('rateable_type', 'App\Models\Service')->get();
+    }
+
+    /**
+     * Accessor To get all ratings related with Trainer that user rate it
+     */
+    public function getUserRatingTrainers()
+    {
+        return $this->ratings()->where('rateable_type', 'App\Models\User')->get();
+    }
+
+    /**
+     * Accessor To get the subscriptions that are active and not expired
+     */
+    public function getUserActiveSubscriptions()
+    {
+        $today = Carbon::today();
+        return $this->subscriptions()->where('start', '<=', $today)->where('end', '>=', $today)->get();
+    }
+
+
+
+    /**
+     * Used in the ownership middleware to make sure
+     * that the user whp want to update or delete own the resource
+     */
+    public function isOwnedBy($userId)
+    {
+        return $this->id == $userId;
     }
 }

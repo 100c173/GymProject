@@ -81,7 +81,7 @@
               <select name="time_id" class="form-select" id="exampleFormControlSelect1" aria-label="Default select example">
                 <option selected>Open To Select A Time</option>
                 @foreach ($times as $time)
-                <option {{$time->id == $session->time_id ? 'selected' : ''}} value="{{$time->id}}">{{$time->getStartAndEndTime()}}</option>
+                <option {{$time->id == $session->time_id ? 'selected' : ''}} value="{{$time->id}}">{{$time->day . " At " .$time->getStartAndEndTime12Hours()}}</option>
                 @endforeach
               </select>
             </div>

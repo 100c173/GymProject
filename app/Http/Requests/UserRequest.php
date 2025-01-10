@@ -22,7 +22,7 @@ class UserRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
+        $rules =  [
             //
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
@@ -33,17 +33,20 @@ class UserRequest extends FormRequest
             'unique:users',
             Rule::unique('users')->ignore($this->route('user')),
             'redirect_to' => 'nullable|in:index,create',
-            'role' => 'required|exists:roles,name',
+
         ];
 
         if ($this->isMethod('post')) {
 
-            // Password is required when creating a new user
+            // Password & role is required when creating a new user
             $rules['password'] = 'required|string|min:8|confirmed';
+            $rules['role'] = 'required|exists:roles,name';
         } elseif ($this->isMethod('put') || $this->isMethod('patch')) {
 
-            // Password is optional when updating an existing user
+            // Password & role is optional when updating an existing user
             $rules['password'] = 'sometimes|string|min:8|confirmed';
+            $rules['role'] = 'sometimes|exists:roles,name';
         }
+        return $rules;
     }
 }
