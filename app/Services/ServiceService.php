@@ -74,4 +74,8 @@ class ServiceService
 
         return $services;
     }
+    public function getAllServices()
+    {
+        return Service::all(); 
+    }
 }

@@ -25,7 +25,7 @@ class SubscriptionRequest extends FormRequest
      */
     public function rules(): array
     {
-        dd(23);
+        
         return [
             'plan_id' => [
                 'required', 
@@ -38,6 +38,7 @@ class SubscriptionRequest extends FormRequest
             ],  // Ensure the plan_id exists in the plans table
             'start' => ['required', 'date', 'after_or_equal:' . Carbon::today()->toDateString()],  // Ensure the start date is today or after
         ];
+        
     }
 
     public function messages()

@@ -62,9 +62,7 @@ class SubscriptionController extends Controller
      */
     public function update(SubscriptionRequest $request, Subscription $subscription)
     {
-
-        $validated = $request->validated();
-        $subscription = $this->subscriptionService->updateMySubscription($validated,$subscription);
+        $subscription = $this->subscriptionService->updateMySubscription($request,$subscription);
 
         return $this->successResponse(
             'Your subscription has been updated successfully.',

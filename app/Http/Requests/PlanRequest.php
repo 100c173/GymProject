@@ -23,6 +23,7 @@ class PlanRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'id' => ['required', 'integer', 'exists:plans,id'],
             'name' => 'required', 'string', Rule::unique('plans', 'name')->ignore($this->route('plan')),
             'description' => 'required|string|max:255',
             'price' => 'required|integer',
