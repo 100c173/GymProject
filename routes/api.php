@@ -25,40 +25,38 @@ use App\Http\Controllers\Api\UserController;
 |
 */
 
-
+Route::post('register', [AuthController::class, 'register']);
+Route::post('login', [AuthController::class, 'login']);
 
 //plans
 Route::get('/plans', [PlanController::class, 'index']);
 Route::get('/plans/{id}', [PlanController::class, 'show']);
 Route::get('/plansWithSession/{id}', [PlanController::class, 'showPlanWithSession']);
 
-
-//services route 
 Route::get('/services', [Services::class, 'index']);
 
 Route::middleware('auth:sanctum')->group(function () {
-    
-    Route::post('/services/store/{id}', [Services::class, 'store']);
-    Route::get('/services/show/{id}', [Services::class, 'show']);
-    Route::put('/services/update/{id}', [Services::class, 'update']);
-    Route::delete('/services/destroy/{id}', [Services::class, 'destroy']);
-});
 
-Route::post('register', [AuthController::class, 'register']);
-Route::post('login', [AuthController::class, 'login']);
-
-
-
-Route::middleware('auth:sanctum')->group(function () {
-    
     Route::apiResource('appointments', AppointmentController::class);
+
     Route::apiResource('users', UserController::class);
-    Route::apiResource('/subscriptions',SubscriptionController::class);
+    Route::post('user/logout', [AuthController::class, 'logout']);
+
+    Route::apiResource('/subscriptions', SubscriptionController::class);
+
     Route::apiResource('membership-applications', MembershipApplicationController::class);
+
     Route::apiResource('ratings', RatingController::class);
     Route::get('ratings/service/{id}', [RatingController::class, 'showServiceRatings']);
     Route::get('ratings/user/{id}', [RatingController::class, 'showTrainerRatings']);
-    Route::post('user/logout', [AuthController::class, 'logout']);
-    Route::get('/attendances/{id}' , [AttendanceController::class , 'update']);
 
+    Route::get('/attendances/{id}', [AttendanceController::class, 'update']);
+
+    Route::get('/services/show/{id}', [Services::class, 'show']);
+});
+
+Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
+    Route::post('/services/store/{id}', [Services::class, 'store']);
+    Route::put('/services/update/{id}', [Services::class, 'update']);
+    Route::delete('/services/destroy/{id}', [Services::class, 'destroy']);
 });

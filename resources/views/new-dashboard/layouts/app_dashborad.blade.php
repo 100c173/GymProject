@@ -1011,8 +1011,8 @@
                             </div>
                           </div>
                           <div class="flex-grow-1">
-                            <h6 class="mb-0">John Doe</h6>
-                            <small class="text-muted">Admin</small>
+                            <h6 class="mb-0">{{auth()->user()->getFullName()}}</h6>
+                            <small class="text-muted">{{auth()->user()->getRoleNames()->first()}}</small>
                           </div>
                         </div>
                       </a>
@@ -1020,7 +1020,7 @@
                     <li>
                       <div class="dropdown-divider my-1"></div>
                     </li>
-                    <li>
+                    {{-- <li>
                       <a class="dropdown-item" href="#">
                         <i class="bx bx-user bx-md me-3"></i><span>My Profile</span>
                       </a>
@@ -1038,7 +1038,7 @@
                     </li>
                     <li>
                       <div class="dropdown-divider my-1"></div>
-                    </li>
+                    </li> --}}
                     <li>
 
                       <a class="dropdown-item" href="javascript:void(0);" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">

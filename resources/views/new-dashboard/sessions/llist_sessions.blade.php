@@ -184,7 +184,9 @@
                           </form>
                           Delete
                       </a>
-                      <div class="divider"> </div>
+                      <div class="divider">
+                        <div class="divider-text">Managment</div>
+                      </div>
 
                       <a href="/appointments/{{$session->id}}" class="dropdown-item">appointments</a>
                       <a href="/attendance/{{$session->id}}" class="dropdown-item">attendances</a>
