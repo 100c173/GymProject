@@ -43,7 +43,7 @@ class UserController extends Controller
     public function index(UserFilterRequest $request)
     {
         $validated = $request->validated();
-        $users = $this->userService->getAllUsersAfterFiltering($validated);
+        $users = $this->userService->getAllTrainersAfterFiltering($validated);
 
         if ($users)
             return $this->successResponse('Success', [
