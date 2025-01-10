@@ -2,7 +2,8 @@
 
 namespace App\Services;
 
-
+use App\Http\Requests\SubscriptionRequest;
+use App\Models\Plan;
 use Carbon\Carbon;
 use App\Models\Subscription;
 use Illuminate\Http\Request;
@@ -77,5 +78,60 @@ class SubscriptionService
         }
         
         return $subscriptions->paginate($entries_number);
+    }
+
+    /**
+     * Display a listing of the resource.
+     */
+    public function showAllMySubscriptions()
+    {
+        $subscriptions = Subscription::where('user_id', auth()->id())->get();
+        return $subscriptions ;
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function createNewSupscription(SubscriptionRequest $request)
+    {
+        $startDate = Carbon::createFromFormat('d-m-Y', $request->start)->format('Y-m-d');
+        $plan = Plan::where('id', $request->plan_id)->first();
+        $end = Carbon::parse($startDate)->addDays($plan->period);
+
+        $subscription = Subscription::create([
+            'user_id' => auth()->id(),
+            'plan_id' => $request->plan_id,
+            'start'   => $startDate,
+            'end' => $end,
+        ]);
+
+        return $subscription;
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(Subscription $subscription)
+    {
+        return $subscription;
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function updateMySubscription(SubscriptionRequest $request, Subscription $subscription)
+    {
+       
+        $startDate = Carbon::createFromFormat('d-m-Y', $request->start)->format('Y-m-d');
+        $plan = Plan::where('id', $request->plan_id)->first();
+        $end = Carbon::parse($startDate)->addDays($plan->period);
+
+        
+        $subscription->update([
+            'start' => $startDate,
+            'end' => $end,
+            'plan_id' => $request->plan_id,
+        ]);
+        return $subscription;
     }
 }

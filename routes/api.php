@@ -27,13 +27,7 @@ use App\Http\Controllers\Api\UserController;
 
 // Protected routes 
 Route::middleware('auth:sanctum')->group(function () {
-
-    //Subscribe to a plan
-    Route::post('/subscriptions', [SubscriptionController::class, 'subscribe']);
-    //Unsubscribe
-    Route::delete('/subscriptions/{id}', [SubscriptionController::class, 'cancelSubscription']);
-    //View user subscriptions
-    Route::get('/users/{id}/subscriptions', [SubscriptionController::class, 'getUserSubscriptions']);
+    Route::apiResource('/subscriptions',SubscriptionController::class);
 });
 
 //plans

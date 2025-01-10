@@ -7,7 +7,7 @@ use App\Http\Requests\UserFilterRequest;
 use App\Http\Requests\UserRequest;
 use App\Http\Resources\UserResource;
 use App\Services\UserService;
-use Illuminate\Http\Request;
+
 
 class UserController extends Controller
 {

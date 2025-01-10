@@ -1,54 +1,103 @@
 <?php
 
 namespace App\Http\Controllers\Api;
+
+use App\Http\Controllers\Controller;
+use App\Http\Requests\SubscriptionRequest;
+use App\Http\Resources\SubscriptionResource;
 use App\Models\Plan;
 use App\Models\Subscription;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
+use App\Services\SubscriptionService;
+use Carbon\Carbon;
+
+
 
 class SubscriptionController extends Controller
 {
-    //subscribe in plan 
-public function subscribe(Request $request)
-{
-    $request->validate([
-        'start' => 'required|date',
-        'user_id' => 'required|exists:users,id',
-        'plan_id' => 'required|exists:plans,id',
-    ]);
+    protected $subscriptionService;
 
-    $plan = Plan::find($request->plan_id);
-    if (!$plan) {
-        return response()->json(['message' => 'Plan not found'], 404);
+    public function __construct(SubscriptionService $subscriptionService)
+    {
+        $this->subscriptionService = $subscriptionService;
+        $this->middleware('check.subscription.owner')->only(['update', 'destroy']);
     }
 
-    $subscription = Subscription::create([
-        'start' => $request->start,
-        'end' => now()->addDays($plan->period), // حساب تاريخ الانتهاء
-        'user_id' => $request->user_id,
-        'plan_id' => $request->plan_id,
-    ]);
-
-    return response()->json(['message' => 'Subscription created successfully', 'subscription' => $subscription], 201);
-}
-//cancel Subscription
-public function cancelSubscription($id)
-{
-    $subscription = Subscription::find($id);
-    if (!$subscription) {
-        return response()->json(['message' => 'Subscription not found'], 404);
+    /**
+     * Display a listing of the resource.
+     */
+    public function index()
+    {
+        $subscriptions = $this->subscriptionService->showAllMySubscriptions();
+        return $this->successResponse('Subscriptions request has been successfully retrieved.', SubscriptionResource::collection($subscriptions));
     }
 
-    $subscription->delete();
-    return response()->json(['message' => 'Subscription canceled successfully'], 200);
-}
-// show User Subscriptions 
-public function getUserSubscriptions($userId)
-{
-    $subscriptions = Subscription::with('plan')->where('user_id', $userId)->get();
-    if ($subscriptions->isEmpty()) {
-        return response()->json(['message' => 'No subscriptions found for this user'], 404);
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(SubscriptionRequest $request)
+    {
+        $validated = $request->validated();
+        $subscription = $this->subscriptionService->createNewSupscription($validated);
+        return $this->successResponse(
+            'Your Subscription application has been submitted successfully.',
+            new SubscriptionResource($subscription),
+            201
+        );
     }
-    return response()->json($subscriptions, 200);
-} 
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(Subscription $subscription)
+    {
+        return $this->successResponse(
+            'Your Subscription application has been submitted successfully.',
+            new SubscriptionResource($subscription),
+            201
+        );
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(SubscriptionRequest $request, Subscription $subscription)
+    {
+
+        $validated = $request->validated();
+        $subscription = $this->subscriptionService->updateMySubscription($validated,$subscription);
+
+        return $this->successResponse(
+            'Your subscription has been updated successfully.',
+            new SubscriptionResource($subscription)
+        );
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(Subscription $subscription)
+    {
+        $subscription->delete();
+        return $this->successResponse('The subscription has been deleted successfully.');
+    }
+
+    /**
+     * Permanently remove the specified resource from storage.
+     */
+    public function forceDelete(Subscription $subscription)
+    {
+        $subscription->forceDelete();
+        return $this->successResponse('The subscription has been permanently deleted successfully.');
+    }
+
+    /**
+     * Restore the specified soft-deleted resource.
+     */
+    public function restore(int $id)
+    {
+        $subscription = Subscription::onlyTrashed()->findOrFail($id);
+        $subscription->restore();
+
+        return $this->successResponse('The subscription has been restored successfully.');
+    }
 }
