@@ -25,41 +25,36 @@ use App\Http\Controllers\Api\UserController;
 |
 */
 
-// Protected routes 
-Route::middleware('auth:sanctum')->group(function () {
-    Route::apiResource('/subscriptions',SubscriptionController::class);
-});
+
 
 //plans
-//View all plans
 Route::get('/plans', [PlanController::class, 'index']);
-//Display details of a specific plan
 Route::get('/plans/{id}', [PlanController::class, 'show']);
-//display plan and sessions related in
 Route::get('/plansWithSession/{id}', [PlanController::class, 'showPlanWithSession']);
 
-Route::apiResource('membership-applications', MembershipApplicationController::class);
-Route::apiResource('appointments', AppointmentController::class);
-Route::apiResource('users', UserController::class);
 
 //services route 
 Route::get('/services', [Services::class, 'index']);
+
 Route::middleware('auth:sanctum')->group(function () {
- 
-Route::post('/services/store/{id}', [Services::class, 'store']);
-Route::get('/services/show/{id}', [Services::class, 'show']);
-Route::put('/services/update/{id}', [Services::class, 'update']);
-Route::delete('/services/destroy/{id}', [Services::class, 'destroy']);
+    
+    Route::post('/services/store/{id}', [Services::class, 'store']);
+    Route::get('/services/show/{id}', [Services::class, 'show']);
+    Route::put('/services/update/{id}', [Services::class, 'update']);
+    Route::delete('/services/destroy/{id}', [Services::class, 'destroy']);
 });
 
 Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
 
 
-Route::apiResource('membership-applications', MembershipApplicationController::class);
-
 
 Route::middleware('auth:sanctum')->group(function () {
+    
+    Route::apiResource('appointments', AppointmentController::class);
+    Route::apiResource('users', UserController::class);
+    Route::apiResource('/subscriptions',SubscriptionController::class);
+    Route::apiResource('membership-applications', MembershipApplicationController::class);
     Route::apiResource('ratings', RatingController::class);
     Route::get('ratings/service/{id}', [RatingController::class, 'showServiceRatings']);
     Route::get('ratings/user/{id}', [RatingController::class, 'showTrainerRatings']);

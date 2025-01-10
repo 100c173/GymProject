@@ -27,7 +27,6 @@ class MembershipApplicationController extends Controller
      */
     public function __construct(MembershipApplicationService $membershipApplicationService)
     {
-        $this->middleware('auth:sanctum');
         $this->middleware('check.application')->only('store');
 
         // Inject the PermissionService to handle membershipApplication-related logic

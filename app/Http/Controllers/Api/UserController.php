@@ -27,8 +27,6 @@ class UserController extends Controller
      */
     public function __construct(UserService $userService)
     {
-        // Apply the auth middleware to ensure the user is authenticated
-        $this->middleware(['auth:sanctum']);
 
         // To make sure that the user who want to update or delete own the resource
         $this->middleware(['check.ownership:user'])->only(['update', 'delete']);

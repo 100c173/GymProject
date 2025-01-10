@@ -17,7 +17,7 @@ class AppointmentController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth:sanctum');
+
         $this->middleware('check.capacity')->only('store' , 'update');
         $this->middleware('preventDoubleBooking')->only('store' , 'update');
         $this->middleware('check.owner')->only('destroy');
