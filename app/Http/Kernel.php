@@ -39,8 +39,8 @@ class Kernel extends HttpKernel
         ],
 
         'api' => [
-            // \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
-            \Illuminate\Routing\Middleware\ThrottleRequests::class.':api',
+            \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
+            \Illuminate\Routing\Middleware\ThrottleRequests::class . ':api',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
     ];
@@ -64,5 +64,23 @@ class Kernel extends HttpKernel
         'signed' => \App\Http\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
+        'admin' => \App\Http\Middleware\IsAdmin::class,
+        'unique.plan' => \App\Http\Middleware\EnsurePlanIsUnique::class,
+        'unique.plantype' => \App\Http\Middleware\EnsurePlanTypeIsUnique::class,
+        'checkSessionExists' => \App\Http\Middleware\CheckSessionExists::class,
+        'preventDoubleBooking' => \App\Http\Middleware\PreventDoubleBooking::class,
+        'PreventDuplicateUser' => \App\Http\Middleware\PreventDuplicateUser::class,
+        'check.capacity' => \App\Http\Middleware\CheckSessionCapacity::class,
+        'check.owner' => \App\Http\Middleware\CheckAppointmentOwner::class, 
+        'redirect' => \App\Http\Middleware\RedirectToAfterLogin::class,
+        'check.plan.trainer' => \App\Http\Middleware\CheckPlanTrainer::class,
+
+        'role' => \Spatie\Permission\Middleware\RoleMiddleware::class,
+        'permission' => \Spatie\Permission\Middleware\PermissionMiddleware::class,
+        'check.application' => \App\Http\Middleware\CheckExistingApplication::class,
+        'check.ownership' => \App\Http\Middleware\CheckOwnership::class,
+        'check.subscription.owner' => \App\Http\Middleware\CheckSubscriptionOwner::class,
+        'check.booking.user' => \App\Http\Middleware\CheckBookingUser::class,
+        'check.rating' => \App\Http\Middleware\CheckTrainer::class,
     ];
 }
