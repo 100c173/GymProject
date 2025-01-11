@@ -162,11 +162,15 @@ class MembershipApplicationService
     {
         $entries_number = $data['entries_number'] ?? 10;
 
-        $memberships = MembershipApplication::query()
+        $memberships = MembershipApplication::whereHas(
+            'user',
+            function ($query) {
+                $query->whereNull('deleted_at');
+            }
+        )->when($data['name'] ?? null, function ($query, $name) {
 
-            ->when($data['name'] ?? null, function ($query, $name) {
-                return $query->UserName($name);
-            })->paginate($entries_number)->appends(request()->except('page'));
+            return $query->UserName($name);
+        })->paginate($entries_number)->appends(request()->except('page'));
 
         return $memberships;
     }

@@ -3,6 +3,8 @@
 namespace App\Services;
 
 use App\Models\Rating;
+use App\Models\Service;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class RatingService
@@ -79,20 +81,30 @@ class RatingService
     {
         $entries_number = $data['entries_number'] ?? 10;
 
-        $ratings = Rating::query()
-            ->when(isset($data['rating']) && $data['rating'] !== 'All', function ($query) use ($data) {
+        $ratings = Rating::whereHas(
+            'user',
+            function ($query) {
+                $query->whereNull('deleted_at');
+            }
+        )->whereHasMorph(
+            'rateable',
+            [
+                User::class,
+                Service::class
+            ]
+        )->when(isset($data['rating']) && $data['rating'] !== 'All', function ($query) use ($data) {
 
-                return $query->ofRating($data['rating']);
-            })->when(isset($data['rateable_type']) && $data['rateable_type'] !== '', function ($query) use ($data) {
+            return $query->ofRating($data['rating']);
+        })->when(isset($data['rateable_type']) && $data['rateable_type'] !== '', function ($query) use ($data) {
 
-                return $query->ofType($data['rateable_type']);
-            })->when(isset($data['rater_name']), function ($query) use ($data) {
+            return $query->ofType($data['rateable_type']);
+        })->when(isset($data['rater_name']), function ($query) use ($data) {
 
-                return $query->ofRaterName($data['rater_name']);
-            })->when(isset($data['rateable_name']), function ($query) use ($data) {
+            return $query->ofRaterName($data['rater_name']);
+        })->when(isset($data['rateable_name']), function ($query) use ($data) {
 
-                return $query->ofRateableName($data['rateable_name']);
-            })->paginate($entries_number)->appends(request()->except('page'));
+            return $query->ofRateableName($data['rateable_name']);
+        })->paginate($entries_number)->appends(request()->except('page'));
 
         return $ratings;
     }
@@ -118,8 +130,4 @@ class RatingService
 
         return Rating::TrainerRatings($id)->get();
     }
-
-
-
-
 }
