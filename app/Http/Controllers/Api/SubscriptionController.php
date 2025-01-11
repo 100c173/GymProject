@@ -41,12 +41,15 @@ class SubscriptionController extends Controller
     {
         $validated = $request->validated();
         $subscription = $this->subscriptionService->createNewSupscription($validated);
-        $this->mailService->SendActivateSubscriptionEmail($subscription);
-        return $this->successResponse(
-            'Your Subscription application has been submitted successfully.',
-            new SubscriptionResource($subscription),
-            201
-        );
+        if ($subscription) {
+            $this->mailService->SendActivateSubscriptionEmail($subscription);
+            return $this->successResponse(
+                'Your Subscription application has been submitted successfully.',
+                new SubscriptionResource($subscription),
+                201
+            );
+        }
+            return $this->errorResponse('Faild To Subscripe.');
     }
 
     /**
